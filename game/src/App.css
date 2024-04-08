@@ -4,8 +4,28 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	background: black;
 }
-.container {
+#selectalias {
+	padding: 1rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	z-index: 1001;
+}
+#darkoverlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	z-index: 1000;
+	top: 0;
+	left: 0;
+	content: "";
+	backdrop-filter: blur(2rem);
+	background: rgba(0, 0, 0, 0.5);
+}
+#container {
 	outline: 2px solid black;
 	position: relative;
 	max-width: 30rem;
@@ -21,5 +41,5 @@
 .grid div {
 	aspect-ratio: 1/1;
 	width: 100%;
-	background: lightblue;
+	background: rgb(44, 44, 44);
 }

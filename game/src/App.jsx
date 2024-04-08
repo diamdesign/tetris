@@ -2,7 +2,8 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
-	const [count, setCount] = useState(0);
+	const [aliasInput, setAliasInput] = useState("");
+	const [alias, setAlias] = useState("");
 
 	function EmptyGrid() {
 		const rows = 20;
@@ -20,16 +21,31 @@ function App() {
 		}
 
 		// Return the array of div elements
-		return <>{divs}</>;
+		return (
+			<>
+				<div className="grid">{divs}</div>
+			</>
+		);
 	}
+
+	// Function to handle input change
+	const handleAliasInput = (event) => {
+		// Update the state with the value entered by the user
+		setAliasInput(event.target.value);
+	};
 
 	return (
 		<>
-			<div className="container">
-				<div className="grid">
-					<EmptyGrid />
-				</div>
+			{/* Input alias */}
+			<input type="text" value={aliasInput} onChange={handleAliasInput} id="selectalias" />
+
+			{/* Tetris container */}
+			<div id="container">
+				<EmptyGrid />
 			</div>
+
+			{/* Dark overlay */}
+			<div id="darkoverlay"></div>
 		</>
 	);
 }
