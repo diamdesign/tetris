@@ -245,12 +245,13 @@
 }
 
 .gamesymbols {
+	width: 15rem;
 	font-family: "Gajraj One";
 	font-size: 2rem;
 	position: absolute;
 	color: white;
 	right: calc(50% + 28vh + 10px);
-	top: 8vh;
+	top: 10vh;
 	text-align: right;
 	animation: textflash 0.1s infinite;
 	z-index: 100;
@@ -273,8 +274,13 @@
 		drop-shadow(0 0 1px yellow) drop-shadow(0 0 1px yellow) drop-shadow(0 0 1px yellow);
 }
 
+.score {
+	font-size: 4vh;
+}
+
 .lines,
-.level {
+.level,
+.comingsymbol {
 	width: 100%;
 	font-size: 1.2rem;
 	font-family: "Gajraj One";
@@ -283,6 +289,48 @@
 	text-align: center;
 	outline: 4px solid rgba(255, 255, 255, 0.08);
 	border-color: rgba(255, 255, 255, 0.4);
+}
+.comingsymbol {
+	width: auto;
+	position: absolute;
+	right: calc(50% - 28vh - 15.5rem);
+	color: white;
+	z-index: 10;
+	overflow: visible;
+	padding: 1rem;
+	animation: textflash 0.561s infinite;
+	aspect-ratio: 1/1;
+	width: 15rem;
+}
+
+.comingsymbol:after {
+	position: absolute;
+	left: 50%;
+	width: 450%;
+	height: 450%;
+	top: 50%;
+	background: radial-gradient(circle, rgba(22, 60, 116, 0.5) 0%, rgba(72, 159, 237, 0) 40%);
+	transform: translateX(-50%) translateY(-50%);
+	content: "";
+	z-index: -1;
+	opacity: 0.5;
+}
+
+.comingsymbol span {
+	font-size: 8rem;
+	display: block;
+	position: relative;
+	transition: all 2s ease-in-out;
+	animation: comingsymbol 2s ease-in-out infinite alternate;
+}
+
+@keyframes comingsymbol {
+	0% {
+		transform: translateY(0);
+	}
+	100% {
+		transform: translateY(-1rem);
+	}
 }
 
 .lines {
@@ -411,4 +459,57 @@
 		top: 60%;
 		left: 50%;
 	}
+}
+
+#backanim i:nth-child(5) {
+	top: -25rem;
+	left: auto;
+	right: 30%;
+	width: 18rem;
+	height: 18rem;
+	background-image: url("assets/moon.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-color: transparent;
+	border: none;
+	box-shadow: 0 0 64px 4px white, 0 0 4px 1px white;
+	filter: brightness(1);
+	border-radius: 100%;
+	animation: moon 1500s linear infinite;
+	z-index: -10000;
+}
+
+@keyframes moon {
+	0% {
+		top: -25rem;
+		right: 10%;
+	}
+	100% {
+		top: 120%;
+		right: -18rem;
+	}
+	50% {
+		top: 120%;
+		right: -35rem;
+	}
+}
+
+#backanim i:nth-child(6) {
+	top: 80%;
+	left: 20%;
+	right: auto;
+	width: 18rem;
+	height: 18rem;
+	background-image: url("assets/earth.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 100%;
+	z-index: 1100;
+	filter: none;
+	opacity: 1;
+	mix-blend-mode: normal;
 }

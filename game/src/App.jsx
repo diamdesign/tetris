@@ -139,7 +139,10 @@ function App() {
 			</div>
 
 			{/* Right content */}
-			<div className="comingsymbol">T</div>
+			<div className="comingsymbol">
+				Next:
+				<span>T</span>
+			</div>
 
 			{/* Tetris container */}
 			<div id="container">
