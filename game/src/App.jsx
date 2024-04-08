@@ -6,8 +6,6 @@ import "./App.css";
 import "./css/stars.css";
 
 function App() {
-	const [aliasInput, setAliasInput] = useState("");
-
 	const {
 		page,
 		setPage,
@@ -25,8 +23,33 @@ function App() {
 		setGameRunning,
 	} = useGameContext();
 
-	function EmptyGrid() {
-		const rows = 20;
+	const [aliasInput, setAliasInput] = useState("");
+	const [scoreClassName, setScoreClassName] = useState("");
+	const [levelClassName, setLevelClassName] = useState("");
+
+	const handleSetScore = (newScore) => {
+		let newVar = score + 1;
+		setScore(newVar);
+
+		// Add the 'addscore' class
+		setScoreClassName("addscore");
+
+		// Remove the 'addscore' class after 0.5s
+		setTimeout(() => {
+			setScoreClassName("");
+		}, 300);
+	};
+
+	const handleSetLevel = (newLevel) => {
+		let newVar = level + 1;
+		setLevel(newVar);
+
+		// Add the 'level + number' class to container
+		setLevelClassName("level" + newVar);
+	};
+
+	function TetrisGrid() {
+		const rows = 21;
 		const columns = 12;
 		const divs = [];
 
@@ -35,12 +58,171 @@ function App() {
 			for (let j = 0; j < columns; j++) {
 				// Calculate unique key for each div
 				const key = `div-${i}-${j}`;
-				// Add div element to the array
-				divs.push(<div key={key}></div>);
+				// Determine if the current div is in the last row
+				const isLastRow = i === rows - 1;
+				// Add class "taken" to divs in the last row
+				const classNames = isLastRow ? "taken lastrow" : "";
+				// Add div element to the array with the appropriate class
+				divs.push(<div key={key} className={classNames}></div>);
 			}
 		}
 
-		// Return the array of div elements
+		const width = 12;
+
+		//The Tetrominoes
+		const lTetromino = [
+			[1, width + 1, width * 2 + 1, 2],
+			[width, width + 1, width + 2, width * 2 + 2],
+			[1, width + 1, width * 2 + 1, width * 2],
+			[width, width * 2, width * 2 + 1, width * 2 + 2],
+		];
+
+		const zTetromino = [
+			[0, width, width + 1, width * 2 + 1],
+			[width + 1, width + 2, width * 2, width * 2 + 1],
+			[0, width, width + 1, width * 2 + 1],
+			[width + 1, width + 2, width * 2, width * 2 + 1],
+		];
+
+		const tTetromino = [
+			[1, width, width + 1, width + 2],
+			[1, width + 1, width + 2, width * 2 + 1],
+			[width, width + 1, width + 2, width * 2 + 1],
+			[1, width, width + 1, width * 2 + 1],
+		];
+
+		const oTetromino = [
+			[0, 1, width, width + 1],
+			[0, 1, width, width + 1],
+			[0, 1, width, width + 1],
+			[0, 1, width, width + 1],
+		];
+
+		const iTetromino = [
+			[1, width + 1, width * 2 + 1, width * 3 + 1],
+			[width, width + 1, width + 2, width + 3],
+			[1, width + 1, width * 2 + 1, width * 3 + 1],
+			[width, width + 1, width + 2, width + 3],
+		];
+
+		const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
+
+		let currentPosition = 4;
+		let currentRotation = 0;
+
+		let random = Math.floor(Math.random() * theTetrominoes.length);
+		let current = theTetrominoes[random][currentRotation];
+
+		useEffect(() => {
+			// Select grid cells within the useEffect hook
+			const cells = Array.from(document.querySelectorAll(".grid div"));
+			console.log(cells);
+
+			console.log(current);
+			console.log(random);
+
+			function draw() {
+				current.forEach((index) => {
+					cells[currentPosition + index].classList.add("tetromino");
+				});
+			}
+
+			function undraw() {
+				current.forEach((index) => {
+					cells[currentPosition + index].classList.remove("tetromino");
+				});
+			}
+
+			const timerId = setInterval(moveDown, 1000);
+
+			function moveDown() {
+				if (gameRunning) {
+					undraw();
+					currentPosition += width;
+					draw();
+					freeze();
+				}
+			}
+
+			function moveLeft() {
+				undraw();
+				const isAtLeftEdge = current.some(
+					(index) => (currentPosition + index) % width === 0
+				);
+				if (!isAtLeftEdge) {
+					currentPosition -= 1;
+				}
+
+				if (
+					current.some((index) =>
+						cells[currentPosition + index].classList.contains("taken")
+					)
+				) {
+					currentPosition += 1;
+				}
+
+				draw();
+			}
+
+			function moveRight() {
+				undraw();
+				const isAtRightEdge = current.some(
+					(index) => (currentPosition + index) % width === width - 1
+				);
+				if (!isAtRightEdge) {
+					currentPosition += 1;
+				}
+
+				if (
+					current.some((index) =>
+						cells[currentPosition + index].classList.contains("taken")
+					)
+				) {
+					currentPosition -= 1;
+				}
+
+				draw();
+			}
+
+			function freeze() {
+				if (
+					current.some((index) =>
+						cells[currentPosition + index + width].classList.contains("taken")
+					)
+				) {
+					current.forEach((index) =>
+						cells[currentPosition + index].classList.add("taken")
+					);
+					random = Math.floor(Math.random() * theTetrominoes.length);
+					current = theTetrominoes[random][currentRotation];
+					currentPosition = 4;
+					draw();
+				}
+			}
+
+			function control(e) {
+				if (e.keyCode === 37) {
+					moveLeft();
+				} else if (e.keyCode === 38) {
+					//rotate
+				} else if (e.keyCode === 39) {
+					moveRight();
+				} else if (e.keyCode === 40) {
+					moveDown();
+				}
+			}
+
+			document.addEventListener("keydown", control);
+
+			draw();
+
+			// Cleanup function to remove event listener
+			return () => {
+				clearInterval(timerId);
+				document.removeEventListener("keydown", control);
+			};
+		}, [gameRunning, currentPosition, current, currentRotation, width, theTetrominoes]);
+
 		return (
 			<>
 				<div className="grid">{divs}</div>
@@ -90,10 +272,65 @@ function App() {
 
 	return (
 		<>
-			{page === "credits" && <Credits />}
-			{/* Input alias */}
-			{!alias && (
-				<div id="intro">
+			<div id="gamecontainer" className={levelClassName}>
+				{page === "credits" && <Credits />}
+				{/* Input alias */}
+				{!alias && (
+					<div id="intro">
+						<h1>
+							<span>T</span>
+							<span>E</span>
+							<span>T</span>
+							<span>R</span>
+							<span>I</span>
+							<span>S</span>
+						</h1>
+						<h2>Styler</h2>
+						<input
+							type="text"
+							value={aliasInput}
+							onChange={handleAliasInput}
+							onKeyDown={handleAliasKey}
+							id="selectalias"
+							placeholder="Enter alias"
+						/>
+					</div>
+				)}
+
+				{!gameRunning && (
+					<div className="start" onClick={handleStartClick} onMouseOver={handleMouseOver}>
+						Play
+					</div>
+				)}
+
+				{/* Colorize or use for other means */}
+				<div className="colorize"></div>
+
+				{/* Currently left content, alias, score, lines, level */}
+				<div className="gamesymbols">
+					{/* Playername */}
+					{alias && <div className="alias">{alias}</div>}
+					<div className={`score ${scoreClassName}`} onClick={handleSetScore}>
+						{score}
+					</div>
+
+					<div className="lines">
+						Lines:
+						<span>{lines}</span>
+					</div>
+					<div className="level" onClick={handleSetLevel}>
+						Level:<span>{level}</span>
+					</div>
+				</div>
+
+				{/* Right content */}
+				<div className="comingsymbol">
+					Next:
+					<span>T</span>
+				</div>
+
+				{/* Tetris container */}
+				<div id="container" className={levelClassName}>
 					<h1>
 						<span>T</span>
 						<span>E</span>
@@ -102,91 +339,40 @@ function App() {
 						<span>I</span>
 						<span>S</span>
 					</h1>
-					<h2>Styler</h2>
-					<input
-						type="text"
-						value={aliasInput}
-						onChange={handleAliasInput}
-						onKeyDown={handleAliasKey}
-						id="selectalias"
-						placeholder="Enter alias"
-					/>
+					<TetrisGrid />
 				</div>
-			)}
 
-			{!gameRunning && (
-				<div className="start" onClick={handleStartClick} onMouseOver={handleMouseOver}>
-					Play
+				<div id="stars"></div>
+				<div id="twinkling"></div>
+				<div id="clouds"></div>
+				<div id="backanim">
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
 				</div>
-			)}
 
-			{/* Colorize or use for other means */}
-			<div className="colorize"></div>
+				{/* Dark overlay */}
+				{showDarkoverlay && <div id="darkoverlay"></div>}
 
-			{/* Currently left content, alias, score, lines, level */}
-			<div className="gamesymbols">
-				{/* Playername */}
-				{alias && <div className="alias">{alias}</div>}
-				<div className="score">{score}</div>
-
-				<div className="lines">
-					Lines:
-					<span>{lines}</span>
-				</div>
-				<div className="level">
-					Level:<span>{level}</span>
-				</div>
+				<Music />
 			</div>
-
-			{/* Right content */}
-			<div className="comingsymbol">
-				Next:
-				<span>T</span>
-			</div>
-
-			{/* Tetris container */}
-			<div id="container">
-				<h1>
-					<span>T</span>
-					<span>E</span>
-					<span>T</span>
-					<span>R</span>
-					<span>I</span>
-					<span>S</span>
-				</h1>
-				<EmptyGrid />
-			</div>
-
-			<div id="stars"></div>
-			<div id="twinkling"></div>
-			<div id="clouds"></div>
-			<div id="backanim">
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-				<i></i>
-			</div>
-
-			{/* Dark overlay */}
-			{showDarkoverlay && <div id="darkoverlay"></div>}
-
-			<Music />
 		</>
 	);
 }

@@ -17,7 +17,7 @@ export function Music() {
 			if (isMuted) {
 				musicPlayer.volume = 0;
 			} else {
-				musicPlayer.volume = 0.25;
+				musicPlayer.volume = 0.15;
 			}
 
 			musicPlayer.loop = true;
