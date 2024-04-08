@@ -5,13 +5,19 @@
 	justify-content: center;
 	align-items: center;
 	background: black;
+	font-family: "VT323", monospace;
+	font-weight: 400;
+	font-style: normal;
 }
 #selectalias {
+	font-family: "VT323", monospace;
+	font-weight: 400;
+	font-style: normal;
 	text-align: center;
 	background: black;
-	color: white;
+	color: white !important;
 	border: none;
-	font-size: 1.3rem;
+	font-size: 3rem;
 	font-weight: bold;
 	outline: 4px solid white;
 	border-radius: 0.4rem;
@@ -37,6 +43,7 @@
 	outline: 2px solid black;
 	position: relative;
 	max-width: 30rem;
+	margin-right: 25vh;
 	width: 50vh;
 }
 .grid {
@@ -50,4 +57,12 @@
 	aspect-ratio: 1/1;
 	width: 100%;
 	background: rgb(44, 44, 44);
+}
+
+.gamesymbols {
+	font-size: 2rem;
+	position: absolute;
+	color: white;
+	left: calc(50% + 16vh);
+	top: 10vh;
 }

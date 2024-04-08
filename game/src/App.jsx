@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
 	const [aliasInput, setAliasInput] = useState("");
 	const [alias, setAlias] = useState("");
+	const [score, setScore] = useState(0);
 	const [showDarkoverlay, setShowDarkoverlay] = useState(true);
 
 	function EmptyGrid() {
@@ -56,6 +57,12 @@ function App() {
 					placeholder="Enter alias"
 				/>
 			)}
+
+			<div className="gamesymbols">
+				{/* Playername */}
+				{alias && <div className="alias">{alias}</div>}
+				<div className="score">{score}</div>
+			</div>
 
 			{/* Tetris container */}
 			<div id="container">
