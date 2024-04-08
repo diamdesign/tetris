@@ -495,18 +495,19 @@
 }
 
 #backanim i:nth-child(6) {
-	top: 80%;
-	left: 20%;
+	top: auto;
+	bottom: -10%;
+	left: -5%;
 	right: auto;
-	width: 18rem;
-	height: 18rem;
+	width: 40rem;
+	height: 40rem;
 	background-image: url("assets/earth.png");
 	background-repeat: no-repeat;
 	background-position: center center;
-	background-size: contain;
+	background-size: 114%;
 	background-color: transparent;
 	border: none;
-	box-shadow: none;
+	box-shadow: 0 0 24px 2px royalblue;
 	border-radius: 100%;
 	z-index: 1100;
 	filter: none;
