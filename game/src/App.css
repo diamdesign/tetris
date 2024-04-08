@@ -7,6 +7,14 @@
 	background: black;
 }
 #selectalias {
+	text-align: center;
+	background: black;
+	color: white;
+	border: none;
+	font-size: 1.3rem;
+	font-weight: bold;
+	outline: 4px solid white;
+	border-radius: 0.4rem;
 	padding: 1rem;
 	position: absolute;
 	top: 50%;

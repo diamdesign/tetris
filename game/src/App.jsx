@@ -4,6 +4,7 @@ import "./App.css";
 function App() {
 	const [aliasInput, setAliasInput] = useState("");
 	const [alias, setAlias] = useState("");
+	const [showDarkoverlay, setShowDarkoverlay] = useState(true);
 
 	function EmptyGrid() {
 		const rows = 20;
@@ -34,10 +35,27 @@ function App() {
 		setAliasInput(event.target.value);
 	};
 
+	// Function to handle alias save
+	const handleAliasKey = (event) => {
+		if (event.key === "Enter") {
+			setAlias(aliasInput);
+			setShowDarkoverlay(false);
+		}
+	};
+
 	return (
 		<>
 			{/* Input alias */}
-			<input type="text" value={aliasInput} onChange={handleAliasInput} id="selectalias" />
+			{!alias && (
+				<input
+					type="text"
+					value={aliasInput}
+					onChange={handleAliasInput}
+					onKeyDown={handleAliasKey}
+					id="selectalias"
+					placeholder="Enter alias"
+				/>
+			)}
 
 			{/* Tetris container */}
 			<div id="container">
@@ -45,7 +63,7 @@ function App() {
 			</div>
 
 			{/* Dark overlay */}
-			<div id="darkoverlay"></div>
+			{showDarkoverlay && <div id="darkoverlay"></div>}
 		</>
 	);
 }
