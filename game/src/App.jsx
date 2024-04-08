@@ -21,11 +21,14 @@ function App() {
 		setScore,
 		gameRunning,
 		setGameRunning,
+		theTetrominoes,
+		width,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
 	const [scoreClassName, setScoreClassName] = useState("");
 	const [levelClassName, setLevelClassName] = useState("");
+	const [random, setRandom] = useState(Math.floor(Math.random() * theTetrominoes.length));
 
 	const handleSetScore = (newScore) => {
 		let newVar = score + 1;
@@ -48,6 +51,24 @@ function App() {
 		setLevelClassName("level" + newVar);
 	};
 
+	function pauseGame() {
+		setGameRunning((prevGameRunning) => !prevGameRunning);
+	}
+
+	useEffect(() => {
+		function control(e) {
+			if (e.keyCode === 80) {
+				pauseGame();
+			}
+		}
+
+		document.addEventListener("keydown", control);
+
+		// Cleanup function to remove event listener
+		return () => {
+			document.removeEventListener("keydown", control);
+		};
+	}, []);
 	function TetrisGrid() {
 		const rows = 21;
 		const columns = 12;
@@ -67,50 +88,10 @@ function App() {
 			}
 		}
 
-		const width = 12;
-
-		//The Tetrominoes
-		const lTetromino = [
-			[1, width + 1, width * 2 + 1, 2],
-			[width, width + 1, width + 2, width * 2 + 2],
-			[1, width + 1, width * 2 + 1, width * 2],
-			[width, width * 2, width * 2 + 1, width * 2 + 2],
-		];
-
-		const zTetromino = [
-			[0, width, width + 1, width * 2 + 1],
-			[width + 1, width + 2, width * 2, width * 2 + 1],
-			[0, width, width + 1, width * 2 + 1],
-			[width + 1, width + 2, width * 2, width * 2 + 1],
-		];
-
-		const tTetromino = [
-			[1, width, width + 1, width + 2],
-			[1, width + 1, width + 2, width * 2 + 1],
-			[width, width + 1, width + 2, width * 2 + 1],
-			[1, width, width + 1, width * 2 + 1],
-		];
-
-		const oTetromino = [
-			[0, 1, width, width + 1],
-			[0, 1, width, width + 1],
-			[0, 1, width, width + 1],
-			[0, 1, width, width + 1],
-		];
-
-		const iTetromino = [
-			[1, width + 1, width * 2 + 1, width * 3 + 1],
-			[width, width + 1, width + 2, width + 3],
-			[1, width + 1, width * 2 + 1, width * 3 + 1],
-			[width, width + 1, width + 2, width + 3],
-		];
-
-		const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
-
 		let currentPosition = 4;
 		let currentRotation = 0;
 
-		let random = Math.floor(Math.random() * theTetrominoes.length);
+		// let random = Math.floor(Math.random() * theTetrominoes.length);
 		let current = theTetrominoes[random][currentRotation];
 
 		useEffect(() => {
@@ -193,11 +174,23 @@ function App() {
 					current.forEach((index) =>
 						cells[currentPosition + index].classList.add("taken")
 					);
-					random = Math.floor(Math.random() * theTetrominoes.length);
+					const random = Math.floor(Math.random() * theTetrominoes.length);
 					current = theTetrominoes[random][currentRotation];
 					currentPosition = 4;
 					draw();
 				}
+			}
+
+			function resetGrid() {
+				setGameRunning(false);
+				cells.forEach((cell) => {
+					cell.classList.remove("tetromino");
+				});
+				currentPosition = 4;
+				random = Math.floor(Math.random() * theTetrominoes.length);
+				current = theTetrominoes[random][currentRotation];
+				draw();
+				setGameRunning(true);
 			}
 
 			function control(e) {
@@ -209,6 +202,8 @@ function App() {
 					moveRight();
 				} else if (e.keyCode === 40) {
 					moveDown();
+				} else if (e.keyCode === 82) {
+					resetGrid();
 				}
 			}
 
