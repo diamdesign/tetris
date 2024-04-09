@@ -276,6 +276,18 @@
 	background-position: center center;
 	background-size: cover;
 }
+
+.minigrid {
+	margin: 1rem;
+	margin-top: 2em;
+	width: 100%;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+}
+
+.minigrid div {
+	aspect-ratio: 1/1;
+}
 .grid {
 	max-width: 100%;
 	display: grid;
@@ -297,7 +309,7 @@
 	right: calc(50% + 28vh + 10px);
 	top: 10vh;
 	text-align: right;
-	animation: textflash 0.1s infinite;
+	animation: textflash 0.561s infinite;
 	z-index: 100;
 }
 
@@ -314,8 +326,8 @@
 .level span,
 .lines span {
 	font-size: 8vh;
-	filter: drop-shadow(0 0 2px black) drop-shadow(0 0 1px black) drop-shadow(0 0 1px black)
-		drop-shadow(0 0 1px yellow) drop-shadow(0 0 1px yellow) drop-shadow(0 0 1px yellow);
+	/* filter: drop-shadow(0 0 2px black) drop-shadow(0 0 1px black) drop-shadow(0 0 1px black)
+		drop-shadow(0 0 1px yellow) drop-shadow(0 0 1px yellow) drop-shadow(0 0 1px yellow); */
 }
 
 .score {
@@ -325,47 +337,45 @@
 .lines,
 .level,
 .comingsymbol {
+	text-transform: uppercase;
 	width: 100%;
 	font-size: 1.2rem;
 	font-family: "Gajraj One";
 	padding: 3vh;
 	margin-top: 1rem;
 	text-align: center;
-	outline: 4px solid rgba(255, 255, 255, 0.08);
+	/* outline: 4px solid rgba(255, 255, 255, 0.08); */
 	border-color: rgba(255, 255, 255, 0.4);
 }
 .comingsymbol {
 	width: auto;
 	position: absolute;
-	right: calc(50% - 28vh - 15.5rem);
+	right: calc(50% - 28vh - 12.5rem);
 	color: white;
 	z-index: 10;
 	overflow: visible;
 	padding: 1rem;
 	animation: textflash 0.561s infinite;
-	aspect-ratio: 1/1;
-	width: 15rem;
+	aspect-ratio: 1 / 1;
+	width: 12rem;
+	outline: none;
+}
+
+.comingsymbol .minigrid {
+	animation: comingsymbol 2s ease-in-out infinite alternate;
 }
 
 .comingsymbol:after {
 	position: absolute;
 	left: 50%;
-	width: 450%;
-	height: 450%;
+	width: 350%;
+	height: 350%;
 	top: 50%;
 	background: radial-gradient(circle, rgba(22, 60, 116, 0.5) 0%, rgba(72, 159, 237, 0) 40%);
 	transform: translateX(-50%) translateY(-50%);
 	content: "";
 	z-index: -1;
-	opacity: 0.5;
-}
-
-.comingsymbol span {
-	font-size: 8rem;
-	display: block;
-	position: relative;
-	transition: all 2s ease-in-out;
-	animation: comingsymbol 2s ease-in-out infinite alternate;
+	opacity: 1;
 }
 
 @keyframes comingsymbol {
@@ -541,8 +551,8 @@
 
 #backanim i:nth-child(6) {
 	top: auto;
-	bottom: -10%;
-	left: -5%;
+	bottom: -20%;
+	left: -10%;
 	right: auto;
 	width: 40rem;
 	height: 40rem;
@@ -576,11 +586,15 @@
 	}
 }
 
+.border {
+	background: rgba(65, 105, 225, 0.186);
+}
+/*
 .lastrow {
 	height: 0 !important;
 	aspect-ratio: auto;
 }
-
+*/
 .copyright {
 	position: absolute;
 	bottom: 0.75rem;

@@ -1,4 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { TetrisGrid } from "./components/TetrisGrid";
+import { MiniGrid } from "./components/MiniGrid";
+import { Score } from "./components/Score";
 
 import { useGameContext } from "./components/Context";
 import { playSound } from "./components/playSound";
@@ -18,16 +21,14 @@ function App() {
 		setLevel,
 		lines,
 		setLines,
-		score,
-		setScore,
 		gameRunning,
-		isPaused,
-		setIsPaused,
 		setGameRunning,
 		theTetrominoes,
 		width,
 		randomRef,
 		isPausedRef,
+		nextRandomRef,
+		scoreRef,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -37,20 +38,20 @@ function App() {
 	const startRef = useRef(null);
 	const inputRef = useRef(null);
 
-	const handleSetScore = (newScore) => {
-		let newVar = score + 1;
-		setScore(newVar);
+	const handleSetScore = () => {
+		scoreRef.current += 1;
 
+		let scoreEl = document.querySelector(".score");
 		// Add the 'addscore' class
-		setScoreClassName("addscore");
+		scoreEl.classList.add("addscore");
 
 		// Remove the 'addscore' class after 0.5s
 		setTimeout(() => {
-			setScoreClassName("");
+			scoreEl.classList.remove("addscore");
 		}, 300);
 	};
 
-	const handleSetLevel = (newLevel) => {
+	const handleSetLevel = () => {
 		let newVar = level + 1;
 		setLevel(newVar);
 
@@ -61,8 +62,11 @@ function App() {
 	function pauseGame() {
 		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
 	}
+
 	useEffect(() => {
-		inputRef.current.focus();
+		setTimeout(() => {
+			inputRef.current.focus();
+		}, 10);
 	}, []);
 
 	useEffect(() => {
@@ -79,208 +83,6 @@ function App() {
 			document.removeEventListener("keydown", control);
 		};
 	}, []);
-
-	function TetrisGrid() {
-		const rows = 21;
-		const columns = 12;
-		const divs = [];
-
-		// Generate div elements
-		for (let i = 0; i < rows; i++) {
-			for (let j = 0; j < columns; j++) {
-				// Calculate unique key for each div
-				const key = `div-${i}-${j}`;
-				// Determine if the current div is in the last row
-				const isLastRow = i === rows - 1;
-				// Add class "taken" to divs in the last row
-				const classNames = isLastRow ? "taken lastrow" : "";
-				// Add div element to the array with the appropriate class
-				divs.push(<div key={key} className={classNames}></div>);
-			}
-		}
-
-		let currentPosition = 4;
-		let currentRotation = 0;
-
-		// let random = Math.floor(Math.random() * theTetrominoes.length);
-		let current = theTetrominoes[randomRef.current][currentRotation];
-
-		useEffect(() => {
-			// Select grid cells within the useEffect hook
-			const cells = Array.from(document.querySelectorAll(".grid div"));
-
-			function draw() {
-				current.forEach((index) => {
-					cells[currentPosition + index].classList.add("tetromino");
-				});
-			}
-
-			function undraw() {
-				current.forEach((index) => {
-					cells[currentPosition + index].classList.remove("tetromino");
-				});
-			}
-
-			const timerId = setInterval(() => {
-				if (!isPausedRef.current) {
-					moveDown();
-				}
-			}, 1000);
-
-			function moveDown() {
-				undraw();
-				currentPosition += width;
-				draw();
-				freeze();
-			}
-
-			function moveLeft() {
-				undraw();
-				const isAtLeftEdge = current.some(
-					(index) => (currentPosition + index) % width === 0
-				);
-				if (!isAtLeftEdge) {
-					currentPosition -= 1;
-				}
-
-				if (
-					current.some((index) =>
-						cells[currentPosition + index].classList.contains("taken")
-					)
-				) {
-					currentPosition += 1;
-				}
-
-				draw();
-			}
-
-			function moveRight() {
-				undraw();
-				const isAtRightEdge = current.some(
-					(index) => (currentPosition + index) % width === width - 1
-				);
-				if (!isAtRightEdge) {
-					currentPosition += 1;
-				}
-
-				if (
-					current.some((index) =>
-						cells[currentPosition + index].classList.contains("taken")
-					)
-				) {
-					currentPosition -= 1;
-				}
-
-				draw();
-			}
-
-			function rotate() {
-				undraw();
-				let nextRotation = currentRotation + 1;
-				if (nextRotation === current.length) {
-					// Loop back order at the end
-					nextRotation = 0;
-				}
-				const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
-
-				const isAtLeftEdge = nextTetromino.some(
-					(index) => (currentPosition + index) % width === width - 1
-				);
-				const isAtRightEdge = nextTetromino.some(
-					(index) => (currentPosition + index) % width === width + 1
-				);
-
-				// Check if rotation is possible without hitting walls or other objects
-				if (!isAtLeftEdge && !isAtRightEdge && !checkCollision(nextTetromino)) {
-					currentRotation = nextRotation;
-					current = nextTetromino;
-				}
-
-				draw();
-			}
-
-			// Function to check collision with other tetrominoes
-			function checkCollision(tetromino) {
-				return tetromino.some(
-					(index) =>
-						cells[currentPosition + index].classList.contains("taken") ||
-						cells[currentPosition + index].classList.contains("tetromino")
-				);
-			}
-
-			function freeze() {
-				if (
-					current.some((index) =>
-						cells[currentPosition + index + width].classList.contains("taken")
-					)
-				) {
-					current.forEach((index) =>
-						cells[currentPosition + index].classList.add("taken")
-					);
-					const newRandom = Math.floor(Math.random() * theTetrominoes.length);
-					randomRef.current = newRandom;
-
-					current = theTetrominoes[randomRef.current][currentRotation];
-					currentPosition = 4;
-					draw();
-				}
-			}
-
-			function resetGrid() {
-				cells.forEach((cell) => {
-					cell.classList.remove("tetromino");
-					if (!cell.classList.contains("lastrow")) {
-						cell.classList.remove("taken");
-					}
-				});
-				currentPosition = 4;
-				const newRandom = Math.floor(Math.random() * theTetrominoes.length);
-				randomRef.current = newRandom;
-
-				current = theTetrominoes[randomRef.current][currentRotation];
-
-				draw();
-			}
-
-			function control(e) {
-				if (e.keyCode === 37) {
-					moveLeft();
-				} else if (e.keyCode === 38) {
-					rotate();
-				} else if (e.keyCode === 39) {
-					moveRight();
-				} else if (e.keyCode === 40) {
-					moveDown();
-				} else if (e.keyCode === 82) {
-					resetGrid();
-				}
-			}
-
-			document.addEventListener("keydown", control);
-
-			draw();
-
-			// Cleanup function to remove event listener
-			return () => {
-				clearInterval(timerId);
-				document.removeEventListener("keydown", control);
-			};
-		}, [
-			gameRunning,
-			randomRef,
-			currentPosition,
-			current,
-			currentRotation,
-			width,
-			theTetrominoes,
-		]);
-
-		return (
-			<>
-				<div className="grid">{divs}</div>
-			</>
-		);
-	}
 
 	function Credits() {
 		return (
@@ -344,7 +146,6 @@ function App() {
 
 	return (
 		<>
-			{/* Game Container*/}
 			<div id="gamecontainer" className={levelClassName}>
 				{/* Credits page */}
 				{page === "credits" && <Credits />}
@@ -406,35 +207,13 @@ function App() {
 							<i></i>
 						</div>
 					)}
-					<div className={`score ${scoreClassName}`} onClick={handleSetScore}>
-						{score}
-						<i></i>
-						<i></i>
-						<i></i>
-						<i></i>
-					</div>
-
-					<div className="lines">
-						Lines:
-						<span>{lines}</span>
-						<i></i>
-						<i></i>
-						<i></i>
-						<i></i>
-					</div>
-					<div className="level" onClick={handleSetLevel}>
-						Level:<span>{level}</span>
-					</div>
-					<i></i>
-					<i></i>
-					<i></i>
-					<i></i>
+					<Score />
 				</div>
 
 				{/* Right content */}
 				<div className="comingsymbol">
 					Next:
-					<span>T</span>
+					<MiniGrid />
 					<i></i>
 					<i></i>
 					<i></i>

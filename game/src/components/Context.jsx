@@ -13,11 +13,11 @@ export const GameContextProvider = ({ children }) => {
 	const [showDarkoverlay, setShowDarkoverlay] = useState(true);
 	const [gameRunning, setGameRunning] = useState(false);
 	const [isPaused, setIsPaused] = useState(true);
-	const [score, setScore] = useState(0);
 	const [level, setLevel] = useState(1);
 	const [lines, setLines] = useState(10);
+	const [score, setScore] = useState(0);
+	const [width, setWidth] = useState(14);
 
-	const width = 12;
 	//The Tetrominoes
 	const lTetromino = [
 		[1, width + 1, width * 2 + 1, 2],
@@ -57,16 +57,50 @@ export const GameContextProvider = ({ children }) => {
 	const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
 
 	const randomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
+	const nextRandomRef = useRef(0);
+	const scoreRef = useRef(0);
+	const tickSpeedRef = useRef(1000);
 
 	const isPausedRef = useRef(true);
 
 	// Add more context variables here as needed
 
+	let displayIndex = 0;
+
+	// Define the displayShape function
+	const displayShape = () => {
+		const displaySquares = Array.from(document.querySelectorAll(".minigrid div"));
+
+		const displayWidth = 4;
+
+		const upNextTetrominoes = [
+			[1, displayWidth + 1, displayWidth * 2 + 1, 2],
+			[0, displayWidth, displayWidth + 1, displayWidth * 2 + 1],
+			[1, displayWidth, displayWidth + 1, displayWidth + 2],
+			[0, 1, displayWidth, displayWidth + 1],
+			[1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1],
+		];
+
+		displaySquares.forEach((square) => {
+			square.classList.remove("tetromino");
+		});
+
+		upNextTetrominoes[nextRandomRef.current].forEach((index) => {
+			displaySquares[displayIndex + index].classList.add("tetromino");
+		});
+	};
+
 	// Return the context provider with the variables as context values
 	return (
 		<GameContext.Provider
 			value={{
+				tickSpeedRef,
+				score,
+				setScore,
+				displayShape,
 				width,
+				scoreRef,
+				nextRandomRef,
 				theTetrominoes,
 				lTetromino,
 				zTetromino,
@@ -75,8 +109,6 @@ export const GameContextProvider = ({ children }) => {
 				iTetromino,
 				gameRunning,
 				setGameRunning,
-				score,
-				setScore,
 				level,
 				setLevel,
 				lines,
