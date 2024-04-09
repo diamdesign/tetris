@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useRef } from "react";
 
 // Create a context
 const GameContext = createContext();
@@ -16,8 +16,6 @@ export const GameContextProvider = ({ children }) => {
 	const [score, setScore] = useState(0);
 	const [level, setLevel] = useState(1);
 	const [lines, setLines] = useState(10);
-
-	// Add more context variables here as needed
 
 	const width = 12;
 	//The Tetrominoes
@@ -58,6 +56,12 @@ export const GameContextProvider = ({ children }) => {
 
 	const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
 
+	const randomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
+
+	const isPausedRef = useRef(true);
+
+	// Add more context variables here as needed
+
 	// Return the context provider with the variables as context values
 	return (
 		<GameContext.Provider
@@ -89,6 +93,8 @@ export const GameContextProvider = ({ children }) => {
 				setMuted,
 				isPaused,
 				setIsPaused,
+				randomRef,
+				isPausedRef,
 				// Add more context variables here as needed
 			}}
 		>

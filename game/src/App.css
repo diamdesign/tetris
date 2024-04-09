@@ -38,6 +38,13 @@
 	z-index: 1002;
 }
 
+#intro {
+	outline: none !important;
+	border: none !important;
+	background: none !important;
+	box-shadow: none !important;
+}
+
 #selectalias {
 	margin-top: 4rem;
 	position: relative;
@@ -253,6 +260,21 @@
 	z-index: 20;
 	mix-blend-mode: overlay;
 	opacity: 0.8;
+}
+
+.colorize:after {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	left: 0;
+	top: 0;
+	content: "";
+	display: block;
+	mix-blend-mode: screenr;
+	background-image: url("assets/zoom.gif");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
 }
 .grid {
 	max-width: 100%;

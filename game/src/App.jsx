@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
 
 import { useGameContext } from "./components/Context";
+import { playSound } from "./components/playSound";
 import { Music } from "./components/Music";
 import "./App.css";
 import "./css/stars.css";
@@ -25,12 +26,13 @@ function App() {
 		setGameRunning,
 		theTetrominoes,
 		width,
+		randomRef,
+		isPausedRef,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
 	const [scoreClassName, setScoreClassName] = useState("");
 	const [levelClassName, setLevelClassName] = useState("");
-	const [random, setRandom] = useState(Math.floor(Math.random() * theTetrominoes.length));
 
 	const startRef = useRef(null);
 	const inputRef = useRef(null);
@@ -57,9 +59,8 @@ function App() {
 	};
 
 	function pauseGame() {
-		setIsPaused((prevIsPaused) => !prevIsPaused);
+		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
 	}
-
 	useEffect(() => {
 		inputRef.current.focus();
 	}, []);
@@ -78,6 +79,7 @@ function App() {
 			document.removeEventListener("keydown", control);
 		};
 	}, []);
+
 	function TetrisGrid() {
 		const rows = 21;
 		const columns = 12;
@@ -101,15 +103,11 @@ function App() {
 		let currentRotation = 0;
 
 		// let random = Math.floor(Math.random() * theTetrominoes.length);
-		let current = theTetrominoes[random][currentRotation];
+		let current = theTetrominoes[randomRef.current][currentRotation];
 
 		useEffect(() => {
 			// Select grid cells within the useEffect hook
 			const cells = Array.from(document.querySelectorAll(".grid div"));
-			console.log(cells);
-
-			console.log(current);
-			console.log(random);
 
 			function draw() {
 				current.forEach((index) => {
@@ -124,7 +122,7 @@ function App() {
 			}
 
 			const timerId = setInterval(() => {
-				if (!isPaused) {
+				if (!isPausedRef.current) {
 					moveDown();
 				}
 			}, 1000);
@@ -176,6 +174,40 @@ function App() {
 				draw();
 			}
 
+			function rotate() {
+				undraw();
+				let nextRotation = currentRotation + 1;
+				if (nextRotation === current.length) {
+					// Loop back order at the end
+					nextRotation = 0;
+				}
+				const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
+
+				const isAtLeftEdge = nextTetromino.some(
+					(index) => (currentPosition + index) % width === width - 1
+				);
+				const isAtRightEdge = nextTetromino.some(
+					(index) => (currentPosition + index) % width === width + 1
+				);
+
+				// Check if rotation is possible without hitting walls or other objects
+				if (!isAtLeftEdge && !isAtRightEdge && !checkCollision(nextTetromino)) {
+					currentRotation = nextRotation;
+					current = nextTetromino;
+				}
+
+				draw();
+			}
+
+			// Function to check collision with other tetrominoes
+			function checkCollision(tetromino) {
+				return tetromino.some(
+					(index) =>
+						cells[currentPosition + index].classList.contains("taken") ||
+						cells[currentPosition + index].classList.contains("tetromino")
+				);
+			}
+
 			function freeze() {
 				if (
 					current.some((index) =>
@@ -185,8 +217,10 @@ function App() {
 					current.forEach((index) =>
 						cells[currentPosition + index].classList.add("taken")
 					);
-					const random = Math.floor(Math.random() * theTetrominoes.length);
-					current = theTetrominoes[random][currentRotation];
+					const newRandom = Math.floor(Math.random() * theTetrominoes.length);
+					randomRef.current = newRandom;
+
+					current = theTetrominoes[randomRef.current][currentRotation];
 					currentPosition = 4;
 					draw();
 				}
@@ -201,7 +235,9 @@ function App() {
 				});
 				currentPosition = 4;
 				const newRandom = Math.floor(Math.random() * theTetrominoes.length);
-				current = theTetrominoes[newRandom][currentRotation];
+				randomRef.current = newRandom;
+
+				current = theTetrominoes[randomRef.current][currentRotation];
 
 				draw();
 			}
@@ -210,7 +246,7 @@ function App() {
 				if (e.keyCode === 37) {
 					moveLeft();
 				} else if (e.keyCode === 38) {
-					//rotate
+					rotate();
 				} else if (e.keyCode === 39) {
 					moveRight();
 				} else if (e.keyCode === 40) {
@@ -229,7 +265,15 @@ function App() {
 				clearInterval(timerId);
 				document.removeEventListener("keydown", control);
 			};
-		}, [gameRunning, currentPosition, current, currentRotation, width, theTetrominoes]);
+		}, [
+			gameRunning,
+			randomRef,
+			currentPosition,
+			current,
+			currentRotation,
+			width,
+			theTetrominoes,
+		]);
 
 		return (
 			<>
@@ -258,13 +302,19 @@ function App() {
 	const handleAliasInput = (event) => {
 		// Update the state with the value entered by the user
 		setAliasInput(event.target.value);
+		playSound("key", 0.2);
 	};
 
 	// Function to handle alias save
 	const handleAliasKey = (event) => {
 		if (event.key === "Enter") {
 			setAlias(aliasInput);
-			startRef.current.focus();
+			playSound("enter", 0.5);
+			playSound("impact", 0.3);
+			setShowDarkoverlay(false);
+			setTimeout(() => {
+				startRef.current.focus();
+			}, 10);
 		}
 	};
 
@@ -272,15 +322,18 @@ function App() {
 	const handleStartClick = () => {
 		setShowDarkoverlay(false);
 		setGameRunning(true);
-		setIsPaused(false);
+		isPausedRef.current = false;
+		playSound("enter", 0.5);
+		playSound("start", 0.5);
 	};
 
 	// Function to handle start button
 	const handleStartKey = (e) => {
 		if (e.keyCode === "13") {
-			setShowDarkoverlay(false);
 			setGameRunning(true);
-			setIsPaused(false);
+			playSound("enter", 0.5);
+			playSound("start", 0.5);
+			isPausedRef.current = false;
 		}
 	};
 
@@ -291,8 +344,11 @@ function App() {
 
 	return (
 		<>
+			{/* Game Container*/}
 			<div id="gamecontainer" className={levelClassName}>
+				{/* Credits page */}
 				{page === "credits" && <Credits />}
+
 				{/* Input alias */}
 				{!alias && (
 					<div id="intro">
@@ -317,7 +373,7 @@ function App() {
 					</div>
 				)}
 
-				{!gameRunning && (
+				{!gameRunning && alias && (
 					<a
 						href="#"
 						tabIndex={1}
@@ -332,29 +388,57 @@ function App() {
 				)}
 
 				{/* Colorize or use for other means */}
-				<div className="colorize"></div>
+				<div className="colorize">
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
+				</div>
 
 				{/* Currently left content, alias, score, lines, level */}
 				<div className="gamesymbols">
 					{/* Playername */}
-					{alias && <div className="alias">{alias}</div>}
+					{alias && (
+						<div className="alias">
+							{alias} <i></i>
+							<i></i>
+							<i></i>
+							<i></i>
+						</div>
+					)}
 					<div className={`score ${scoreClassName}`} onClick={handleSetScore}>
 						{score}
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
 					</div>
 
 					<div className="lines">
 						Lines:
 						<span>{lines}</span>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
 					</div>
 					<div className="level" onClick={handleSetLevel}>
 						Level:<span>{level}</span>
 					</div>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
 				</div>
 
 				{/* Right content */}
 				<div className="comingsymbol">
 					Next:
 					<span>T</span>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
 				</div>
 
 				{/* Tetris container */}
@@ -367,6 +451,10 @@ function App() {
 						<span>I</span>
 						<span>S</span>
 					</h1>
+					<i></i>
+					<i></i>
+					<i></i>
+					<i></i>
 					<TetrisGrid />
 				</div>
 
