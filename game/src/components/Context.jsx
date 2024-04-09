@@ -13,10 +13,12 @@ export const GameContextProvider = ({ children }) => {
 	const [showDarkoverlay, setShowDarkoverlay] = useState(true);
 	const [gameRunning, setGameRunning] = useState(false);
 	const [isPaused, setIsPaused] = useState(true);
+	const [disableControls, setDisableControls] = useState(false);
 	const [level, setLevel] = useState(1);
 	const [lines, setLines] = useState(10);
 	const [score, setScore] = useState(0);
 	const [width, setWidth] = useState(14);
+	const [height, setHeight] = useState(22);
 
 	//The Tetrominoes
 	const lTetromino = [
@@ -94,11 +96,15 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				disableControls,
+				setDisableControls,
 				tickSpeedRef,
 				score,
 				setScore,
 				displayShape,
 				width,
+				height,
+				setHeight,
 				scoreRef,
 				nextRandomRef,
 				theTetrominoes,

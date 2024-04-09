@@ -3,6 +3,8 @@ import { useGameContext } from "./Context";
 
 export function TetrisGrid() {
 	const {
+		disableControls,
+		setDisableControls,
 		level,
 		setLevel,
 		lines,
@@ -12,6 +14,7 @@ export function TetrisGrid() {
 		setGameRunning,
 		theTetrominoes,
 		width,
+		height,
 		randomRef,
 		isPausedRef,
 		nextRandomRef,
@@ -21,32 +24,59 @@ export function TetrisGrid() {
 		setScore,
 	} = useGameContext();
 
-	const rows = 23;
+	const rows = height;
 	const columns = width;
-	const divs = [];
 
-	// Generate div elements
+	// Initialize the grid array
+	const gridArray = [];
+
+	// Generate the grid array
 	for (let i = 0; i < rows; i++) {
+		const rowArray = [];
 		for (let j = 0; j < columns; j++) {
-			// Calculate unique key for each div
-			const key = `div-${i}-${j}`;
-			// Determine if the current div is in the last row
+			const cell = {
+				key: `div-${i}-${j}`,
+				classNames: "",
+			};
+
+			// Determine if the cell is in the last row
 			const isLastRow = i === rows - 1;
-			// Determine if the current div is the first or last in the row
+			// Determine if the cell is the first or last in the row
 			const isFirstRow = i === 0;
 			const isFirstColumn = j === 0;
 			const isLastColumn = j === columns - 1;
-			// Add class "taken" to divs in the last row and first/last columns
-			let classNames =
-				isLastRow || isFirstRow || isFirstColumn || isLastColumn ? "taken border" : "";
-			// Add class "lastrow" to divs in the last row
-			if (isLastRow) {
-				classNames += " lastrow";
+
+			// Add appropriate class names to the cell
+			if (!isFirstRow && (isLastRow || isFirstColumn || isLastColumn)) {
+				cell.classNames = "taken border";
 			}
-			// Add div element to the array with the appropriate class
-			divs.push(<div key={key} className={classNames}></div>);
+
+			// Add class "lastrow" to cells in the last row
+			if (isLastRow) {
+				cell.classNames += " lastrow";
+			}
+
+			// Add class "firstrow" to cells in the first row
+			if (isFirstRow) {
+				cell.classNames += " firstrow border";
+			}
+
+			// Add class "leftborder" to cells at the beginning of each row (except the first row)
+			if (!isFirstRow && isFirstColumn) {
+				cell.classNames += " leftborder";
+			}
+
+			// Add class "rightborder" to cells at the end of each row (except the first row)
+			if (!isFirstRow && isLastColumn) {
+				cell.classNames += " rightborder";
+			}
+
+			rowArray.push(cell);
 		}
+		gridArray.push(rowArray);
 	}
+
+	console.log(gridArray);
 
 	// Inline styles for the grid
 	const gridStyle = {
@@ -62,16 +92,13 @@ export function TetrisGrid() {
 
 	useEffect(() => {
 		// Select grid cells within the useEffect hook
-		const cells = Array.from(document.querySelectorAll(".grid div"));
+		let cells = Array.from(document.querySelectorAll(".grid div"));
 
 		function draw() {
+			if (!cells) return;
 			current.forEach((index) => {
 				cells[currentPosition + index].classList.add("tetromino");
 			});
-
-			if (scoreRef.current !== score) {
-				setScore(scoreRef.current);
-			}
 		}
 
 		function undraw() {
@@ -87,9 +114,10 @@ export function TetrisGrid() {
 		}, tickSpeedRef.current);
 
 		let lastMove = false;
+		let addingScore = false;
 
 		function moveDown() {
-			if (!lastMove) {
+			if (!lastMove && !disableControls && !addingScore) {
 				undraw();
 				currentPosition += width;
 				draw();
@@ -171,8 +199,11 @@ export function TetrisGrid() {
 
 					current = theTetrominoes[randomRef.current][currentRotation];
 					currentPosition = startCurrentPos;
+					addScore();
 					draw();
+
 					displayShape();
+
 					lastMove = false;
 				}, tickSpeedRef.current);
 			}
@@ -212,6 +243,60 @@ export function TetrisGrid() {
 
 		draw();
 
+		function checkCompletedRows() {
+			const completedRows = [];
+			for (let i = 0; i < cells.length; i += width) {
+				// Check if the row is not the first row and not the last row
+				if (
+					!cells[i].classList.contains("firstrow") &&
+					!cells[i].classList.contains("lastrow")
+				) {
+					let isCompleted = true;
+					for (let j = i; j < i + width; j++) {
+						if (!cells[j].classList.contains("taken")) {
+							isCompleted = false;
+							break; // Exit inner loop early if any cell in the row is not taken
+						}
+					}
+					if (isCompleted) {
+						// Full row completed
+						completedRows.push(i / width); // Push the row index
+					}
+				}
+			}
+			return completedRows;
+		}
+
+		function addScore() {
+			console.log("Checking adding score...");
+			addingScore = true;
+
+			// Check which rows are completed
+			const completedRows = checkCompletedRows();
+
+			console.log(completedRows);
+
+			if (completedRows.length >= 1) {
+				// Update the score
+				const scoreToAdd = completedRows.length * 10;
+				scoreRef.current += scoreToAdd;
+				setScore(scoreRef.current);
+
+				let scoreEl = document.querySelector(".score");
+				scoreEl.classList.add("addscore");
+
+				setTimeout(() => {
+					scoreEl.classList.remove("addscore");
+				}, 300);
+
+				setTimeout(() => {
+					addingScore = false;
+				}, tickSpeedRef);
+			} else {
+				addingScore = false;
+			}
+		}
+
 		// Cleanup function to remove event listener
 		return () => {
 			clearInterval(timerId);
@@ -228,10 +313,13 @@ export function TetrisGrid() {
 		theTetrominoes,
 	]);
 
+	// Render the grid based on the grid array
 	return (
 		<>
 			<div className="grid" style={gridStyle}>
-				{divs}
+				{gridArray.map((row, rowIndex) =>
+					row.map((cell) => <div key={cell.key} className={cell.classNames}></div>)
+				)}
 			</div>
 		</>
 	);

@@ -40,15 +40,6 @@ function App() {
 
 	const handleSetScore = () => {
 		scoreRef.current += 1;
-
-		let scoreEl = document.querySelector(".score");
-		// Add the 'addscore' class
-		scoreEl.classList.add("addscore");
-
-		// Remove the 'addscore' class after 0.5s
-		setTimeout(() => {
-			scoreEl.classList.remove("addscore");
-		}, 300);
 	};
 
 	const handleSetLevel = () => {
@@ -103,6 +94,7 @@ function App() {
 	// Function to handle input change
 	const handleAliasInput = (event) => {
 		// Update the state with the value entered by the user
+
 		setAliasInput(event.target.value);
 		playSound("key", 0.2);
 	};
@@ -110,13 +102,17 @@ function App() {
 	// Function to handle alias save
 	const handleAliasKey = (event) => {
 		if (event.key === "Enter") {
-			setAlias(aliasInput);
-			playSound("enter", 0.5);
-			playSound("impact", 0.3);
-			setShowDarkoverlay(false);
-			setTimeout(() => {
-				startRef.current.focus();
-			}, 10);
+			if (event.target.value !== "") {
+				setAlias(aliasInput);
+				playSound("enter", 0.5);
+				playSound("impact", 0.3);
+				setShowDarkoverlay(false);
+				setTimeout(() => {
+					startRef.current.focus();
+				}, 10);
+			} else {
+				alert("You need to enter an alias for the highscores");
+			}
 		}
 	};
 
