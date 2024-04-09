@@ -12,9 +12,11 @@ export const GameContextProvider = ({ children }) => {
 	const [music, setMusic] = useState("start");
 	const [showDarkoverlay, setShowDarkoverlay] = useState(true);
 	const [gameRunning, setGameRunning] = useState(false);
+	const [isPaused, setIsPaused] = useState(true);
 	const [score, setScore] = useState(0);
 	const [level, setLevel] = useState(1);
 	const [lines, setLines] = useState(10);
+
 	// Add more context variables here as needed
 
 	const width = 12;
@@ -85,6 +87,8 @@ export const GameContextProvider = ({ children }) => {
 				setMusic,
 				isMuted,
 				setMuted,
+				isPaused,
+				setIsPaused,
 				// Add more context variables here as needed
 			}}
 		>

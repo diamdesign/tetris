@@ -49,12 +49,24 @@
 	z-index: 1001;
 	padding: 1rem 4rem;
 }
-.start:hover {
+.start:hover,
+.start:focus-visible,
+.start:focus {
 	cursor: pointer;
 	color: black !important;
 	outline-color: yellow;
 	background: yellow;
 	box-shadow: 0 0 4rem 0 yellow;
+	transform-origin: top left;
+}
+
+.start:active {
+	cursor: pointer;
+	color: black !important;
+	outline-color: yellow;
+	background: yellow;
+	box-shadow: 0 0 4rem 0 yellow;
+	scale: 0.9;
 }
 #darkoverlay {
 	position: fixed;
@@ -545,4 +557,20 @@
 .lastrow {
 	height: 0 !important;
 	aspect-ratio: auto;
+}
+
+.copyright {
+	position: absolute;
+	bottom: 0.75rem;
+	left: 50%;
+	color: white;
+	transform: translateX(-50%);
+	z-index: 50;
+	font-size: 0.75rem;
+	font-family: "Roboto", sans-serif;
+	opacity: 0.5;
+}
+
+.copyright a {
+	color: white;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 
 import { useGameContext } from "./components/Context";
 import { Music } from "./components/Music";
@@ -20,6 +20,8 @@ function App() {
 		score,
 		setScore,
 		gameRunning,
+		isPaused,
+		setIsPaused,
 		setGameRunning,
 		theTetrominoes,
 		width,
@@ -29,6 +31,9 @@ function App() {
 	const [scoreClassName, setScoreClassName] = useState("");
 	const [levelClassName, setLevelClassName] = useState("");
 	const [random, setRandom] = useState(Math.floor(Math.random() * theTetrominoes.length));
+
+	const startRef = useRef(null);
+	const inputRef = useRef(null);
 
 	const handleSetScore = (newScore) => {
 		let newVar = score + 1;
@@ -52,8 +57,12 @@ function App() {
 	};
 
 	function pauseGame() {
-		setGameRunning((prevGameRunning) => !prevGameRunning);
+		setIsPaused((prevIsPaused) => !prevIsPaused);
 	}
+
+	useEffect(() => {
+		inputRef.current.focus();
+	}, []);
 
 	useEffect(() => {
 		function control(e) {
@@ -114,15 +123,17 @@ function App() {
 				});
 			}
 
-			const timerId = setInterval(moveDown, 1000);
+			const timerId = setInterval(() => {
+				if (!isPaused) {
+					moveDown();
+				}
+			}, 1000);
 
 			function moveDown() {
-				if (gameRunning) {
-					undraw();
-					currentPosition += width;
-					draw();
-					freeze();
-				}
+				undraw();
+				currentPosition += width;
+				draw();
+				freeze();
 			}
 
 			function moveLeft() {
@@ -182,15 +193,17 @@ function App() {
 			}
 
 			function resetGrid() {
-				setGameRunning(false);
 				cells.forEach((cell) => {
 					cell.classList.remove("tetromino");
+					if (!cell.classList.contains("lastrow")) {
+						cell.classList.remove("taken");
+					}
 				});
 				currentPosition = 4;
-				random = Math.floor(Math.random() * theTetrominoes.length);
-				current = theTetrominoes[random][currentRotation];
+				const newRandom = Math.floor(Math.random() * theTetrominoes.length);
+				current = theTetrominoes[newRandom][currentRotation];
+
 				draw();
-				setGameRunning(true);
 			}
 
 			function control(e) {
@@ -251,6 +264,7 @@ function App() {
 	const handleAliasKey = (event) => {
 		if (event.key === "Enter") {
 			setAlias(aliasInput);
+			startRef.current.focus();
 		}
 	};
 
@@ -258,6 +272,16 @@ function App() {
 	const handleStartClick = () => {
 		setShowDarkoverlay(false);
 		setGameRunning(true);
+		setIsPaused(false);
+	};
+
+	// Function to handle start button
+	const handleStartKey = (e) => {
+		if (e.keyCode === "13") {
+			setShowDarkoverlay(false);
+			setGameRunning(true);
+			setIsPaused(false);
+		}
 	};
 
 	// Function to handle mouse over
@@ -284,6 +308,7 @@ function App() {
 						<input
 							type="text"
 							value={aliasInput}
+							ref={inputRef}
 							onChange={handleAliasInput}
 							onKeyDown={handleAliasKey}
 							id="selectalias"
@@ -293,9 +318,17 @@ function App() {
 				)}
 
 				{!gameRunning && (
-					<div className="start" onClick={handleStartClick} onMouseOver={handleMouseOver}>
+					<a
+						href="#"
+						tabIndex={1}
+						className="start"
+						onClick={handleStartClick}
+						onKeyDown={handleStartKey}
+						onMouseOver={handleMouseOver}
+						ref={startRef}
+					>
 						Play
-					</div>
+					</a>
 				)}
 
 				{/* Colorize or use for other means */}
@@ -365,6 +398,13 @@ function App() {
 
 				{/* Dark overlay */}
 				{showDarkoverlay && <div id="darkoverlay"></div>}
+
+				<div className="copyright">
+					© 2024{" "}
+					<a href="https://diam.se" target="_blank">
+						DIAM
+					</a>
+				</div>
 
 				<Music />
 			</div>
