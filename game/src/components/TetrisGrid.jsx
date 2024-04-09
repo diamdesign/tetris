@@ -100,14 +100,8 @@ export function TetrisGrid() {
 		function moveLeft() {
 			undraw();
 			const isAtLeftEdge = current.some((index) => (currentPosition + index) % width === 0);
-			if (!isAtLeftEdge) {
+			if (!isAtLeftEdge && !checkCollision(current.map((index) => index - 1))) {
 				currentPosition -= 1;
-			}
-
-			if (
-				current.some((index) => cells[currentPosition + index].classList.contains("taken"))
-			) {
-				currentPosition += 1;
 			}
 
 			draw();
@@ -118,14 +112,8 @@ export function TetrisGrid() {
 			const isAtRightEdge = current.some(
 				(index) => (currentPosition + index) % width === width - 1
 			);
-			if (!isAtRightEdge) {
+			if (!isAtRightEdge && !checkCollision(current.map((index) => index + 1))) {
 				currentPosition += 1;
-			}
-
-			if (
-				current.some((index) => cells[currentPosition + index].classList.contains("taken"))
-			) {
-				currentPosition -= 1;
 			}
 
 			draw();
@@ -193,7 +181,7 @@ export function TetrisGrid() {
 		function resetGrid() {
 			cells.forEach((cell) => {
 				cell.classList.remove("tetromino");
-				if (!cell.classList.contains("lastrow")) {
+				if (!cell.classList.contains("border")) {
 					cell.classList.remove("taken");
 				}
 			});
