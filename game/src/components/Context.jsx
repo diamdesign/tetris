@@ -19,29 +19,30 @@ export const GameContextProvider = ({ children }) => {
 	const [score, setScore] = useState(0);
 	const [width, setWidth] = useState(14);
 	const [height, setHeight] = useState(22);
+	const [minidivs, setMinidivs] = useState([]);
 
 	//The Tetrominoes
 	const lTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[0, 1, 0],
-			[0, 1, 0],
-			[0, 1, 1],
+			[1, ""],
+			[1, ""],
+			[1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
 			[1, 1, 1],
-			[1, 0, 0],
+			[1, "", ""],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[1, 1, 0],
-			[0, 1, 0],
-			[0, 1, 0],
+			[1, 1],
+			["", 1],
+			["", 1],
 		],
 		[
 			// 270 degrees clockwise rotation
-			[0, 0, 1],
+			["", "", 1],
 			[1, 1, 1],
 		],
 	];
@@ -49,25 +50,148 @@ export const GameContextProvider = ({ children }) => {
 	const jTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[0, 1, 0],
-			[0, 1, 0],
-			[1, 1, 0],
+			["", 1],
+			["", 1],
+			[1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[1, 0, 0],
+			[1, "", ""],
 			[1, 1, 1],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[0, 1, 1],
-			[0, 1, 0],
-			[0, 1, 0],
+			[1, 1],
+			[1, ""],
+			[1, ""],
 		],
 		[
 			// 270 degrees clockwise rotation
 			[1, 1, 1],
-			[0, 0, 1],
+			["", "", 1],
+		],
+	];
+
+	const sTetromino = [
+		[
+			// Original rotation (0 degrees)
+			["", 1, 1],
+			[1, 1, ""],
+		],
+		[
+			// 90 degrees clockwise rotation
+			[1, ""],
+			[1, 1],
+			["", 1],
+		],
+		[
+			// 180 degrees clockwise rotation
+			["", 1, 1],
+			[1, 1, ""],
+		],
+		[
+			// 270 degrees clockwise rotation
+			[1, ""],
+			[1, 1],
+			["", 1],
+		],
+	];
+
+	const zTetromino = [
+		[
+			// Original rotation (0 degrees)
+			[1, 1, ""],
+			["", 1, 1],
+		],
+		[
+			// 90 degrees clockwise rotation
+			[""],
+			[1, 1],
+			[1, ""],
+		],
+		[
+			// 180 degrees clockwise rotation
+			[1, 1, ""],
+			["", 1, 1],
+		],
+		[
+			// 270 degrees clockwise rotation
+			["", 1],
+			[1, 1],
+			[1, ""],
+		],
+	];
+
+	const tTetromino = [
+		[
+			// Original rotation (0 degrees)
+			[1, 1, 1],
+			["", 1, ""],
+		],
+		[
+			// 90 degrees clockwise rotation
+			["", 1],
+			[1, 1],
+			["", 1],
+		],
+		[
+			// 180 degrees clockwise rotation
+			["", 1, ""],
+			[1, 1, 1],
+		],
+		[
+			// 270 degrees clockwise rotation
+			[1, ""],
+			[1, 1],
+			[1, ""],
+		],
+	];
+
+	const oTetromino = [
+		[
+			// Original rotation (0 degrees)
+			[1, 1],
+			[1, 1],
+		],
+		[
+			// 90 degrees clockwise rotation
+			[1, 1],
+			[1, 1],
+		],
+		[
+			// 180 degrees clockwise rotation
+			[1, 1],
+			[1, 1],
+		],
+		[
+			// 270 degrees clockwise rotation
+			[1, 1],
+			[1, 1],
+		],
+	];
+
+	const iTetromino = [
+		[
+			// Original rotation (0 degrees)
+			[1],
+			[1],
+			[1],
+			[1],
+		],
+		[
+			// 90 degrees clockwise rotation
+			[1, 1, 1, 1],
+		],
+		[
+			// 180 degrees clockwise rotation
+			[1],
+			[1],
+			[1],
+			[1],
+		],
+		[
+			// 270 degrees clockwise rotation
+			[1, 1, 1, 1],
 		],
 	];
 
@@ -101,46 +225,66 @@ export const GameContextProvider = ({ children }) => {
 	];
 */
 
-	const theTetrominoes = [lTetromino, jTetromino];
+	const theTetrominoes = [
+		lTetromino,
+		sTetromino,
+		tTetromino,
+		jTetromino,
+		zTetromino,
+		oTetromino,
+		iTetromino,
+	];
 
 	const randomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
-	const nextRandomRef = useRef(0);
+	const nextRandomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
 	const scoreRef = useRef(0);
 	const tickSpeedRef = useRef(1000);
+	const startRotationRef = useRef(0);
 
 	const isPausedRef = useRef(true);
 
 	// Add more context variables here as needed
 
 	let displayIndex = 0;
-
-	// Define the displayShape function
 	const displayShape = () => {
-		const displaySquares = Array.from(document.querySelectorAll(".minigrid div"));
+		// Get the next tetromino shape
+		const upNextTetromino = theTetrominoes[nextRandomRef.current][startRotationRef.current];
 
-		const displayWidth = 4;
+		// Create a copy of minidivs
+		const newMinidivs = [...minidivs];
 
-		const upNextTetrominoes = [
-			[1, displayWidth + 1, displayWidth * 2 + 1, 2],
-			[0, displayWidth, displayWidth + 1, displayWidth * 2 + 1],
-			[1, displayWidth, displayWidth + 1, displayWidth + 2],
-			[0, 1, displayWidth, displayWidth + 1],
-			[1, displayWidth + 1, displayWidth * 2 + 1, displayWidth * 3 + 1],
-		];
-
-		displaySquares.forEach((square) => {
-			square.classList.remove("tetromino");
+		// Reset all classNames in the copied minidivs
+		newMinidivs.forEach((row) => {
+			row.forEach((cell) => {
+				cell.classNames = [];
+			});
 		});
 
-		upNextTetrominoes[nextRandomRef.current].forEach((index) => {
-			displaySquares[displayIndex + index].classList.add("tetromino");
+		// Add tetromino class to cells based on the next tetromino shape
+		upNextTetromino.forEach((row, rowIndex) => {
+			row.forEach((cell, colIndex) => {
+				if (cell === 1) {
+					// Calculate the position of the cell in the grid
+					const x = colIndex;
+					const y = rowIndex;
+
+					// Update classNames in the newMinidivs array
+					newMinidivs[y][x].classNames.push("tetromino");
+				}
+			});
 		});
+
+		// Update the state with the newMinidivs
+		setMinidivs(newMinidivs);
 	};
 
 	// Return the context provider with the variables as context values
 	return (
 		<GameContext.Provider
 			value={{
+				startRotationRef,
+				minidivs,
+				setMinidivs,
 				disableControls,
 				setDisableControls,
 				tickSpeedRef,

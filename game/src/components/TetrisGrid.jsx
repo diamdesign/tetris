@@ -22,15 +22,12 @@ export function TetrisGrid() {
 		nextRandomRef,
 		scoreRef,
 		tickSpeedRef,
+		startRotationRef,
 		score,
 		setScore,
 	} = useGameContext();
 
 	const [gridArray, setGridArray] = useState([]);
-	const [undrawPending, setUndrawPending] = useState(true);
-
-	const rows = height;
-	const columns = width;
 
 	useEffect(() => {
 		// Inside useEffect, update gridArray using setGridArray
@@ -87,9 +84,15 @@ export function TetrisGrid() {
 		}
 
 		// Call generateGridArray to initialize gridArray
-		const initialGridArray = generateGridArray(rows, columns);
+		const initialGridArray = generateGridArray(height, width);
 		setGridArray(initialGridArray);
-	}, [rows, columns]);
+	}, [height, width]);
+
+	/*
+	useEffect(() => {
+		console.log(gridArray);
+	}, [gridArray]);
+*/
 
 	// Hardcode inline style gridStyle
 	const gridStyle = {
@@ -102,12 +105,15 @@ export function TetrisGrid() {
 	let currentX = startX;
 	let currentY = startY;
 
-	let currentRotation = 0;
+	let currentRotation = startRotationRef.current;
 
 	// let random = Math.floor(Math.random() * theTetrominoes.length);
-	let current = theTetrominoes[randomRef.current][currentRotation];
+	let current = theTetrominoes[randomRef.current][startRotationRef.current];
 
 	useEffect(() => {
+		let lastMove = false;
+		let addingScore = false;
+
 		const timerId = setInterval(() => {
 			if (!isPausedRef.current) {
 				moveDown();
@@ -118,82 +124,85 @@ export function TetrisGrid() {
 
 		// Draw each new state of the gridArray with the tetrominos position
 		function draw() {
-			if (undrawPending) {
-				// Create a copy of the gridArray to modify
-				const newGridArray = [...gridArray];
+			// Create a copy of the gridArray to modify
+			const newGridArray = [...gridArray];
 
-				// Iterate over the tetromino and update classNames in newGridArray
-				current.forEach((row, rowIndex) => {
-					row.forEach((cell, columnIndex) => {
-						if (cell === 1) {
-							// If the cell is part of the tetromino (has a value of 1)
-							const x = currentX + columnIndex;
-							const y = currentY + rowIndex;
+			// Iterate over the tetromino and update classNames in newGridArray
+			current.forEach((row, rowIndex) => {
+				row.forEach((cell, columnIndex) => {
+					if (cell === 1) {
+						// If the cell is part of the tetromino (has a value of 1)
+						const x = currentX + columnIndex;
+						const y = currentY + rowIndex;
 
-							// Update classNames in the newGridArray
+						// Update classNames in the newGridArray if the cell doesn't already have the "tetromino" class
+						if (!newGridArray[y][x].classNames.includes("tetromino")) {
 							newGridArray[y][x].classNames.push("tetromino");
 						}
-					});
+					}
 				});
+			});
 
-				// Set the newGridArray as the new state to draw it
-				setGridArray(newGridArray);
-				setUndrawPending(false);
-			}
+			// Set the newGridArray as the new state to draw it
+			setGridArray(newGridArray);
 		}
-
-		if (gameRunning) {
-			draw();
-		}
-
-		let lastMove = false;
-		let addingScore = false;
 
 		function moveDown() {
 			if (!lastMove && !disableControls && !addingScore) {
 				undraw();
 				currentY++; // Move down by incrementing the row index
 				draw();
-				// freeze();
+				freeze();
 			}
 		}
 
 		function undraw() {
-			if (!undrawPending) {
-				// Create a copy of the gridArray to modify
-				const newGridArray = [...gridArray];
+			// Create a copy of the gridArray to modify
+			const newGridArray = [...gridArray];
 
-				// Iterate over the gridArray and remove the "tetromino" class from appropriate cells
-				newGridArray.forEach((row, rowIndex) => {
-					row.forEach((cell, columnIndex) => {
-						// Check if the cell has the "tetromino" class and does not have the "taken" class
-						if (
-							cell.classNames.includes("tetromino") &&
-							!cell.classNames.includes("taken")
-						) {
-							// Remove the "tetromino" class from classNames in the newGridArray
-							newGridArray[rowIndex][columnIndex].classNames = cell.classNames.filter(
-								(className) => className !== "tetromino"
-							);
+			// Iterate over the gridArray and remove the "tetromino" class from appropriate cells
+			newGridArray.forEach((row, rowIndex) => {
+				row.forEach((cell, columnIndex) => {
+					// Check if the cell has the "tetromino" class and does not have the "taken" class
+					if (
+						cell.classNames.includes("tetromino") &&
+						!cell.classNames.includes("taken")
+					) {
+						// Remove the "tetromino" class from classNames in the newGridArray
+						const index = cell.classNames.indexOf("tetromino");
+						if (index !== -1) {
+							newGridArray[rowIndex][columnIndex].classNames.splice(index, 1);
 						}
-					});
+					}
 				});
+			});
 
-				// Set the newGridArray as the new state
-				setGridArray(newGridArray);
-				setUndrawPending(true);
-			}
+			// Set the newGridArray as the new state
+
+			setGridArray(newGridArray);
 		}
 
-		/*
 		function moveLeft() {
+			console.log("Move left...");
 			undraw();
-			const isAtLeftEdge = current.some((index) => (currentX + index) % width === 0);
-			if (!isAtLeftEdge && !checkCollision(current.map((index) => index - 1))) {
+
+			// Check if any filled cell of the tetromino is at the left edge of the grid
+			const isAtLeftEdge = current.some((row, rowIndex) =>
+				row.some((cell, colIndex) => cell === 1 && (currentX + colIndex) % width === 0)
+			);
+
+			// Check if moving left would result in a collision
+			const leftPositions = current.map((row, rowIndex) =>
+				row.map((cell, colIndex) => (cell === 1 ? currentX + colIndex - 1 : null))
+			);
+			const collision = checkCollision(leftPositions);
+
+			// Move the tetromino left if it's not at the left edge and there is no collision
+			if (!isAtLeftEdge && !collision) {
 				currentX--; // Move left by decrementing the column index
 			}
 
-			draw();
+			draw(); // Redraw the grid with the updated position
 		}
 
 		function moveRight() {
@@ -206,6 +215,7 @@ export function TetrisGrid() {
 			draw();
 		}
 
+		/*
 		function rotate() {
 			undraw();
 			let nextRotation = currentRotation + 1;
@@ -227,7 +237,7 @@ export function TetrisGrid() {
 
 			draw();
 		}
-
+*/
 		function checkCollision(tetromino, x, y) {
 			return tetromino.some((row, rowIndex) =>
 				row.some((cell, colIndex) => {
@@ -238,47 +248,65 @@ export function TetrisGrid() {
 						cell &&
 						gridArray[gridY] &&
 						gridArray[gridY][gridX] &&
-						(gridArray[gridY][gridX].classList.contains("taken") ||
-							gridArray[gridY][gridX].classList.contains("tetromino"))
+						(gridArray[gridY][gridX].classNames.includes("taken") ||
+							gridArray[gridY][gridX].classNames.includes("tetromino"))
 					);
 				})
 			);
 		}
 
 		function freeze() {
-			if (
-				current.some((index) =>
-					gridArray[currentY + Math.floor((index + currentY * width) / width) + 1][
-						currentX + ((index + currentY * width) % width)
-					].classNames.includes("taken")
-				)
-			) {
+			let newY = currentY + 1;
+
+			// Determine the bottom row of the tetromino
+			const collisionUnderneath = current.some((row, rowIndex) =>
+				row.some((cell, colIndex) => {
+					// Calculate grid coordinates for the current cell
+					const gridX = currentX + colIndex;
+					const gridY = newY + rowIndex;
+
+					// Check if the cell is filled in the tetromino and there is a collision with the grid
+					return (
+						cell === 1 &&
+						gridY >= 0 &&
+						gridArray[gridY] &&
+						gridArray[gridY][gridX] &&
+						gridArray[gridY][gridX].classNames.includes("taken")
+					);
+				})
+			);
+
+			// If collision detected, freeze the tetromino
+			if (collisionUnderneath) {
 				lastMove = true;
 				setTimeout(() => {
-					current.forEach(
-						(index) =>
-							(gridArray[currentY + Math.floor((index + currentY * width) / width)][
-								currentX + ((index + currentY * width) % width)
-							].classNames += " taken")
-					);
+					current.forEach((row, rowIndex) => {
+						row.forEach((cell, colIndex) => {
+							if (cell === 1) {
+								const x = currentX + colIndex;
+								const y = currentY + rowIndex;
+								gridArray[y][x].classNames.push("taken");
+							}
+						});
+					});
+
 					const newRandom = nextRandomRef.current;
 					nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
-
+					startRotationRef.current = Math.floor(Math.random() * 4);
 					randomRef.current = newRandom;
-
-					current = theTetrominoes[randomRef.current][currentRotation];
+					current = theTetrominoes[newRandom][startRotationRef.current];
 					currentX = startX;
 					currentY = startY;
-					// addScore();
-					draw();
 
 					displayShape();
+					draw();
 
 					lastMove = false;
 				}, tickSpeedRef.current);
 			}
 		}
 
+		/*
 		function resetGrid() {
 			// Iterate over the gridArray
 			gridArray = generateGridArray(rows, columns);
@@ -294,6 +322,7 @@ export function TetrisGrid() {
 			draw();
 		}
 
+		*/
 		function control(e) {
 			if (e.keyCode === 37) {
 				moveLeft();
@@ -310,6 +339,7 @@ export function TetrisGrid() {
 
 		document.addEventListener("keydown", control);
 
+		/*
 		draw();
 
 		function checkCompletedRows() {
@@ -366,14 +396,13 @@ export function TetrisGrid() {
 			}
 		}
 
-		// Cleanup function to remove event listener
+		*/
+
 		return () => {
 			clearInterval(timerId);
 			document.removeEventListener("keydown", control);
 		};
-
-		*/
-	}, [gameRunning, setScore, randomRef.current, current, currentRotation, width, theTetrominoes]);
+	}, [gameRunning, width, setScore, randomRef.current, current, currentRotation, theTetrominoes]);
 
 	// Render the grid based on the grid array
 	return (

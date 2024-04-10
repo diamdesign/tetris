@@ -2,31 +2,37 @@ import React, { useEffect, useContext } from "react";
 import { useGameContext } from "./Context";
 
 export function MiniGrid() {
-	const { displayShape } = useGameContext();
-
-	const minirows = 4;
-	const minicolumns = 4;
-	const minidivs = [];
-
-	// Generate div elements
-	for (let i = 0; i < minirows; i++) {
-		for (let j = 0; j < minicolumns; j++) {
-			// Calculate unique key for each div
-			const key = `div-${i}-${j}`;
-
-			// Add div element to the array with the appropriate class
-			minidivs.push(<div key={key}></div>);
-		}
-	}
+	const { gameRunning, displayShape, startRotationRef, minidivs, setMinidivs } = useGameContext();
 
 	useEffect(() => {
-		// Define displayShape function
-		displayShape();
+		const minirows = 4;
+		const minicolumns = 4;
+		const divs = [];
+		for (let i = 0; i < minirows; i++) {
+			const row = [];
+			for (let j = 0; j < minicolumns; j++) {
+				const key = `div-${i}-${j}`;
+				row.push({
+					key: key,
+					classNames: [], // Initialize classNames array
+				});
+			}
+			divs.push(row);
+		}
+
+		setMinidivs(divs);
 	}, []);
 
 	return (
-		<>
-			<div className="minigrid">{minidivs}</div>
-		</>
+		<div className="minigrid">
+			{minidivs &&
+				minidivs.map((row, rowIndex) => (
+					<div key={rowIndex} className="row">
+						{row.map((cell, columnIndex) => (
+							<div key={cell.key} className={cell.classNames.join(" ")}></div>
+						))}
+					</div>
+				))}
+		</div>
 	);
 }

@@ -30,6 +30,7 @@ function App() {
 		isPausedRef,
 		nextRandomRef,
 		scoreRef,
+		displayShape,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -108,6 +109,7 @@ function App() {
 				playSound("enter", 0.5);
 				playSound("impact", 0.3);
 				setShowDarkoverlay(false);
+				displayShape();
 				setTimeout(() => {
 					startRef.current.focus();
 				}, 10);
@@ -145,10 +147,25 @@ function App() {
 		<>
 			<div id="gamecontainer" className={levelClassName}>
 				<div id="settings">
-					<button onClick={() => setWidth((prevWidth) => prevWidth + 1)}>
+					<button
+						onClick={() => {
+							setWidth((prevWidth) => {
+								console.log("New width:", prevWidth + 1);
+								return prevWidth + 1;
+							});
+						}}
+					>
 						Increase Width
 					</button>
-					<button onClick={() => setWidth((prevWidth) => prevWidth - 1)}>
+
+					<button
+						onClick={() => {
+							setWidth((prevWidth) => {
+								console.log("New width:", prevWidth - 1);
+								return prevWidth - 1;
+							});
+						}}
+					>
 						Decrease Width
 					</button>
 				</div>
