@@ -60,8 +60,8 @@ export function TetrisGrid() {
 		let addingScore = false;
 
 		const timerId = setInterval(() => {
-			console.log("Timer tick"); // Add this line
 			if (!isPausedRef.current) {
+				console.log("Timer tick"); // Add this line
 				moveDown();
 			}
 		}, tickSpeedRef.current);

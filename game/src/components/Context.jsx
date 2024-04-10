@@ -252,7 +252,6 @@ export const GameContextProvider = ({ children }) => {
 
 	// Add more context variables here as needed
 
-	let displayIndex = 0;
 	const displayShape = () => {
 		// Get the next tetromino shape
 		const upNextTetromino = theTetrominoes[nextRandomRef.current][startRotationRef.current];
