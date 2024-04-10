@@ -25,12 +25,17 @@ function App() {
 		setGameRunning,
 		theTetrominoes,
 		width,
+		height,
+		setHeight,
 		setWidth,
 		randomRef,
 		isPausedRef,
 		nextRandomRef,
 		scoreRef,
 		displayShape,
+		generateGridArray,
+		setGridArray,
+		gridArray,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -150,7 +155,8 @@ function App() {
 					<button
 						onClick={() => {
 							setWidth((prevWidth) => {
-								console.log("New width:", prevWidth + 1);
+								const initialGridArray = generateGridArray(height, width);
+								setGridArray(initialGridArray);
 								return prevWidth + 1;
 							});
 						}}
@@ -161,7 +167,9 @@ function App() {
 					<button
 						onClick={() => {
 							setWidth((prevWidth) => {
-								console.log("New width:", prevWidth - 1);
+								const initialGridArray = generateGridArray(height, width);
+								setGridArray(initialGridArray);
+
 								return prevWidth - 1;
 							});
 						}}

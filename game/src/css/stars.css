@@ -107,6 +107,7 @@ https://mkrtchyan.ga
 		top center;
 	z-index: 3;
 	filter: brightness(3.5);
+	mix-blend-mode: screen;
 	-moz-animation: move-clouds-back 200s linear infinite;
 	-ms-animation: move-clouds-back 200s linear infinite;
 	-o-animation: move-clouds-back 200s linear infinite;

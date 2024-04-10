@@ -20,6 +20,7 @@ export const GameContextProvider = ({ children }) => {
 	const [width, setWidth] = useState(14);
 	const [height, setHeight] = useState(22);
 	const [minidivs, setMinidivs] = useState([]);
+	const [gridArray, setGridArray] = useState([]);
 
 	//The Tetrominoes
 	const lTetromino = [
@@ -172,26 +173,32 @@ export const GameContextProvider = ({ children }) => {
 
 	const iTetromino = [
 		[
-			// Original rotation (0 degrees)
-			[1],
-			[1],
-			[1],
-			[1],
+			// Original rotation ("" degrees)
+			["", 1, "", ""],
+			["", 1, "", ""],
+			["", 1, "", ""],
+			["", 1, "", ""],
 		],
 		[
-			// 90 degrees clockwise rotation
+			// 9"" degrees clockwise rotation
+			["", "", "", ""],
 			[1, 1, 1, 1],
+			["", "", "", ""],
+			["", "", "", ""],
 		],
 		[
-			// 180 degrees clockwise rotation
-			[1],
-			[1],
-			[1],
-			[1],
+			// 18"" degrees clockwise rotation
+			["", 1, "", ""],
+			["", 1, "", ""],
+			["", 1, "", ""],
+			["", 1, "", ""],
 		],
 		[
-			// 270 degrees clockwise rotation
+			// 27"" degrees clockwise rotation
+			["", "", "", ""],
 			[1, 1, 1, 1],
+			["", "", "", ""],
+			["", "", "", ""],
 		],
 	];
 
@@ -278,10 +285,65 @@ export const GameContextProvider = ({ children }) => {
 		setMinidivs(newMinidivs);
 	};
 
+	function generateGridArray(rows, columns) {
+		const newGridArray = [];
+
+		// Generate the grid array
+		for (let i = 0; i < rows; i++) {
+			const rowArray = [];
+			for (let j = 0; j < columns; j++) {
+				const cell = {
+					key: `div-${i}-${j}`,
+					classNames: [],
+				};
+
+				// Determine if the cell is in the last row
+				const isLastRow = i === rows - 1;
+				// Determine if the cell is the first or last in the row
+				const isFirstRow = i === 0;
+				const isFirstColumn = j === 0;
+				const isLastColumn = j === columns - 1;
+
+				// Add appropriate class names to the cell
+				if (!isFirstRow && (isLastRow || isFirstColumn || isLastColumn)) {
+					cell.classNames.push("taken", "border");
+				}
+
+				// Add class "lastrow" to cells in the last row
+				if (isLastRow) {
+					cell.classNames.push("lastrow");
+				}
+
+				// Add class "firstrow" to cells in the first row
+				if (isFirstRow) {
+					cell.classNames.push("firstrow", "border");
+				}
+
+				// Add class "leftborder" to cells at the beginning of each row (except the first row)
+				if (!isFirstRow && isFirstColumn) {
+					cell.classNames.push("leftborder");
+				}
+
+				// Add class "rightborder" to cells at the end of each row (except the first row)
+				if (!isFirstRow && isLastColumn) {
+					cell.classNames.push("rightborder");
+				}
+
+				rowArray.push(cell);
+			}
+			newGridArray.push(rowArray);
+		}
+
+		return newGridArray;
+	}
+
 	// Return the context provider with the variables as context values
 	return (
 		<GameContext.Provider
 			value={{
+				gridArray,
+				setGridArray,
+				generateGridArray,
 				startRotationRef,
 				minidivs,
 				setMinidivs,
