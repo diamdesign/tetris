@@ -25,6 +25,7 @@ function App() {
 		setGameRunning,
 		theTetrominoes,
 		width,
+		setWidth,
 		randomRef,
 		isPausedRef,
 		nextRandomRef,
@@ -143,6 +144,14 @@ function App() {
 	return (
 		<>
 			<div id="gamecontainer" className={levelClassName}>
+				<div id="settings">
+					<button onClick={() => setWidth((prevWidth) => prevWidth + 1)}>
+						Increase Width
+					</button>
+					<button onClick={() => setWidth((prevWidth) => prevWidth - 1)}>
+						Decrease Width
+					</button>
+				</div>
 				{/* Credits page */}
 				{page === "credits" && <Credits />}
 

@@ -22,12 +22,56 @@ export const GameContextProvider = ({ children }) => {
 
 	//The Tetrominoes
 	const lTetromino = [
-		[1, width + 1, width * 2 + 1, 2],
-		[width, width + 1, width + 2, width * 2 + 2],
-		[1, width + 1, width * 2 + 1, width * 2],
-		[width, width * 2, width * 2 + 1, width * 2 + 2],
+		[
+			// Original rotation (0 degrees)
+			[0, 1, 0],
+			[0, 1, 0],
+			[0, 1, 1],
+		],
+		[
+			// 90 degrees clockwise rotation
+			[1, 1, 1],
+			[1, 0, 0],
+		],
+		[
+			// 180 degrees clockwise rotation
+			[1, 1, 0],
+			[0, 1, 0],
+			[0, 1, 0],
+		],
+		[
+			// 270 degrees clockwise rotation
+			[0, 0, 1],
+			[1, 1, 1],
+		],
 	];
 
+	const jTetromino = [
+		[
+			// Original rotation (0 degrees)
+			[0, 1, 0],
+			[0, 1, 0],
+			[1, 1, 0],
+		],
+		[
+			// 90 degrees clockwise rotation
+			[1, 0, 0],
+			[1, 1, 1],
+		],
+		[
+			// 180 degrees clockwise rotation
+			[0, 1, 1],
+			[0, 1, 0],
+			[0, 1, 0],
+		],
+		[
+			// 270 degrees clockwise rotation
+			[1, 1, 1],
+			[0, 0, 1],
+		],
+	];
+
+	/*
 	const zTetromino = [
 		[0, width, width + 1, width * 2 + 1],
 		[width + 1, width + 2, width * 2, width * 2 + 1],
@@ -55,8 +99,9 @@ export const GameContextProvider = ({ children }) => {
 		[1, width + 1, width * 2 + 1, width * 3 + 1],
 		[width, width + 1, width + 2, width + 3],
 	];
+*/
 
-	const theTetrominoes = [lTetromino, zTetromino, tTetromino, oTetromino, iTetromino];
+	const theTetrominoes = [lTetromino, jTetromino];
 
 	const randomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
 	const nextRandomRef = useRef(0);
@@ -104,15 +149,13 @@ export const GameContextProvider = ({ children }) => {
 				displayShape,
 				width,
 				height,
+				setWidth,
 				setHeight,
 				scoreRef,
 				nextRandomRef,
 				theTetrominoes,
 				lTetromino,
-				zTetromino,
-				tTetromino,
-				oTetromino,
-				iTetromino,
+				jTetromino,
 				gameRunning,
 				setGameRunning,
 				level,
