@@ -26,24 +26,24 @@ export const GameContextProvider = ({ children }) => {
 	const lTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[1, ""],
-			[1, ""],
+			[1, 0],
+			[1, 0],
 			[1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
 			[1, 1, 1],
-			[1, "", ""],
+			[1, 0, 0],
 		],
 		[
 			// 180 degrees clockwise rotation
 			[1, 1],
-			["", 1],
-			["", 1],
+			[0, 1],
+			[0, 1],
 		],
 		[
 			// 270 degrees clockwise rotation
-			["", "", 1],
+			[0, 0, 1],
 			[1, 1, 1],
 		],
 	];
@@ -51,75 +51,75 @@ export const GameContextProvider = ({ children }) => {
 	const jTetromino = [
 		[
 			// Original rotation (0 degrees)
-			["", 1],
-			["", 1],
+			[0, 1],
+			[0, 1],
 			[1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[1, "", ""],
+			[1, 0, 0],
 			[1, 1, 1],
 		],
 		[
 			// 180 degrees clockwise rotation
 			[1, 1],
-			[1, ""],
-			[1, ""],
+			[1, 0],
+			[1, 0],
 		],
 		[
 			// 270 degrees clockwise rotation
 			[1, 1, 1],
-			["", "", 1],
+			[0, 0, 1],
 		],
 	];
 
 	const sTetromino = [
 		[
 			// Original rotation (0 degrees)
-			["", 1, 1],
-			[1, 1, ""],
+			[0, 1, 1],
+			[1, 1, 0],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[1, ""],
+			[1, 0],
 			[1, 1],
-			["", 1],
+			[0, 1],
 		],
 		[
 			// 180 degrees clockwise rotation
-			["", 1, 1],
-			[1, 1, ""],
+			[0, 1, 1],
+			[1, 1, 0],
 		],
 		[
 			// 270 degrees clockwise rotation
-			[1, ""],
+			[1, 0],
 			[1, 1],
-			["", 1],
+			[0, 1],
 		],
 	];
 
 	const zTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[1, 1, ""],
-			["", 1, 1],
+			[1, 1, 0],
+			[0, 1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[""],
+			[0, 1],
 			[1, 1],
-			[1, ""],
+			[1, 0],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[1, 1, ""],
-			["", 1, 1],
+			[1, 1, 0],
+			[0, 1, 1],
 		],
 		[
 			// 270 degrees clockwise rotation
-			["", 1],
+			[0, 1],
 			[1, 1],
-			[1, ""],
+			[1, 0],
 		],
 	];
 
@@ -127,24 +127,24 @@ export const GameContextProvider = ({ children }) => {
 		[
 			// Original rotation (0 degrees)
 			[1, 1, 1],
-			["", 1, ""],
+			[0, 1, 0],
 		],
 		[
 			// 90 degrees clockwise rotation
-			["", 1],
+			[0, 1],
 			[1, 1],
-			["", 1],
+			[0, 1],
 		],
 		[
 			// 180 degrees clockwise rotation
-			["", 1, ""],
+			[0, 1, 0],
 			[1, 1, 1],
 		],
 		[
 			// 270 degrees clockwise rotation
-			[1, ""],
+			[1, 0],
 			[1, 1],
-			[1, ""],
+			[1, 0],
 		],
 	];
 
@@ -173,32 +173,32 @@ export const GameContextProvider = ({ children }) => {
 
 	const iTetromino = [
 		[
-			// Original rotation ("" degrees)
-			["", 1, "", ""],
-			["", 1, "", ""],
-			["", 1, "", ""],
-			["", 1, "", ""],
+			// Original rotation (0 degrees)
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
 		],
 		[
-			// 9"" degrees clockwise rotation
-			["", "", "", ""],
+			// 90 degrees clockwise rotation
+			[0, 0, 0, 0],
 			[1, 1, 1, 1],
-			["", "", "", ""],
-			["", "", "", ""],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
 		],
 		[
-			// 18"" degrees clockwise rotation
-			["", 1, "", ""],
-			["", 1, "", ""],
-			["", 1, "", ""],
-			["", 1, "", ""],
+			// 180 degrees clockwise rotation
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
+			[0, 1, 0, 0],
 		],
 		[
-			// 27"" degrees clockwise rotation
-			["", "", "", ""],
+			// 270 degrees clockwise rotation
+			[0, 0, 0, 0],
 			[1, 1, 1, 1],
-			["", "", "", ""],
-			["", "", "", ""],
+			[0, 0, 0, 0],
+			[0, 0, 0, 0],
 		],
 	];
 

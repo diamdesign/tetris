@@ -589,6 +589,32 @@
 	}
 }
 
+.fulldown {
+	animation: fulldownanim 0.4s ease-in-out 1 forwards, boxflash 0.1s infinite !important;
+}
+@keyframes fulldownanim {
+	0% {
+		filter: brightness(4);
+		transform: translateY(0rem);
+	}
+	10% {
+		transform: translateY(3rem);
+	}
+	20% {
+		transform: translateY(-0.1rem);
+	}
+	40% {
+		transform: translateY(0.6rem);
+	}
+	60% {
+		filter: brightness(1);
+		transform: translateY(0rem);
+	}
+	100% {
+		transform: translateY(0rem);
+	}
+}
+
 .border {
 	background: rgba(65, 105, 225, 0.186);
 }
