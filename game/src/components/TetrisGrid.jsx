@@ -35,6 +35,13 @@ export function TetrisGrid() {
 		startX,
 		setStartX,
 		startXRef,
+		addedLines,
+		setAddedLines,
+		addedScore,
+		setAddedScore,
+		setShowScore,
+		showScore,
+		gridArrayRef,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -43,12 +50,15 @@ export function TetrisGrid() {
 		// Call generateGridArray to initialize gridArray
 		const initialGridArray = generateGridArray(height, width);
 		setGridArray(initialGridArray);
+		gridArrayRef.current = initialGridArray;
 	}, [startX, height, width]);
 
 	// Hardcode inline style gridStyle
 	const gridStyle = {
 		gridTemplateColumns: `repeat(${width}, 1fr)`,
 	};
+
+	let movedDiv = 0;
 
 	const startY = -2; // Assuming the tetromino starts at the top row
 
@@ -77,7 +87,7 @@ export function TetrisGrid() {
 		// Draw each new state of the gridArray with the tetrominos position
 		function draw() {
 			// Create a copy of the gridArray to modify
-			const newGridArray = [...gridArray];
+			const newGridArray = [...gridArrayRef.current];
 
 			let tetromino = current.current;
 			// Iterate over the Tetromino's shape and update the gridArray
@@ -100,6 +110,7 @@ export function TetrisGrid() {
 
 			// Set the newGridArray as the new state to draw it
 			setGridArray(newGridArray);
+			gridArrayRef.current = newGridArray;
 		}
 
 		function moveDown() {
@@ -114,7 +125,7 @@ export function TetrisGrid() {
 
 		function undraw() {
 			// Create a copy of the gridArray to modify
-			const newGridArray = [...gridArray];
+			const newGridArray = [...gridArrayRef.current];
 
 			// Iterate over the gridArray and remove the "tetromino" class from appropriate cells
 			newGridArray.forEach((row, rowIndex) => {
@@ -295,6 +306,7 @@ export function TetrisGrid() {
 				current.current = theTetrominoes[newRandom][startRotationRef.current];
 				currentX.current = startX;
 				currentY.current = startY;
+				addScore();
 
 				displayShape();
 				draw();
@@ -354,12 +366,14 @@ export function TetrisGrid() {
 
 			console.log(colorRef.current);
 
+			addScore();
+
 			displayShape();
 		}
 
 		function resetGrid() {
 			undraw();
-			let newGrid = [...gridArray];
+			let newGrid = [...gridArrayRef.current];
 			// Iterate over the gridArray
 
 			gridArray.forEach((row, rowIndex) => {
@@ -408,6 +422,7 @@ export function TetrisGrid() {
 			current.current = theTetrominoes[randomRef.current][currentRotation.current];
 
 			setGridArray(newGrid);
+			gridArrayRef.current = newGrid;
 
 			currentY.current = 0; // Update currentY state
 			currentX.current = Math.floor(width / 2) - 1; // Update currentX state
@@ -440,34 +455,72 @@ export function TetrisGrid() {
 			}
 		}
 
-		/*
 		function checkCompletedRows() {
 			const completedRows = [];
-			for (let i = 0; i < gridArray.length; i += width) {
-				// Check if the row is not the first row and not the last row
+
+			// Iterate over each row
+			gridArray.forEach((row, y) => {
+				// Skip rows with "firstrow" or "lastrow" class
 				if (
-					!gridArray[i].classList.contains("firstrow") &&
-					!gridArray[i].classList.contains("lastrow")
+					row.some(
+						(cell) =>
+							cell.classNames.includes("firstrow") ||
+							cell.classNames.includes("lastrow")
+					)
 				) {
-					let isCompleted = true;
-					for (let j = i; j < i + width; j++) {
-						if (!gridArray[j].classList.contains("taken")) {
-							isCompleted = false;
-							break; // Exit inner loop early if any cell in the row is not taken
-						}
-					}
-					if (isCompleted) {
-						// Full row completed
-						completedRows.push(i / width); // Push the row index
-					}
+					return;
 				}
-			}
+
+				let isCompleted = true;
+
+				// Check if all cells in the row have class "taken"
+				row.forEach((cell) => {
+					if (!cell.classNames.includes("taken")) {
+						isCompleted = false;
+					}
+				});
+
+				// If all cells are taken, add the row index to completedRows
+				if (isCompleted) {
+					completedRows.push(y);
+				}
+			});
+
 			return completedRows;
+		}
+
+		function removeAddRows(completedRows) {
+			// Create a copy of gridArray
+			const grid = gridArrayRef.current;
+			console.log(grid);
+			const newGridArray = grid.map((row) => [...row]);
+
+			// Iterate through completedRows and remove/add rows accordingly
+			completedRows.forEach((rowIndex, newIndex) => {
+				const rowToRemove = newGridArray.splice(rowIndex, 1)[0];
+
+				// Insert the row at the top (index 1)
+				newGridArray.splice(1, 0, rowToRemove);
+
+				// Update the indices of the remaining rows
+				newGridArray.forEach((row) => {
+					row.forEach((cell) => {
+						movedDiv++;
+						cell.key = `div-moved-${movedDiv}-${Math.floor(Math.random() * 1000)}`;
+					});
+				});
+			});
+
+			console.log(newGridArray);
+
+			// Update gridArray
+			setGridArray(newGridArray);
+			gridArrayRef.current = newGridArray;
+			console.log(gridArrayRef.current);
 		}
 
 		function addScore() {
 			console.log("Checking adding score...");
-			addingScore = true;
 
 			// Check which rows are completed
 			const completedRows = checkCompletedRows();
@@ -475,8 +528,22 @@ export function TetrisGrid() {
 			console.log(completedRows);
 
 			if (completedRows.length >= 1) {
+				removeAddRows(completedRows);
+
+				setShowScore(true);
 				// Update the score
+				let newLines = lines - completedRows.length;
+				if (newLines === 0) {
+					setLines(10);
+					let newLevel = level + 1;
+					setLevel(newLevel);
+				} else {
+					setLines(newLines);
+				}
+
+				setAddedLines(completedRows.length);
 				const scoreToAdd = completedRows.length * 10;
+				setAddedScore(scoreToAdd);
 				scoreRef.current += scoreToAdd;
 				setScore(scoreRef.current);
 
@@ -488,14 +555,14 @@ export function TetrisGrid() {
 				}, 300);
 
 				setTimeout(() => {
+					setShowScore(false);
+				}, 800);
+
+				setTimeout(() => {
 					addingScore = false;
 				}, tickSpeedRef);
-			} else {
-				addingScore = false;
 			}
 		}
-
-		*/
 
 		timerId.current = setInterval(() => {
 			if (!isPausedRef.current) {

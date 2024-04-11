@@ -40,6 +40,12 @@ function App() {
 		startX,
 		setStartX,
 		startXRef,
+		setShowScore,
+		showScore,
+		addedLines,
+		setAddedLines,
+		addedScore,
+		setAddedScore,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -227,6 +233,14 @@ function App() {
 							id="selectalias"
 							placeholder="Enter alias"
 						/>
+					</div>
+				)}
+
+				{gameRunning && showScore && (
+					<div className="newscore">
+						{addedLines} Lines
+						<br />
+						<span>+{addedScore}</span>
 					</div>
 				)}
 
