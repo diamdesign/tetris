@@ -147,7 +147,7 @@ function App() {
 
 	// Function to handle mouse over
 	const handleMouseOver = () => {
-		playSound("tickbig", 0.6);
+		playSound("mouseover", 0.35);
 	};
 
 	const handleWidth = (action) => {
@@ -210,8 +210,7 @@ function App() {
 						</a>
 						<p>Press "Enter" or "Space" to begin.</p>
 						<p>
-							Set up your Tetris board here before you begin. Choose width and height
-							carefully.
+							Set up Tetris grid. <br /> (Normal is between 10x16 - 12x20)
 						</p>
 						<button onClick={() => handleWidth("minus")}>- Width</button>
 						<button onClick={() => handleWidth("plus")}>+ Width</button>

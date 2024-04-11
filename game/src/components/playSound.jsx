@@ -9,6 +9,7 @@ import fulldownSound2 from "../assets/epic-swoosh-boom-2-183997.mp3";
 import ticksmallSound from "../assets/ticksmall.mp3";
 import tickbigSound from "../assets/tickbig.mp3";
 import rotateSound from "../assets/rotate.mp3";
+import mouseoverSound from "../assets/button-124476.mp3";
 
 const soundFiles = {
 	key: keydownSound,
@@ -20,6 +21,7 @@ const soundFiles = {
 	ticksmall: ticksmallSound,
 	tickbig: tickbigSound,
 	rotate: rotateSound,
+	mouseover: mouseoverSound,
 	// Add more mappings as needed
 };
 
