@@ -13,7 +13,7 @@ export const GameContextProvider = ({ children }) => {
 	const [showDarkoverlay, setShowDarkoverlay] = useState(true);
 	const [gameRunning, setGameRunning] = useState(false);
 	const [isPaused, setIsPaused] = useState(true);
-	const [disableControls, setDisableControls] = useState(false);
+	const [disableControls, setDisableControls] = useState(true);
 	const [level, setLevel] = useState(1);
 	const [lines, setLines] = useState(10);
 	const [score, setScore] = useState(0);
@@ -202,6 +202,8 @@ export const GameContextProvider = ({ children }) => {
 		],
 	];
 
+	const color = ["orange", "green", "purple", "blue", "red", "yellow", "white"];
+
 	/*
 	const zTetromino = [
 		[0, width, width + 1, width * 2 + 1],
@@ -241,12 +243,14 @@ export const GameContextProvider = ({ children }) => {
 		oTetromino,
 		iTetromino,
 	];
-
 	const randomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
 	const nextRandomRef = useRef(Math.floor(Math.random() * theTetrominoes.length));
 	const scoreRef = useRef(0);
 	const tickSpeedRef = useRef(1000);
 	const startRotationRef = useRef(0);
+	const nextStartRotationRef = useRef(Math.floor(Math.random() * 3));
+	const colorRef = useRef(color[randomRef.current]);
+	const nextColorRef = useRef(color[nextRandomRef.current]);
 
 	const isPausedRef = useRef(true);
 
@@ -254,8 +258,12 @@ export const GameContextProvider = ({ children }) => {
 
 	const displayShape = () => {
 		// Get the next tetromino shape
-		const upNextTetromino = theTetrominoes[nextRandomRef.current][startRotationRef.current];
 
+		const upNextTetromino = theTetrominoes[nextRandomRef.current][nextStartRotationRef.current];
+		nextColorRef.current = color[nextRandomRef.current];
+		const upNextColor = nextColorRef.current;
+
+		console.log(upNextColor);
 		// Create a copy of minidivs
 		const newMinidivs = [...minidivs];
 
@@ -275,7 +283,7 @@ export const GameContextProvider = ({ children }) => {
 					const y = rowIndex;
 
 					// Update classNames in the newMinidivs array
-					newMinidivs[y][x].classNames.push("tetromino");
+					newMinidivs[y][x].classNames.push("tetromino", upNextColor);
 				}
 			});
 		});
@@ -340,10 +348,14 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				color,
+				nextColorRef,
+				colorRef,
 				gridArray,
 				setGridArray,
 				generateGridArray,
 				startRotationRef,
+				nextStartRotationRef,
 				minidivs,
 				setMinidivs,
 				disableControls,

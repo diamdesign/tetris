@@ -35,6 +35,7 @@ function App() {
 		displayShape,
 		generateGridArray,
 		setGridArray,
+		setDisableControls,
 		gridArray,
 	} = useGameContext();
 
@@ -73,7 +74,6 @@ function App() {
 				pauseGame();
 			}
 		}
-
 		document.addEventListener("keydown", control);
 
 		// Cleanup function to remove event listener
@@ -103,7 +103,7 @@ function App() {
 		// Update the state with the value entered by the user
 
 		setAliasInput(event.target.value);
-		playSound("key", 0.2);
+		playSound("key", 0.35);
 	};
 
 	// Function to handle alias save
@@ -126,57 +126,48 @@ function App() {
 
 	// Function to handle start button
 	const handleStartClick = () => {
-		setShowDarkoverlay(false);
-		setGameRunning(true);
-		isPausedRef.current = false;
 		playSound("enter", 0.5);
 		playSound("start", 0.5);
+		isPausedRef.current = false;
+		setDisableControls(false);
+		setGameRunning(true);
 	};
 
 	// Function to handle start button
 	const handleStartKey = (e) => {
-		if (e.keyCode === "13") {
-			setGameRunning(true);
+		e.stopPropagation();
+		if (e.keyCode === 13 || e.keyCode === 32) {
 			playSound("enter", 0.5);
 			playSound("start", 0.5);
 			isPausedRef.current = false;
+			setDisableControls(false);
+			setGameRunning(true);
 		}
 	};
 
 	// Function to handle mouse over
 	const handleMouseOver = () => {
-		// playSound("mouseover");
+		playSound("tickbig", 0.6);
+	};
+
+	const handleWidth = (action) => {
+		if (action === "minus") {
+			let newWidth = width - 1;
+			setWidth(newWidth);
+			const newGrid = generateGridArray(width, height);
+			setGridArray(newGrid);
+		} else if (action === "plus") {
+			let newWidth = width + 1;
+			setWidth(newWidth);
+			const newGrid = generateGridArray(width, height);
+			setGridArray(newGrid);
+		}
 	};
 
 	return (
 		<>
 			<div id="gamecontainer" className={levelClassName}>
-				<div id="settings">
-					<button
-						onClick={() => {
-							setWidth((prevWidth) => {
-								const initialGridArray = generateGridArray(height, width);
-								setGridArray(initialGridArray);
-								return prevWidth + 1;
-							});
-						}}
-					>
-						Increase Width
-					</button>
-
-					<button
-						onClick={() => {
-							setWidth((prevWidth) => {
-								const initialGridArray = generateGridArray(height, width);
-								setGridArray(initialGridArray);
-
-								return prevWidth - 1;
-							});
-						}}
-					>
-						Decrease Width
-					</button>
-				</div>
+				<div id="settings"></div>
 				{/* Credits page */}
 				{page === "credits" && <Credits />}
 
@@ -205,17 +196,26 @@ function App() {
 				)}
 
 				{!gameRunning && alias && (
-					<a
-						href="#"
-						tabIndex={1}
-						className="start"
-						onClick={handleStartClick}
-						onKeyDown={handleStartKey}
-						onMouseOver={handleMouseOver}
-						ref={startRef}
-					>
-						Play
-					</a>
+					<div className="playbox">
+						<a
+							href="#"
+							tabIndex={1}
+							className="start"
+							onClick={handleStartClick}
+							onKeyDown={handleStartKey}
+							onMouseOver={handleMouseOver}
+							ref={startRef}
+						>
+							Play
+						</a>
+						<p>Press "Enter" or "Space" to begin.</p>
+						<p>
+							Set up your Tetris board here before you begin. Choose width and height
+							carefully.
+						</p>
+						<button onClick={() => handleWidth("minus")}>- Width</button>
+						<button onClick={() => handleWidth("plus")}>+ Width</button>
+					</div>
 				)}
 
 				{/* Colorize or use for other means */}
@@ -292,6 +292,31 @@ function App() {
 					<i></i>
 					<i></i>
 				</div>
+
+				{gameRunning && (
+					<div id="startanim">
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+						<i></i>
+					</div>
+				)}
 
 				{/* Dark overlay */}
 				{showDarkoverlay && <div id="darkoverlay"></div>}

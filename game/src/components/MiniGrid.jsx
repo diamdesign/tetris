@@ -26,13 +26,12 @@ export function MiniGrid() {
 	return (
 		<div className="minigrid">
 			{minidivs &&
-				minidivs.map((row, rowIndex) => (
-					<div key={rowIndex} className="row">
-						{row.map((cell, columnIndex) => (
-							<div key={cell.key} className={cell.classNames.join(" ")}></div>
-						))}
-					</div>
-				))}
+				minidivs.map((row, rowIndex) =>
+					// Render the child divs directly without wrapping them in a div with class "row"
+					row.map((cell, columnIndex) => (
+						<div key={cell.key} className={cell.classNames.join(" ")}></div>
+					))
+				)}
 		</div>
 	);
 }

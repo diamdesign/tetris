@@ -4,6 +4,7 @@ import { playSound } from "./playSound";
 
 export function TetrisGrid() {
 	const {
+		color,
 		disableControls,
 		setDisableControls,
 		level,
@@ -24,11 +25,13 @@ export function TetrisGrid() {
 		scoreRef,
 		tickSpeedRef,
 		startRotationRef,
+		nextStartRotationRef,
 		score,
 		setScore,
 		generateGridArray,
 		gridArray,
 		setGridArray,
+		colorRef,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -45,7 +48,7 @@ export function TetrisGrid() {
 	};
 
 	const startX = Math.floor(width / 2) - 1;
-	const startY = 0; // Assuming the tetromino starts at the top row
+	const startY = -2; // Assuming the tetromino starts at the top row
 
 	const currentY = useRef(startY);
 	const currentX = useRef(startX);
@@ -54,6 +57,7 @@ export function TetrisGrid() {
 
 	// let random = Math.floor(Math.random() * theTetrominoes.length);
 	const current = useRef(theTetrominoes[randomRef.current][startRotationRef.current]);
+	colorRef.current = randomRef.current;
 
 	const timerId = useRef(null);
 
@@ -67,8 +71,6 @@ export function TetrisGrid() {
 			// Create a copy of the gridArray to modify
 			const newGridArray = [...gridArray];
 
-			console.log(currentY.current);
-
 			let tetromino = current.current;
 			// Iterate over the Tetromino's shape and update the gridArray
 			tetromino.forEach((row, rowIndex) => {
@@ -79,7 +81,11 @@ export function TetrisGrid() {
 					// Update the gridArray if the cell is part of the Tetromino
 					if (cell === 1 && gridY >= 0 && gridY < height && gridX >= 0 && gridX < width) {
 						// Set the Tetromino cell in the gridArray
-						newGridArray[gridY][gridX].classNames.push("tetromino");
+
+						newGridArray[gridY][gridX].classNames.push(
+							"tetromino",
+							color[colorRef.current]
+						);
 					}
 				});
 			});
@@ -89,7 +95,6 @@ export function TetrisGrid() {
 		}
 
 		function moveDown() {
-			console.log(disableControls);
 			// const isCollision = checkCollisionBottom(currentX, newY, current, gridArray);
 			if (!disableControls) {
 				undraw();
@@ -111,11 +116,35 @@ export function TetrisGrid() {
 						cell.classNames.includes("tetromino") &&
 						!cell.classNames.includes("taken")
 					) {
-						// Remove the "tetromino" class from classNames in the newGridArray
-						const index = cell.classNames.indexOf("tetromino");
-						if (index !== -1) {
-							newGridArray[rowIndex][columnIndex].classNames.splice(index, 1);
-						}
+						// Array of color classes to remove
+						const colorsToRemove = [
+							"red",
+							"orange",
+							"purple",
+							"blue",
+							"yellow",
+							"green",
+							"white",
+						];
+
+						// Remove the "tetromino" class and any color class from classNames in the newGridArray
+						const cell = newGridArray[rowIndex][columnIndex];
+						const indexesToRemove = [];
+
+						// Find and store indexes of classes to remove
+						["tetromino", ...colorsToRemove].forEach((className) => {
+							const index = cell.classNames.indexOf(className);
+							if (index !== -1) {
+								indexesToRemove.push(index);
+							}
+						});
+
+						// Remove classes from classNames array in reverse order to avoid changing indexes
+						indexesToRemove
+							.sort((a, b) => b - a)
+							.forEach((index) => {
+								cell.classNames.splice(index, 1);
+							});
 					}
 				});
 			});
@@ -147,6 +176,7 @@ export function TetrisGrid() {
 			// Move the tetromino left if it's not at the left edge and there is no collision
 
 			currentX.current = currentX.current - 1;
+			playSound("ticksmall", 0.6);
 
 			draw(); // Redraw the grid with the updated position
 		}
@@ -155,7 +185,7 @@ export function TetrisGrid() {
 			undraw();
 
 			currentX.current = currentX.current + 1;
-
+			playSound("ticksmall", 0.6);
 			draw();
 		}
 
@@ -182,6 +212,7 @@ export function TetrisGrid() {
 				current = nextTetromino;
 			}
 			*/
+			playSound("rotate", 0.6);
 			draw();
 		}
 
@@ -246,8 +277,13 @@ export function TetrisGrid() {
 
 				const newRandom = nextRandomRef.current;
 				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
-				startRotationRef.current = Math.floor(Math.random() * 4);
+
+				startRotationRef.current = nextStartRotationRef.current;
+				nextStartRotationRef.current = Math.floor(Math.random() * 3);
+
+				colorRef.current = newRandom;
 				randomRef.current = newRandom;
+
 				current.current = theTetrominoes[newRandom][startRotationRef.current];
 				currentX.current = startX;
 				currentY.current = startY;
@@ -274,7 +310,7 @@ export function TetrisGrid() {
 			// Update the currentY to finalize the position
 			currentY.current += stepsDown;
 
-			draw();
+			// draw();
 
 			let fullDownSound = ["fulldown", "fulldown2"];
 			let randomFullDownSound = Math.floor(Math.random() * fullDownSound.length);
@@ -300,39 +336,69 @@ export function TetrisGrid() {
 
 			const newRandom = nextRandomRef.current;
 			nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
-			startRotationRef.current = Math.floor(Math.random() * 4);
+			startRotationRef.current = nextStartRotationRef.current;
+			nextStartRotationRef.current = Math.floor(Math.random() * 3);
 			randomRef.current = newRandom;
+			colorRef.current = newRandom;
 			current.current = theTetrominoes[newRandom][startRotationRef.current];
 			currentX.current = startX;
 			currentY.current = startY;
+
+			console.log(colorRef.current);
 
 			displayShape();
 		}
 
 		function resetGrid() {
 			undraw();
+			let newGrid = [...gridArray];
 			// Iterate over the gridArray
 
-			gridArray.forEach((row) => {
-				row.forEach((cell) => {
+			gridArray.forEach((row, rowIndex) => {
+				row.forEach((cell, columnIndex) => {
 					// Check if the cell has both "tetromino" and "taken" in classNames
 					if (
 						cell.classNames.includes("tetromino") &&
 						cell.classNames.includes("taken")
 					) {
-						// Remove both "tetromino" and "taken" from classNames
-						cell.classNames = cell.classNames.filter(
-							(className) => className !== "tetromino" && className !== "taken"
-						);
+						// Array of color classes to remove
+						const colorsToRemove = [
+							"red",
+							"orange",
+							"purple",
+							"blue",
+							"yellow",
+							"green",
+							"white",
+						];
+
+						// Remove the "tetromino" class and any color class from classNames in the newGridArray
+						const cell = newGrid[rowIndex][columnIndex];
+						const indexesToRemove = [];
+
+						// Find and store indexes of classes to remove
+						["tetromino", ...colorsToRemove].forEach((className) => {
+							const index = cell.classNames.indexOf(className);
+							if (index !== -1) {
+								indexesToRemove.push(index);
+							}
+						});
+
+						// Remove classes from classNames array in reverse order to avoid changing indexes
+						indexesToRemove
+							.sort((a, b) => b - a)
+							.forEach((index) => {
+								cell.classNames.splice(index, 1);
+							});
 					}
 				});
 			});
 
 			const newRandom = Math.floor(Math.random() * theTetrominoes.length);
 			randomRef.current = newRandom;
+			colorRef.current = newRandom;
 			current.current = theTetrominoes[randomRef.current][currentRotation.current];
 
-			let newGrid = [...gridArray];
 			setGridArray(newGrid);
 
 			currentY.current = 0; // Update currentY state
@@ -348,18 +414,21 @@ export function TetrisGrid() {
 		}
 
 		function control(e) {
-			if (e.keyCode === 37) {
-				moveLeft();
-			} else if (e.keyCode === 39) {
-				moveRight();
-			} else if (e.keyCode === 40) {
-				moveDown();
-			} else if (e.keyCode === 38) {
-				rotate();
-			} else if (e.keyCode === 32) {
-				fullDown();
-			} else if (e.keyCode === 82) {
-				resetGame();
+			if (!disableControls) {
+				if (e.keyCode === 37 || e.keyCode === 65) {
+					moveLeft();
+				} else if (e.keyCode === 39 || e.keyCode === 68) {
+					moveRight();
+				} else if (e.keyCode === 40 || e.keyCode === 83) {
+					playSound("tickbig", 0.6);
+					moveDown();
+				} else if (e.keyCode === 38 || e.keyCode === 87) {
+					rotate();
+				} else if (e.keyCode === 32) {
+					fullDown();
+				} else if (e.keyCode === 82) {
+					resetGame();
+				}
 			}
 		}
 
@@ -423,7 +492,6 @@ export function TetrisGrid() {
 		timerId.current = setInterval(() => {
 			if (!isPausedRef.current) {
 				moveDown();
-				console.log("Timer tick");
 			}
 		}, tickSpeedRef.current);
 
@@ -431,7 +499,7 @@ export function TetrisGrid() {
 			clearInterval(timerId.current);
 			document.removeEventListener("keydown", control);
 		};
-	}, [gameRunning, width]);
+	}, [gameRunning]);
 
 	useEffect(() => {
 		return () => {

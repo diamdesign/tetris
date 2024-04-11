@@ -37,11 +37,45 @@
 	z-index: 1002;
 }
 
+.start {
+	top: 0;
+	left: 0;
+	transform: none;
+	position: relative;
+	border-radius: 0;
+	display: inline-block;
+	text-transform: uppercase;
+	text-decoration: none;
+	z-index: 1001;
+	padding: 1rem 4rem;
+	margin-bottom: 2rem !important;
+	transform-origin: center center;
+}
+
 #intro {
 	outline: none !important;
 	border: none !important;
 	background: none !important;
 	box-shadow: none !important;
+}
+
+.playbox {
+	text-align: center;
+	color: white !important;
+	border: none;
+	font-size: 2rem;
+	font-weight: bold;
+	padding: 1rem;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	z-index: 1002;
+}
+
+.playbox p:nth-child(3) {
+	margin-top: 1rem;
+	max-width: 30rem;
 }
 
 #selectalias {
@@ -51,16 +85,18 @@
 	left: 0;
 	top: 0;
 }
-.start {
-	border-radius: none;
-	text-transform: uppercase;
-	text-decoration: none;
-	z-index: 1001;
-	padding: 1rem 4rem;
-}
-.start:hover,
+
 .start:focus-visible,
 .start:focus {
+	cursor: pointer;
+	color: black !important;
+	outline-color: yellow;
+	background: yellow;
+	box-shadow: none;
+	transform-origin: top left;
+}
+
+.start:hover {
 	cursor: pointer;
 	color: black !important;
 	outline-color: yellow;
@@ -70,6 +106,7 @@
 }
 
 .start:active {
+	transform-origin: center center;
 	cursor: pointer;
 	color: black !important;
 	outline-color: yellow;
@@ -403,7 +440,7 @@
 .tetromino {
 	border: 1px solid rgba(0, 0, 0, 0.1) !important;
 	background: white;
-	box-shadow: 0 0 12px 0 white;
+	box-shadow: 0 0 64px 0 white;
 }
 
 #backanim {
@@ -645,4 +682,103 @@
 	z-index: 100000000;
 	top: 0;
 	right: 0;
+}
+
+#startanim {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: block;
+	z-index: 5;
+}
+
+#startanim i {
+	opacity: 0;
+	border-radius: 100%;
+	content: "";
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	width: 100vw;
+	height: 100vw;
+	border: 4px solid yellow;
+	display: block;
+	transform-origin: top left;
+	box-shadow: 0 0 1rem 0 yellow, 0 0 1rem 0 yellow inset;
+	animation: startanimation 0.6s ease-out 1 forwards;
+}
+
+#startanim i:nth-child(2n) {
+	border: 4px solid rgba(255, 255, 0, 0.692);
+	animation: startanimation 1s ease-out 0.1s forwards !important;
+}
+
+#startanim i:nth-child(3n) {
+	border: 4px solid rgba(255, 255, 0, 0.424);
+	animation: startanimation 1s ease-out 0.2s forwards !important;
+}
+
+#startanim i:nth-child(4n) {
+	border: 4px solid rgba(255, 255, 0, 0.288);
+	animation: startanimation 1s ease-out 0.4s forwards !important;
+}
+
+#startanim i:nth-child(n + 4):nth-child(-n + 23) {
+	display: none;
+}
+
+@keyframes startanimation {
+	0% {
+		opacity: 1;
+		scale: 0;
+	}
+	90% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		scale: 2;
+	}
+}
+.tetromino.taken {
+	animation: takenstart 0.2s ease-out 1 forwards;
+}
+
+@keyframes takenstart {
+	0% {
+		box-shadow: 0 0 2rem 0.2rem white;
+		filter: brightness(3);
+	}
+	100% {
+		box-shadow: 0 0 0.8rem 0rem white;
+		filter: brightness(1);
+	}
+}
+
+.red {
+	background-color: red;
+}
+
+.blue {
+	background-color: blue;
+}
+.purple {
+	background-color: purple;
+}
+.white {
+	background-color: white;
+}
+.orange {
+	background-color: orange;
+}
+
+.yellow {
+	background-color: yellow;
+}
+
+.green {
+	background-color: green;
 }
