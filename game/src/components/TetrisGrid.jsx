@@ -32,6 +32,9 @@ export function TetrisGrid() {
 		gridArray,
 		setGridArray,
 		colorRef,
+		startX,
+		setStartX,
+		startXRef,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -40,14 +43,13 @@ export function TetrisGrid() {
 		// Call generateGridArray to initialize gridArray
 		const initialGridArray = generateGridArray(height, width);
 		setGridArray(initialGridArray);
-	}, [height, width]);
+	}, [startX, height, width]);
 
 	// Hardcode inline style gridStyle
 	const gridStyle = {
 		gridTemplateColumns: `repeat(${width}, 1fr)`,
 	};
 
-	const startX = Math.floor(width / 2) - 1;
 	const startY = -2; // Assuming the tetromino starts at the top row
 
 	const currentY = useRef(startY);
@@ -60,8 +62,14 @@ export function TetrisGrid() {
 	colorRef.current = randomRef.current;
 
 	const timerId = useRef(null);
+	useEffect(() => {
+		let newValue = Math.floor(width / 2 - 1);
+		setStartX(newValue);
+		currentX.current = startX;
+	}, [gameRunning]);
 
 	useEffect(() => {
+		console.log("StartX", startX);
 		document.addEventListener("keydown", control);
 		let lastMove = false;
 		let addingScore = false;
@@ -500,13 +508,13 @@ export function TetrisGrid() {
 			document.removeEventListener("keydown", control);
 		};
 	}, [gameRunning]);
-
+	/*
 	useEffect(() => {
 		return () => {
 			clearInterval(timerId.current);
 		};
 	}, []);
-
+*/
 	// Render the grid based on the grid array
 	return (
 		<>

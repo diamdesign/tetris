@@ -37,6 +37,9 @@ function App() {
 		setGridArray,
 		setDisableControls,
 		gridArray,
+		startX,
+		setStartX,
+		startXRef,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -151,17 +154,49 @@ function App() {
 	};
 
 	const handleWidth = (action) => {
+		let newWidth;
 		if (action === "minus") {
-			let newWidth = width - 1;
+			newWidth = width - 1;
+			if (newWidth < 12) {
+				return;
+			}
 			setWidth(newWidth);
 			const newGrid = generateGridArray(width, height);
 			setGridArray(newGrid);
 		} else if (action === "plus") {
-			let newWidth = width + 1;
+			newWidth = width + 1;
+			if (newWidth > 34) {
+				return;
+			}
 			setWidth(newWidth);
 			const newGrid = generateGridArray(width, height);
 			setGridArray(newGrid);
 		}
+		startXRef.current = Math.floor(newWidth / 2) - 1;
+		setStartX(startXRef.current);
+		console.log(startX);
+		playSound("ticksmall", 0.8);
+	};
+
+	const handleHeight = (action) => {
+		if (action === "minus") {
+			let newHeight = height - 1;
+			if (newHeight < 18) {
+				return;
+			}
+			setHeight(newHeight);
+			const newGrid = generateGridArray(width, height);
+			setGridArray(newGrid);
+		} else if (action === "plus") {
+			let newHeight = height + 1;
+			if (newHeight > 34) {
+				return;
+			}
+			setHeight(newHeight);
+			const newGrid = generateGridArray(width, height);
+			setGridArray(newGrid);
+		}
+		playSound("tickbig", 0.8);
 	};
 
 	return (
@@ -212,8 +247,45 @@ function App() {
 						<p>
 							Set up Tetris grid. <br /> (Normal is between 10x16 - 12x20)
 						</p>
-						<button onClick={() => handleWidth("minus")}>- Width</button>
-						<button onClick={() => handleWidth("plus")}>+ Width</button>
+						<div className="setsize">
+							<div className="width">
+								Width
+								<span>{width - 2}</span>
+								<button
+									className="sizebutton widthminus"
+									onClick={() => handleWidth("minus")}
+									onMouseOver={handleMouseOver}
+								>
+									-
+								</button>
+								<button
+									className="sizebutton widthplus"
+									onClick={() => handleWidth("plus")}
+									onMouseOver={handleMouseOver}
+								>
+									+
+								</button>
+							</div>
+
+							<div className="height">
+								Height
+								<span>{height - 2}</span>
+								<button
+									className="sizebutton heightminus"
+									onClick={() => handleHeight("minus")}
+									onMouseOver={handleMouseOver}
+								>
+									-
+								</button>
+								<button
+									className="sizebutton heightplus"
+									onClick={() => handleHeight("plus")}
+									onMouseOver={handleMouseOver}
+								>
+									+
+								</button>
+							</div>
+						</div>
 					</div>
 				)}
 

@@ -60,12 +60,15 @@
 }
 
 .playbox {
+	background: rgba(0, 0, 0, 0.35);
+	outline: 4px solid white;
+	backdrop-filter: blur(0.5rem);
 	text-align: center;
 	color: white !important;
 	border: none;
 	font-size: 2rem;
 	font-weight: bold;
-	padding: 1rem;
+	padding: 4rem 3rem;
 	position: absolute;
 	top: 50%;
 	left: 50%;
@@ -73,9 +76,44 @@
 	z-index: 1002;
 }
 
+.playbox .setsize {
+	font-size: 1.2rem;
+	margin-top: 2rem;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	align-content: center;
+	justify-content: center;
+}
+.playbox .width {
+	float: left;
+}
+
+.playbox .width span,
+.playbox .height span {
+	font-size: 2rem;
+	display: block;
+}
+
 .playbox p:nth-child(3) {
+	font-size: 1.2rem;
 	margin-top: 1rem;
 	max-width: 30rem;
+}
+
+.playbox .sizebutton {
+	width: 3rem;
+	height: 3rem;
+	margin: 2px;
+	border: none;
+	font-size: 2rem;
+	font-weight: bold;
+	margin-top: 0.8rem;
+}
+
+.playbox .sizebutton:hover {
+	cursor: pointer;
+	background: yellow;
+	color: black;
 }
 
 #selectalias {

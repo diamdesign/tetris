@@ -21,6 +21,7 @@ export const GameContextProvider = ({ children }) => {
 	const [height, setHeight] = useState(22);
 	const [minidivs, setMinidivs] = useState([]);
 	const [gridArray, setGridArray] = useState([]);
+	const [startX, setStartX] = useState(Math.floor(width / 2) - 1);
 
 	//The Tetrominoes
 	const lTetromino = [
@@ -252,6 +253,7 @@ export const GameContextProvider = ({ children }) => {
 	const colorRef = useRef(color[randomRef.current]);
 	const nextColorRef = useRef(color[nextRandomRef.current]);
 
+	const startXRef = useRef(Math.floor(width / 2 - 1));
 	const isPausedRef = useRef(true);
 
 	// Add more context variables here as needed
@@ -348,6 +350,9 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				startXRef,
+				startX,
+				setStartX,
 				color,
 				nextColorRef,
 				colorRef,
