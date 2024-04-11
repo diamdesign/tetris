@@ -259,6 +259,10 @@ export const GameContextProvider = ({ children }) => {
 	const startXRef = useRef(Math.floor(width / 2 - 1));
 	const isPausedRef = useRef(true);
 	const gridArrayRef = useRef([]);
+	const winRow = useRef(false);
+	const winLevel = useRef(false);
+	const linesRef = useRef(10);
+	const levelRef = useRef(1);
 
 	// Add more context variables here as needed
 
@@ -269,7 +273,6 @@ export const GameContextProvider = ({ children }) => {
 		nextColorRef.current = color[nextRandomRef.current];
 		const upNextColor = nextColorRef.current;
 
-		console.log(upNextColor);
 		// Create a copy of minidivs
 		const newMinidivs = [...minidivs];
 
@@ -354,6 +357,10 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				linesRef,
+				levelRef,
+				winRow,
+				winLevel,
 				gridArrayRef,
 				addedLines,
 				setAddedLines,

@@ -46,6 +46,7 @@ function App() {
 		setAddedLines,
 		addedScore,
 		setAddedScore,
+		winRow,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");

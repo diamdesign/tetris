@@ -729,6 +729,32 @@
 	}
 }
 
+.winrow:after {
+	display: block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	content: "";
+	background: white;
+	animation: winrow 0.033s linear infinite alternate;
+	box-shadow: 0 0 0.4rem 1px white;
+}
+
+@keyframes winrow {
+	0% {
+		opacity: 0.77;
+	}
+	100% {
+		opacity: 0.25;
+	}
+}
+
+.lineupdate span,
+.levelupdate span {
+	animation: scoreadd 0.3s ease-in-out 1 forwards;
+}
+
 .border {
 	background: rgba(65, 105, 225, 0.186);
 }
