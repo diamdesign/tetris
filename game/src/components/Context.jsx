@@ -29,53 +29,59 @@ export const GameContextProvider = ({ children }) => {
 	const [addedScore, setAddedScore] = useState(0);
 	const [multiplier, setMultiplier] = useState(0);
 	const [fullDownScore, setFullDownScore] = useState(10);
+	const [rotation, setRotation] = useState(0);
+	const [levelClassName, setLevelClassName] = useState("");
 
 	//The Tetrominoes
 	const lTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[1, 0],
-			[1, 0],
-			[1, 1],
+			[0, 1, 0],
+			[0, 1, 0],
+			[0, 1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
+			[0, 0, 0],
 			[1, 1, 1],
 			[1, 0, 0],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[1, 1],
-			[0, 1],
-			[0, 1],
+			[1, 1, 0],
+			[0, 1, 0],
+			[0, 1, 0],
 		],
 		[
 			// 270 degrees clockwise rotation
 			[0, 0, 1],
 			[1, 1, 1],
+			[0, 0, 0],
 		],
 	];
 
 	const jTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[0, 1],
-			[0, 1],
-			[1, 1],
+			[0, 1, 0],
+			[0, 1, 0],
+			[1, 1, 0],
 		],
 		[
 			// 90 degrees clockwise rotation
 			[1, 0, 0],
 			[1, 1, 1],
+			[0, 0, 0],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[1, 1],
-			[1, 0],
-			[1, 0],
+			[0, 1, 1],
+			[0, 1, 0],
+			[0, 1, 0],
 		],
 		[
 			// 270 degrees clockwise rotation
+			[0, 0, 0],
 			[1, 1, 1],
 			[0, 0, 1],
 		],
@@ -136,23 +142,25 @@ export const GameContextProvider = ({ children }) => {
 			// Original rotation (0 degrees)
 			[1, 1, 1],
 			[0, 1, 0],
+			[0, 0, 0],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[0, 1],
-			[1, 1],
-			[0, 1],
+			[0, 1, 0],
+			[1, 1, 0],
+			[0, 1, 0],
 		],
 		[
 			// 180 degrees clockwise rotation
 			[0, 1, 0],
 			[1, 1, 1],
+			[0, 0, 0],
 		],
 		[
 			// 270 degrees clockwise rotation
-			[1, 0],
-			[1, 1],
-			[1, 0],
+			[1, 0, 0],
+			[1, 1, 0],
+			[1, 0, 0],
 		],
 	];
 
@@ -269,6 +277,8 @@ export const GameContextProvider = ({ children }) => {
 	const levelRef = useRef(1);
 	const multiplierRef = useRef(0);
 	const fullDownScoreRef = useRef(10);
+	const highscoreArray = useRef([]);
+	const aliasRef = useRef("");
 
 	// Add more context variables here as needed
 
@@ -339,16 +349,12 @@ export const GameContextProvider = ({ children }) => {
 				// Add class "firstrow" to cells in the first row
 				if (isFirstRow) {
 					cell.classNames.push("firstrow", "border");
-				}
-
-				// Add class "leftborder" to cells at the beginning of each row (except the first row)
-				if (!isFirstRow && isFirstColumn) {
-					cell.classNames.push("leftborder");
-				}
-
-				// Add class "rightborder" to cells at the end of each row (except the first row)
-				if (!isFirstRow && isLastColumn) {
-					cell.classNames.push("rightborder");
+					if (isFirstColumn) {
+						cell.classNames.push("leftborder");
+					}
+					if (isLastColumn) {
+						cell.classNames.push("rightborder");
+					}
 				}
 
 				rowArray.push(cell);
@@ -363,6 +369,14 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				levelClassName,
+				setLevelClassName,
+				alias,
+				aliasRef,
+				setAlias,
+				highscoreArray,
+				rotation,
+				setRotation,
 				gameOver,
 				setGameOver,
 				fullDownScoreRef,
@@ -422,8 +436,6 @@ export const GameContextProvider = ({ children }) => {
 				setShowDarkoverlay,
 				page,
 				setPage,
-				alias,
-				setAlias,
 				music,
 				setMusic,
 				isMuted,

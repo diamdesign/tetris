@@ -4,6 +4,8 @@ import { playSound } from "./playSound";
 
 export function TetrisGrid() {
 	const {
+		levelClassName,
+		setLevelClassName,
 		color,
 		disableControls,
 		setDisableControls,
@@ -56,6 +58,10 @@ export function TetrisGrid() {
 		setFullDownScore,
 		gameOver,
 		setGameOver,
+		rotation,
+		setRotation,
+		highscoreArray,
+		aliasRef,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -74,7 +80,7 @@ export function TetrisGrid() {
 
 	let movedDiv = 0;
 
-	const startY = -2; // Assuming the tetromino starts at the top row
+	const startY = -1; // Assuming the tetromino starts at the top row
 
 	const currentY = useRef(startY);
 	const currentX = useRef(startX);
@@ -233,6 +239,7 @@ export function TetrisGrid() {
 		function rotate() {
 			undraw();
 			let nextRotation = currentRotation.current + 1;
+			console.log(nextRotation);
 			if (nextRotation === theTetrominoes[randomRef.current].length) {
 				// Loop back order at the end
 				nextRotation = 0;
@@ -245,6 +252,29 @@ export function TetrisGrid() {
 			if (!isCollision) {
 				currentRotation.current = nextRotation;
 				current.current = nextTetromino;
+				// setRotation(nextRotation);
+				playSound("rotate", 0.6);
+			}
+			draw();
+		}
+
+		function rotateBack() {
+			undraw();
+			let nextRotation = currentRotation.current - 1;
+			console.log(nextRotation);
+			if (nextRotation < 0) {
+				// Loop back order at the end
+				nextRotation = theTetrominoes[randomRef.current].length - 1;
+			}
+			console.log(nextRotation);
+			const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
+
+			const isCollision = checkCollision(nextTetromino, currentX.current, currentY.current);
+
+			if (!isCollision) {
+				currentRotation.current = nextRotation;
+				current.current = nextTetromino;
+				// setRotation(nextRotation);
 				playSound("rotate", 0.6);
 			}
 			draw();
@@ -319,15 +349,18 @@ export function TetrisGrid() {
 				playSound("taken", 0.2);
 
 				const newRandom = nextRandomRef.current;
-				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
+				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length - 1);
 
 				startRotationRef.current = nextStartRotationRef.current;
+				currentRotation.current = startRotationRef.current;
+				const newRotation = currentRotation.current;
+
 				nextStartRotationRef.current = Math.floor(Math.random() * 3);
 
 				colorRef.current = newRandom;
 				randomRef.current = newRandom;
 
-				current.current = theTetrominoes[newRandom][startRotationRef.current];
+				current.current = theTetrominoes[newRandom][newRotation];
 				currentX.current = startX;
 				currentY.current = startY;
 
@@ -500,6 +533,8 @@ export function TetrisGrid() {
 					moveDown();
 				} else if (e.keyCode === 38 || e.keyCode === 87) {
 					rotate();
+				} else if (e.keyCode === 90) {
+					rotateBack();
 				} else if (e.keyCode === 32) {
 					fullDown();
 				} else if (e.keyCode === 82) {
@@ -632,6 +667,7 @@ export function TetrisGrid() {
 					isNewLevel = true;
 					linesRef.current = 10;
 					let newLevel = levelRef.current + 1;
+					setLevelClassName("level" + newLevel);
 					setLevel(newLevel);
 					levelRef.current = newLevel;
 					winLevel.current = true;
@@ -656,7 +692,30 @@ export function TetrisGrid() {
 						}, 300);
 					}, 300);
 				} else if (completedLines === 4) {
+					playSound("line1", 0.4);
+					setTimeout(() => {
+						playSound("line1", 0.8);
+						setTimeout(() => {
+							playSound("line1", 0.8);
+							setTimeout(() => {
+								playSound("line1", 0.8);
+							}, 300);
+						}, 300);
+					}, 300);
 				} else if (completedLines >= 5) {
+					playSound("line1", 0.4);
+					setTimeout(() => {
+						playSound("line1", 0.8);
+						setTimeout(() => {
+							playSound("line1", 0.8);
+							setTimeout(() => {
+								playSound("line1", 0.8);
+								setTimeout(() => {
+									playSound("line1", 0.8);
+								}, 300);
+							}, 300);
+						}, 300);
+					}, 300);
 				}
 
 				var scoreToAdd;
@@ -670,6 +729,7 @@ export function TetrisGrid() {
 				if (isNewLevel) {
 					scoreToAdd += 1000 * levelRef.current;
 
+					// Set Tick Speed after Level between 1000ms level 0 and 1ms level 33
 					if (levelRef.current === 2) {
 						tickSpeedRef.current = 900;
 					} else if (levelRef.current === 3) {
@@ -683,15 +743,61 @@ export function TetrisGrid() {
 					} else if (levelRef.current === 5) {
 						tickSpeedRef.current = 400;
 					} else if (levelRef.current === 6) {
-						tickSpeedRef.current = 300;
+						tickSpeedRef.current = 350;
 					} else if (levelRef.current === 7) {
-						tickSpeedRef.current = 200;
+						tickSpeedRef.current = 300;
 					} else if (levelRef.current === 8) {
-						tickSpeedRef.current = 150;
+						tickSpeedRef.current = 250;
 					} else if (levelRef.current === 9) {
-						tickSpeedRef.current = 100;
+						tickSpeedRef.current = 200;
 					} else if (levelRef.current === 10) {
+						tickSpeedRef.current = 150;
+					} else if (levelRef.current === 11) {
+						tickSpeedRef.current = 140;
+					} else if (levelRef.current === 12) {
+						tickSpeedRef.current = 130;
+					} else if (levelRef.current === 13) {
+						tickSpeedRef.current = 120;
+					} else if (levelRef.current === 14) {
+						tickSpeedRef.current = 100;
+					} else if (levelRef.current === 15) {
+						tickSpeedRef.current = 90;
+					} else if (levelRef.current === 16) {
+						tickSpeedRef.current = 80;
+					} else if (levelRef.current === 17) {
+						tickSpeedRef.current = 75;
+					} else if (levelRef.current === 18) {
+						tickSpeedRef.current = 70;
+					} else if (levelRef.current === 19) {
+						tickSpeedRef.current = 65;
+					} else if (levelRef.current === 20) {
+						tickSpeedRef.current = 60;
+					} else if (levelRef.current === 21) {
+						tickSpeedRef.current = 55;
+					} else if (levelRef.current === 22) {
 						tickSpeedRef.current = 50;
+					} else if (levelRef.current === 23) {
+						tickSpeedRef.current = 45;
+					} else if (levelRef.current === 24) {
+						tickSpeedRef.current = 40;
+					} else if (levelRef.current === 25) {
+						tickSpeedRef.current = 35;
+					} else if (levelRef.current === 26) {
+						tickSpeedRef.current = 30;
+					} else if (levelRef.current === 27) {
+						tickSpeedRef.current = 25;
+					} else if (levelRef.current === 28) {
+						tickSpeedRef.current = 20;
+					} else if (levelRef.current === 29) {
+						tickSpeedRef.current = 15;
+					} else if (levelRef.current === 30) {
+						tickSpeedRef.current = 10;
+					} else if (levelRef.current === 31) {
+						tickSpeedRef.current = 5;
+					} else if (levelRef.current === 32) {
+						tickSpeedRef.current = 3;
+					} else if (levelRef.current === 33) {
+						tickSpeedRef.current = 1;
 					}
 
 					startIntervalDown();
@@ -739,6 +845,7 @@ export function TetrisGrid() {
 		startIntervalDown();
 
 		function gameOver() {
+			setDisableControls(true);
 			const newGridArray = [...gridArrayRef.current];
 
 			const isRowTaken = current.current.some((cell, colIndex) => {
@@ -755,6 +862,17 @@ export function TetrisGrid() {
 				setGameRunning(false);
 				setGameOver(true);
 				console.log("Game Over");
+
+				highscoreArray.current = {
+					alias: aliasRef.current,
+					highscore: scoreRef.current,
+					time: "10:32",
+					level: levelRef.current,
+					width: width,
+					height: height,
+				};
+				console.log(highscoreArray.current);
+
 				clearInterval(timerId.current);
 			}
 		}

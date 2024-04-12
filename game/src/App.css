@@ -502,11 +502,39 @@
 	border-style: solid;
 	border-top-color: rgba(255, 255, 255, 0.2) !important;
 	border-left-color: rgba(255, 255, 255, 0.1) !important;
-	border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+	border-bottom-color: rgba(0, 0, 0, 0.3) !important;
 	background: white;
 	box-shadow: 0 0 64px 0 white;
 }
 
+.tetromino.red {
+	box-shadow: 0 0 64px 0 red;
+}
+.tetromino.orange {
+	box-shadow: 0 0 64px 0 orange;
+}
+.tetromino.yellow {
+	box-shadow: 0 0 64px 0 yellow;
+}
+.tetromino.blue {
+	box-shadow: 0 0 64px 0 blue;
+}
+.tetromino.purple {
+	box-shadow: 0 0 64px 0 purple;
+}
+.tetromino.green {
+	box-shadow: 0 0 64px 0 green;
+}
+
+#gameover {
+	color: white;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	content: "";
+	z-index: 10000;
+}
 #backanim {
 	position: fixed;
 	width: 100%;
@@ -940,7 +968,7 @@
 		filter: brightness(3);
 	}
 	100% {
-		box-shadow: 0 0 0.8rem 0rem white;
+		box-shadow: 0 0 0rem 0rem white;
 		filter: brightness(1);
 	}
 }

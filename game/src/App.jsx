@@ -56,26 +56,15 @@ function App() {
 		multiplierRef,
 		gameOver,
 		setGameOver,
+		aliasRef,
+		levelClassName,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
 	const [scoreClassName, setScoreClassName] = useState("");
-	const [levelClassName, setLevelClassName] = useState("");
 
 	const startRef = useRef(null);
 	const inputRef = useRef(null);
-
-	const handleSetScore = () => {
-		scoreRef.current += 1;
-	};
-
-	const handleSetLevel = () => {
-		let newVar = level + 1;
-		setLevel(newVar);
-
-		// Add the 'level + number' class to container
-		setLevelClassName("level" + newVar);
-	};
 
 	function pauseGame() {
 		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
@@ -137,6 +126,7 @@ function App() {
 		if (event.key === "Enter") {
 			if (event.target.value !== "") {
 				setAlias(aliasInput);
+				aliasRef.current = aliasInput;
 				playSound("enter", 0.5);
 				playSound("impact", 0.3);
 				setShowDarkoverlay(false);
@@ -294,7 +284,7 @@ function App() {
 					</div>
 				)}
 
-				{!gameRunning && alias && (
+				{!gameRunning && alias && !gameOver && (
 					<div className="playbox">
 						<a
 							href="#"
