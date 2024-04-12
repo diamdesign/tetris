@@ -47,6 +47,9 @@ export function TetrisGrid() {
 		winRow,
 		setShowFullDown,
 		showFullDown,
+		multiplier,
+		multiplierRef,
+		setMultiplier,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -640,11 +643,21 @@ export function TetrisGrid() {
 				} else if (completedLines >= 5) {
 				}
 
+				var scoreToAdd;
+				if (multiplierRef.current === 0) {
+					scoreToAdd = completedRows.length * 100;
+				} else {
+					scoreToAdd = completedRows.length * 100 * multiplierRef.current;
+				}
 				setAddedLines(completedLines);
-				const scoreToAdd = completedRows.length * 10;
+
 				setAddedScore(scoreToAdd);
 				scoreRef.current += scoreToAdd;
 				setScore(scoreRef.current);
+
+				const newMultiplier = multiplierRef.current + completedLines;
+				setMultiplier(newMultiplier);
+				multiplierRef.current = newMultiplier;
 
 				let scoreEl = document.querySelector(".score");
 				scoreEl.classList.add("addscore");
@@ -660,6 +673,10 @@ export function TetrisGrid() {
 				setTimeout(() => {
 					addingScore = false;
 				}, tickSpeedRef);
+			} else {
+				const newMultiplier = 0;
+				setMultiplier(newMultiplier);
+				multiplierRef.current = newMultiplier;
 			}
 		}
 

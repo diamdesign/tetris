@@ -729,6 +729,60 @@
 	}
 }
 
+.newfastdown {
+	z-index: 1000;
+	position: fixed;
+	left: 50%;
+	top: 40%;
+	transform: translateX(-50%) translateY(-50%);
+	color: white;
+	font-size: 2rem;
+	line-height: 2rem;
+	font-family: "Gajraj One";
+	text-align: center;
+	animation: newfastdown 0.6s ease-out 1 forwards;
+	filter: drop-shadow(0 0 1px yellow) drop-shadow(0 0 4px yellow) drop-shadow(0 0 2rem yellow)
+		drop-shadow(0 0 2rem yellow);
+	transform-origin: top left;
+}
+@keyframes newfastdown {
+	0% {
+		opacity: 1;
+		scale: 0.5;
+		color: yellow;
+	}
+	30% {
+		color: white;
+	}
+	80% {
+		scale: 1.5;
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		scale: 1.5;
+		color: white;
+	}
+}
+
+.multiplier {
+	text-transform: uppercase;
+	text-align: left;
+	font-family: "Gajraj One";
+	font-size: 1rem;
+	z-index: 10;
+	color: white;
+	position: fixed;
+	top: 10vh;
+	right: calc(50% - 28vh - 7.5rem);
+	animation: textflash 0.561s infinite;
+}
+
+.multiplier span {
+	text-transform: lowercase;
+	font-size: 3rem;
+}
+
 .winrow:after {
 	display: block;
 	width: 100%;

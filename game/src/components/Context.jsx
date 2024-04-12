@@ -26,6 +26,8 @@ export const GameContextProvider = ({ children }) => {
 	const [showFullDown, setShowFullDown] = useState(false);
 	const [addedLines, setAddedLines] = useState(0);
 	const [addedScore, setAddedScore] = useState(0);
+	const [multiplier, setMultiplier] = useState(0);
+	const [fullDownScore, setFullDownScore] = useState(10);
 
 	//The Tetrominoes
 	const lTetromino = [
@@ -264,6 +266,8 @@ export const GameContextProvider = ({ children }) => {
 	const winLevel = useRef(false);
 	const linesRef = useRef(10);
 	const levelRef = useRef(1);
+	const multiplierRef = useRef(0);
+	const fullDownScoreRef = useRef(10);
 
 	// Add more context variables here as needed
 
@@ -358,6 +362,12 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				fullDownScoreRef,
+				fullDownScore,
+				setFullDownScore,
+				multiplierRef,
+				multiplier,
+				setMultiplier,
 				showFullDown,
 				setShowFullDown,
 				linesRef,
