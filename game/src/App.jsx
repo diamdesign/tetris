@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { TetrisGrid } from "./components/TetrisGrid";
 import { MiniGrid } from "./components/MiniGrid";
 import { Score } from "./components/Score";
-
+import { Highscore } from "./components/Highscore";
 import { useGameContext } from "./components/Context";
 import { playSound } from "./components/playSound";
 import { Music } from "./components/Music";
@@ -54,6 +54,8 @@ function App() {
 		multiplier,
 		setMultiplier,
 		multiplierRef,
+		gameOver,
+		setGameOver,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");

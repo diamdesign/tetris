@@ -45,6 +45,7 @@ export function TetrisGrid() {
 		showScore,
 		gridArrayRef,
 		winRow,
+		winLevel,
 		setShowFullDown,
 		showFullDown,
 		multiplier,
@@ -53,6 +54,8 @@ export function TetrisGrid() {
 		fullDownScoreRef,
 		fullDownScore,
 		setFullDownScore,
+		gameOver,
+		setGameOver,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -666,6 +669,32 @@ export function TetrisGrid() {
 
 				if (isNewLevel) {
 					scoreToAdd += 1000 * levelRef.current;
+
+					if (levelRef.current === 2) {
+						tickSpeedRef.current = 900;
+					} else if (levelRef.current === 3) {
+						tickSpeedRef.current = 800;
+					} else if (levelRef.current === 4) {
+						tickSpeedRef.current = 700;
+					} else if (levelRef.current === 5) {
+						tickSpeedRef.current = 600;
+					} else if (levelRef.current === 6) {
+						tickSpeedRef.current = 500;
+					} else if (levelRef.current === 5) {
+						tickSpeedRef.current = 400;
+					} else if (levelRef.current === 6) {
+						tickSpeedRef.current = 300;
+					} else if (levelRef.current === 7) {
+						tickSpeedRef.current = 200;
+					} else if (levelRef.current === 8) {
+						tickSpeedRef.current = 150;
+					} else if (levelRef.current === 9) {
+						tickSpeedRef.current = 100;
+					} else if (levelRef.current === 10) {
+						tickSpeedRef.current = 50;
+					}
+
+					startIntervalDown();
 				}
 
 				setAddedScore(scoreToAdd);
@@ -697,11 +726,17 @@ export function TetrisGrid() {
 			}
 		}
 
-		timerId.current = setInterval(() => {
-			if (!isPausedRef.current && !winRow.current) {
-				moveDown();
-			}
-		}, tickSpeedRef.current);
+		const startIntervalDown = () => {
+			clearInterval(timerId.current);
+
+			timerId.current = setInterval(() => {
+				if (!isPausedRef.current && !winRow.current) {
+					moveDown();
+				}
+			}, tickSpeedRef.current);
+		};
+
+		startIntervalDown();
 
 		function gameOver() {
 			const newGridArray = [...gridArrayRef.current];

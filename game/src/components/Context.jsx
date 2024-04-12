@@ -24,6 +24,7 @@ export const GameContextProvider = ({ children }) => {
 	const [startX, setStartX] = useState(Math.floor(width / 2) - 1);
 	const [showScore, setShowScore] = useState(false);
 	const [showFullDown, setShowFullDown] = useState(false);
+	const [gameOver, setGameOver] = useState(false);
 	const [addedLines, setAddedLines] = useState(0);
 	const [addedScore, setAddedScore] = useState(0);
 	const [multiplier, setMultiplier] = useState(0);
@@ -362,6 +363,8 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				gameOver,
+				setGameOver,
 				fullDownScoreRef,
 				fullDownScore,
 				setFullDownScore,
