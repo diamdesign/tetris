@@ -227,6 +227,15 @@ function App() {
 				{/* Credits page */}
 				{page === "credits" && <Credits />}
 
+				{!gameRunning && gameOver && (
+					<div id="gameover">
+						<h1>Game Over</h1>
+
+						<Highscore />
+						<div id="playagain">Play again</div>
+					</div>
+				)}
+
 				{/* Input alias */}
 				{!alias && (
 					<div id="intro">
@@ -296,7 +305,7 @@ function App() {
 						>
 							Play
 						</a>
-						<p>Press "Enter" or "Space" to begin.</p>
+
 						<p>
 							Set up Tetris grid. <br /> (Normal is between 10x16 - 12x20)
 						</p>
