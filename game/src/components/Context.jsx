@@ -23,6 +23,7 @@ export const GameContextProvider = ({ children }) => {
 	const [gridArray, setGridArray] = useState([]);
 	const [startX, setStartX] = useState(Math.floor(width / 2) - 1);
 	const [showScore, setShowScore] = useState(false);
+	const [showFullDown, setShowFullDown] = useState(false);
 	const [addedLines, setAddedLines] = useState(0);
 	const [addedScore, setAddedScore] = useState(0);
 
@@ -357,6 +358,8 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				showFullDown,
+				setShowFullDown,
 				linesRef,
 				levelRef,
 				winRow,

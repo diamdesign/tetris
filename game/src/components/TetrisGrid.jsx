@@ -45,6 +45,8 @@ export function TetrisGrid() {
 		showScore,
 		gridArrayRef,
 		winRow,
+		setShowFullDown,
+		showFullDown,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -304,6 +306,8 @@ export function TetrisGrid() {
 					});
 				});
 
+				playSound("taken", 0.2);
+
 				const newRandom = nextRandomRef.current;
 				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
 
@@ -346,15 +350,33 @@ export function TetrisGrid() {
 
 			// draw();
 
+			setShowFullDown(true);
+
+			scoreRef.current += 10;
+
+			setScore(scoreRef.current);
+			let scoreEl = document.querySelector(".score");
+			scoreEl.classList.add("addscore");
+
+			setTimeout(() => {
+				scoreEl.classList.remove("addscore");
+			}, 300);
+
 			let fullDownSound = ["fulldown", "fulldown2"];
 			let randomFullDownSound = Math.floor(Math.random() * fullDownSound.length);
 
-			playSound(fullDownSound[randomFullDownSound], 0.6);
+			playSound(fullDownSound[randomFullDownSound], 0.7);
+			playSound("fulldownpoint", 0.4);
+			playSound("taken", 0.2);
 
 			document.querySelector("#container").classList.add("fulldown");
 			setTimeout(() => {
 				document.querySelector("#container").classList.remove("fulldown");
 			}, 250);
+
+			setTimeout(() => {
+				setShowFullDown(false);
+			}, 1000);
 
 			tetromino.forEach((row, rowIndex) => {
 				row.forEach((cell, colIndex) => {
@@ -604,6 +626,18 @@ export function TetrisGrid() {
 					setTimeout(() => {
 						winLevel.current = false;
 					}, 1000);
+				}
+
+				if (completedLines === 1) {
+					playSound("line1", 0.4);
+				} else if (completedLines === 2) {
+					playSound("line1", 0.2);
+					setTimeout(() => {
+						playSound("line2", 0.5);
+					}, 500);
+				} else if (completedLines === 3) {
+				} else if (completedLines === 4) {
+				} else if (completedLines >= 5) {
 				}
 
 				setAddedLines(completedLines);

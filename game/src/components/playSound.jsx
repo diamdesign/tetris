@@ -10,6 +10,10 @@ import ticksmallSound from "../assets/ticksmall.mp3";
 import tickbigSound from "../assets/tickbig.mp3";
 import rotateSound from "../assets/rotate.mp3";
 import mouseoverSound from "../assets/button-124476.mp3";
+import fulldownPointSound from "../assets/90s-game-ui-2-185095.mp3";
+import takenSound from "../assets/8-bit-game-2-186976.mp3";
+import line1Sound from "../assets/90s-game-ui-7-185100.mp3";
+import line2Sound from "../assets/decidemp3-14575.mp3";
 
 const soundFiles = {
 	key: keydownSound,
@@ -22,6 +26,10 @@ const soundFiles = {
 	tickbig: tickbigSound,
 	rotate: rotateSound,
 	mouseover: mouseoverSound,
+	fulldownpoint: fulldownPointSound,
+	taken: takenSound,
+	line1: line1Sound,
+	line2: line2Sound,
 	// Add more mappings as needed
 };
 

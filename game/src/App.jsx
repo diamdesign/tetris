@@ -47,6 +47,8 @@ function App() {
 		addedScore,
 		setAddedScore,
 		winRow,
+		setShowFullDown,
+		showFullDown,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -55,6 +57,8 @@ function App() {
 
 	const startRef = useRef(null);
 	const inputRef = useRef(null);
+
+	const fullDownScore = 10;
 
 	const handleSetScore = () => {
 		scoreRef.current += 1;
@@ -242,6 +246,13 @@ function App() {
 						{addedLines} Lines
 						<br />
 						<span>+{addedScore}</span>
+					</div>
+				)}
+
+				{gameRunning && showFullDown && (
+					<div className="newscore">
+						Fast Down <br />
+						<span>+{fullDownScore}</span>
 					</div>
 				)}
 
