@@ -225,6 +225,7 @@ function App() {
 		setDisableControls(true);
 		setIsResetGame(true);
 		isPausedRef.current = true;
+		playSound("key", 0.5);
 	}
 
 	return (

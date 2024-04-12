@@ -27,7 +27,7 @@ export function Music() {
 	}, [isMuted, musicAudio]);
 
 	function handleClickMute() {
-		playSound("tickbig", 0.8);
+		playSound("key", 0.5);
 		setMuted((prevMuted) => !prevMuted);
 	}
 	function handleMouseOver() {

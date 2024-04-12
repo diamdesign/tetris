@@ -5,7 +5,7 @@ export function Fullscreen() {
 	const [isFullscreen, setIsFullscreen] = useState(false);
 
 	function handleClickFullscreen() {
-		playSound("tickbig", 0.8);
+		playSound("key", 0.5);
 		if (!document.fullscreenElement) {
 			document.documentElement
 				.requestFullscreen()
