@@ -50,6 +50,9 @@ export function TetrisGrid() {
 		multiplier,
 		multiplierRef,
 		setMultiplier,
+		fullDownScoreRef,
+		fullDownScore,
+		setFullDownScore,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -355,7 +358,17 @@ export function TetrisGrid() {
 
 			setShowFullDown(true);
 
-			scoreRef.current += 10;
+			console.log("MultiplierRef:", multiplierRef.current);
+			if (multiplierRef.current > 1) {
+				let multipliedScore = multiplierRef.current * 10;
+				scoreRef.current += multipliedScore;
+				fullDownScoreRef.current = multipliedScore;
+			} else {
+				fullDownScoreRef.current = 10;
+				scoreRef.current += 10;
+			}
+
+			setFullDownScore(fullDownScoreRef.current);
 
 			setScore(scoreRef.current);
 			let scoreEl = document.querySelector(".score");
@@ -618,7 +631,7 @@ export function TetrisGrid() {
 				setShowScore(true);
 				// Update the score
 
-				if (newLines === 0) {
+				if (newLines <= 0) {
 					setLines(10);
 					linesRef.current = 10;
 					let newLevel = levelRef.current + 1;

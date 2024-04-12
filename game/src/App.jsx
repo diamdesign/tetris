@@ -117,9 +117,16 @@ function App() {
 
 	// Function to handle input change
 	const handleAliasInput = (event) => {
-		// Update the state with the value entered by the user
+		// Get the input value entered by the user
+		const inputValue = event.target.value;
 
-		setAliasInput(event.target.value);
+		// Remove spaces and SQL-intrusive symbols
+		const sanitizedValue = inputValue.replace(/[^\w\s]/gi, "").replace(/\s+/g, "");
+
+		// Update the state with the sanitized value
+		setAliasInput(sanitizedValue);
+
+		// Play a sound
 		playSound("key", 0.35);
 	};
 
