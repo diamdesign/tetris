@@ -325,7 +325,7 @@ export const GameContextProvider = ({ children }) => {
 			const rowArray = [];
 			for (let j = 0; j < columns; j++) {
 				const cell = {
-					key: `div-${i}-${j}`,
+					key: `div-${i}-${j}-${Math.floor(Math.random() * 1000)}`,
 					classNames: [],
 				};
 

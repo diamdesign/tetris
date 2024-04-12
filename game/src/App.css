@@ -429,7 +429,63 @@
 }
 
 .score {
-	font-size: 4vh;
+	line-height: 2.5rem;
+	margin-bottom: 2rem;
+	font-size: 3rem;
+}
+
+#timer {
+	font-size: 0.6rem;
+	text-transform: uppercase;
+}
+
+#timer div {
+	font-size: 1.2rem;
+}
+
+#btn-mute,
+#btn-fullscreen,
+#btn-back {
+	position: fixed;
+	top: 1rem;
+	right: 1rem;
+	z-index: 1000;
+	width: 3rem;
+	height: 3rem;
+	border: 2px solid black;
+	background-image: url("assets/icon-music.svg");
+	background-size: 2rem;
+	background-position: center center;
+	background-repeat: no-repeat;
+	filter: invert(1);
+}
+
+#btn-fullscreen {
+	top: auto;
+	bottom: 1rem;
+	background-image: url("assets/icon-fullscreen.svg");
+}
+
+#btn-back {
+	right: auto;
+	left: 1rem;
+	background-image: url("assets/icon-back.svg");
+}
+
+#btn-mute:hover,
+#btn-fullscreen:hover,
+#btn-back:hover {
+	cursor: pointer;
+	scale: 1.2;
+	background-color: white;
+	border-color: white;
+	filter: invert(0);
+}
+
+#btn-mute:active,
+#btn-fullscreen:active,
+#btn-back:active {
+	scale: 1;
 }
 
 .lines,

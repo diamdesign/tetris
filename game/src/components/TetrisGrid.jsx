@@ -132,6 +132,21 @@ export function TetrisGrid() {
 			gridArrayRef.current = newGridArray;
 		}
 
+		const isGameOver = () => {
+			const newGridArray = [...gridArrayRef.current];
+
+			return current.current.some((cell, colIndex) => {
+				const gridX = startX + colIndex;
+				return (
+					cell &&
+					newGridArray[3] &&
+					newGridArray[3][gridX] &&
+					newGridArray[3][gridX].classNames.includes("taken") &&
+					newGridArray[3][gridX].classNames.includes("tetromino")
+				);
+			});
+		};
+
 		function moveDown() {
 			const newY = currentY.current + 1;
 			const isCollision = checkCollisionBottom(
@@ -146,9 +161,16 @@ export function TetrisGrid() {
 			if (!disableControls && !winRow.current) {
 				playSound("tickbig", 0.6);
 				undraw();
-				currentY.current = currentY.current + 1; // Move down by incrementing the row index
+
+				currentY.current = currentY.current + 1;
+
+				const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+				if (checkGameOver) {
+					gameOver();
+					return;
+				}
+
 				draw();
-				gameOver();
 				freeze();
 			}
 		}
@@ -460,10 +482,15 @@ export function TetrisGrid() {
 
 		function resetGrid() {
 			undraw();
-			let newGrid = [...gridArrayRef.current];
+			const newGridArray = generateGridArray(height, width);
+			setGridArray(newGridArray);
+			gridArrayRef.current = newGridArray;
+			currentY.current = startY;
+
 			// Iterate over the gridArray
 
-			gridArray.forEach((row, rowIndex) => {
+			/*
+			newGrid.forEach((row, rowIndex) => {
 				row.forEach((cell, columnIndex) => {
 					// Check if the cell has both "tetromino" and "taken" in classNames
 					if (
@@ -500,16 +527,20 @@ export function TetrisGrid() {
 								cell.classNames.splice(index, 1);
 							});
 					}
+
+					movedDiv++;
+					cell.key = `div-moved-${movedDiv}-${Math.floor(Math.random() * 1000)}`;
 				});
 			});
+			*/
 
 			const newRandom = Math.floor(Math.random() * theTetrominoes.length);
 			randomRef.current = newRandom;
 			colorRef.current = newRandom;
 			current.current = theTetrominoes[randomRef.current][currentRotation.current];
 
-			setGridArray(newGrid);
-			gridArrayRef.current = newGrid;
+			setGridArray(newGridArray);
+			gridArrayRef.current = newGridArray;
 
 			currentY.current = 0; // Update currentY state
 			currentX.current = Math.floor(width / 2) - 1; // Update currentX state
@@ -520,6 +551,23 @@ export function TetrisGrid() {
 		function resetGame() {
 			resetGrid();
 
+			let startanimEl = document.querySelector("#startanim");
+			startanimEl.style.display = "none";
+			setTimeout(() => {
+				startanimEl.style.display = "block";
+			});
+
+			setMultiplier(0);
+			multiplierRef.current = 0;
+			setScore(0);
+			scoreRef.current = 0;
+			setLines(10);
+			linesRef.current = 10;
+			setLevel(1);
+			levelRef.current = 1;
+
+			playSound("start", 0.5);
+			playSound("undo", 0.5);
 			displayShape();
 		}
 
@@ -846,35 +894,23 @@ export function TetrisGrid() {
 
 		function gameOver() {
 			setDisableControls(true);
-			const newGridArray = [...gridArrayRef.current];
 
-			const isRowTaken = current.current.some((cell, colIndex) => {
-				const gridX = startX + colIndex;
-				return (
-					cell &&
-					newGridArray[3] &&
-					newGridArray[3][gridX] &&
-					newGridArray[3][gridX].classNames.includes("taken")
-				);
-			});
+			setGameRunning(false);
+			setGameOver(true);
+			console.log("Game Over");
 
-			if (isRowTaken) {
-				setGameRunning(false);
-				setGameOver(true);
-				console.log("Game Over");
+			// JSON to send to Database
+			highscoreArray.current = {
+				alias: aliasRef.current,
+				highscore: scoreRef.current,
+				time: "10:32",
+				level: levelRef.current,
+				width: width,
+				height: height,
+			};
+			console.log(highscoreArray.current);
 
-				highscoreArray.current = {
-					alias: aliasRef.current,
-					highscore: scoreRef.current,
-					time: "10:32",
-					level: levelRef.current,
-					width: width,
-					height: height,
-				};
-				console.log(highscoreArray.current);
-
-				clearInterval(timerId.current);
-			}
+			clearInterval(timerId.current);
 		}
 
 		return () => {

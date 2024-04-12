@@ -14,6 +14,7 @@ import fulldownPointSound from "../assets/90s-game-ui-2-185095.mp3";
 import takenSound from "../assets/8-bit-game-2-186976.mp3";
 import line1Sound from "../assets/90s-game-ui-7-185100.mp3";
 import line2Sound from "../assets/high-zcore-96686.mp3";
+import undoSound from "../assets/cinematic-whoosh-reverse-161307.mp3";
 
 const soundFiles = {
 	key: keydownSound,
@@ -30,6 +31,7 @@ const soundFiles = {
 	taken: takenSound,
 	line1: line1Sound,
 	line2: line2Sound,
+	undo: undoSound,
 	// Add more mappings as needed
 };
 

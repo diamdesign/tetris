@@ -1,5 +1,6 @@
 import React from "react";
 import { useGameContext } from "./Context";
+import { Timer } from "./Timer";
 
 export function Score() {
 	const { score, lines, level, winRow, winLevel } = useGameContext();
@@ -13,6 +14,8 @@ export function Score() {
 				<i></i>
 				<i></i>
 			</div>
+
+			<Timer />
 
 			<div className={`lines ${winRow.current ? "lineupdate" : ""}`}>
 				Lines: <span>{lines}</span>

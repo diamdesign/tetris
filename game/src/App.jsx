@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from "react";
 import { TetrisGrid } from "./components/TetrisGrid";
 import { MiniGrid } from "./components/MiniGrid";
 import { Score } from "./components/Score";
+import { Fullscreen } from "./components/Fullscreen";
 import { Highscore } from "./components/Highscore";
 import { useGameContext } from "./components/Context";
 import { playSound } from "./components/playSound";
@@ -212,9 +213,19 @@ function App() {
 		playSound("tickbig", 0.8);
 	};
 
+	function handleClickBack() {
+		setGameRunning(false);
+		setGameOver(false);
+		setAlias(null);
+		setShowDarkoverlay(true);
+		setDisableControls(true);
+	}
+
 	return (
 		<>
 			<div id="gamecontainer" className={levelClassName}>
+				<Fullscreen />
+
 				<div id="settings"></div>
 				{/* Credits page */}
 				{page === "credits" && <Credits />}
@@ -362,6 +373,7 @@ function App() {
 							<i></i>
 						</div>
 					)}
+
 					<Score />
 				</div>
 
@@ -446,8 +458,20 @@ function App() {
 				{/* Dark overlay */}
 				{showDarkoverlay && <div id="darkoverlay"></div>}
 
+				{alias && (
+					<div
+						id="btn-back"
+						onMouseOver={handleMouseOver}
+						onClick={handleClickBack}
+					></div>
+				)}
 				<div className="copyright">
 					© 2024{" "}
+					<a href="https://diam.se" target="_blank">
+						DIAM
+					</a>
+					{" - "}
+					Theme by{" "}
 					<a href="https://diam.se" target="_blank">
 						DIAM
 					</a>
