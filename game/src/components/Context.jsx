@@ -31,6 +31,7 @@ export const GameContextProvider = ({ children }) => {
 	const [fullDownScore, setFullDownScore] = useState(10);
 	const [rotation, setRotation] = useState(0);
 	const [levelClassName, setLevelClassName] = useState("");
+	const [isResetGame, setIsResetGame] = useState(false);
 
 	//The Tetrominoes
 	const lTetromino = [
@@ -167,23 +168,23 @@ export const GameContextProvider = ({ children }) => {
 	const oTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[1, 1],
-			[1, 1],
+			[0, 1, 1],
+			[0, 1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[1, 1],
-			[1, 1],
+			[0, 1, 1],
+			[0, 1, 1],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[1, 1],
-			[1, 1],
+			[0, 1, 1],
+			[0, 1, 1],
 		],
 		[
 			// 270 degrees clockwise rotation
-			[1, 1],
-			[1, 1],
+			[0, 1, 1],
+			[0, 1, 1],
 		],
 	];
 
@@ -268,7 +269,7 @@ export const GameContextProvider = ({ children }) => {
 	const colorRef = useRef(color[randomRef.current]);
 	const nextColorRef = useRef(color[nextRandomRef.current]);
 
-	const startXRef = useRef(Math.floor(width / 2 - 1));
+	const startXRef = useRef(Math.floor(width / 2 - 2));
 	const isPausedRef = useRef(true);
 	const gridArrayRef = useRef([]);
 	const winRow = useRef(false);
@@ -369,6 +370,8 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				isResetGame,
+				setIsResetGame,
 				levelClassName,
 				setLevelClassName,
 				alias,

@@ -59,6 +59,8 @@ function App() {
 		setGameOver,
 		aliasRef,
 		levelClassName,
+		setIsResetGame,
+		isResetGame,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -148,6 +150,7 @@ function App() {
 		isPausedRef.current = false;
 		setDisableControls(false);
 		setGameRunning(true);
+		setIsResetGame(true);
 	};
 
 	// Function to handle start button
@@ -159,6 +162,7 @@ function App() {
 			isPausedRef.current = false;
 			setDisableControls(false);
 			setGameRunning(true);
+			setIsResetGame(true);
 		}
 	};
 
@@ -219,6 +223,8 @@ function App() {
 		setAlias(null);
 		setShowDarkoverlay(true);
 		setDisableControls(true);
+		setIsResetGame(true);
+		isPausedRef.current = true;
 	}
 
 	return (

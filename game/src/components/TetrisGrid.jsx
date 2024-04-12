@@ -62,6 +62,10 @@ export function TetrisGrid() {
 		setRotation,
 		highscoreArray,
 		aliasRef,
+		showDarkoverlay,
+		setShowDarkoverlay,
+		isResetGame,
+		setIsResetGame,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -89,11 +93,13 @@ export function TetrisGrid() {
 
 	// let random = Math.floor(Math.random() * theTetrominoes.length);
 	const current = useRef(theTetrominoes[randomRef.current][startRotationRef.current]);
+
 	colorRef.current = randomRef.current;
 
 	const timerId = useRef(null);
+
 	useEffect(() => {
-		let newValue = Math.floor(width / 2 - 1);
+		let newValue = Math.floor(width / 2 - 2);
 		setStartX(newValue);
 		currentX.current = startX;
 	}, [gameRunning]);
@@ -358,15 +364,21 @@ export function TetrisGrid() {
 			const isCollision = checkCollisionBottom(currX, newY, tetromino, newGridArray);
 			// If collision detected, freeze the tetromino
 			if (isCollision) {
-				tetromino.forEach((row, rowIndex) => {
-					row.forEach((cell, colIndex) => {
-						if (cell === 1) {
-							const x = currentX.current + colIndex;
-							const y = currentY.current + rowIndex;
-							newGridArray[y][x].classNames.push("taken");
-						}
+				try {
+					tetromino.forEach((row, rowIndex) => {
+						row.forEach((cell, colIndex) => {
+							if (cell === 1) {
+								const x = currentX.current + colIndex;
+								const y = currentY.current + rowIndex;
+
+								newGridArray[y][x].classNames.push("taken");
+							}
+						});
 					});
-				});
+				} catch (error) {
+					console.log("Game Over");
+					gameOver();
+				}
 
 				playSound("taken", 0.2);
 
@@ -548,14 +560,18 @@ export function TetrisGrid() {
 			draw();
 		}
 
-		function resetGame() {
+		function resetGame(start = null) {
 			resetGrid();
 
-			let startanimEl = document.querySelector("#startanim");
-			startanimEl.style.display = "none";
-			setTimeout(() => {
-				startanimEl.style.display = "block";
-			});
+			if (start !== "start") {
+				let startanimEl = document.querySelector("#startanim");
+				startanimEl.style.display = "none";
+				setTimeout(() => {
+					startanimEl.style.display = "block";
+				});
+				playSound("start", 0.5);
+				playSound("undo", 0.5);
+			}
 
 			setMultiplier(0);
 			multiplierRef.current = 0;
@@ -565,9 +581,8 @@ export function TetrisGrid() {
 			linesRef.current = 10;
 			setLevel(1);
 			levelRef.current = 1;
+			startXRef.current = Math.floor(width / 2 - 2);
 
-			playSound("start", 0.5);
-			playSound("undo", 0.5);
 			displayShape();
 		}
 
@@ -747,8 +762,8 @@ export function TetrisGrid() {
 							playSound("line1", 0.8);
 							setTimeout(() => {
 								playSound("line1", 0.8);
-							}, 300);
-						}, 300);
+							}, 100);
+						}, 200);
 					}, 300);
 				} else if (completedLines >= 5) {
 					playSound("line1", 0.4);
@@ -760,9 +775,9 @@ export function TetrisGrid() {
 								playSound("line1", 0.8);
 								setTimeout(() => {
 									playSound("line1", 0.8);
-								}, 300);
-							}, 300);
-						}, 300);
+								}, 50);
+							}, 100);
+						}, 200);
 					}, 300);
 				}
 
@@ -893,9 +908,10 @@ export function TetrisGrid() {
 		startIntervalDown();
 
 		function gameOver() {
-			setDisableControls(true);
-
 			setGameRunning(false);
+			setDisableControls(true);
+			setShowDarkoverlay(true);
+
 			setGameOver(true);
 			console.log("Game Over");
 
@@ -913,11 +929,15 @@ export function TetrisGrid() {
 			clearInterval(timerId.current);
 		}
 
+		if (isResetGame) {
+			resetGame("start");
+		}
+
 		return () => {
 			clearInterval(timerId.current);
 			document.removeEventListener("keydown", control);
 		};
-	}, [gameRunning, gridArrayRef]);
+	}, [gameRunning, gridArrayRef, isResetGame]);
 
 	useEffect(() => {
 		return () => {
