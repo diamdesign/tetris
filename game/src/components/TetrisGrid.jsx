@@ -911,7 +911,7 @@ export function TetrisGrid() {
 			setGameRunning(false);
 			setDisableControls(true);
 			setShowDarkoverlay(true);
-
+			isPausedRef.current = true;
 			setGameOver(true);
 			console.log("Game Over");
 

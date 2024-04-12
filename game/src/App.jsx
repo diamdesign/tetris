@@ -190,7 +190,7 @@ function App() {
 			const newGrid = generateGridArray(width, height);
 			setGridArray(newGrid);
 		}
-		startXRef.current = Math.floor(newWidth / 2) - 1;
+		startXRef.current = Math.floor(newWidth / 2) - 2;
 		setStartX(startXRef.current);
 		console.log(startX);
 		playSound("ticksmall", 0.8);
