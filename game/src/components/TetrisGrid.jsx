@@ -125,7 +125,16 @@ export function TetrisGrid() {
 		}
 
 		function moveDown() {
-			// const isCollision = checkCollisionBottom(currentX, newY, current, gridArray);
+			const newY = currentY.current + 1;
+			const isCollision = checkCollisionBottom(
+				currentX.current,
+				newY,
+				current.current,
+				gridArrayRef.current
+			);
+			if (isCollision) {
+				freeze();
+			}
 			if (!disableControls && !winRow.current) {
 				playSound("tickbig", 0.6);
 				undraw();
@@ -270,7 +279,7 @@ export function TetrisGrid() {
 		function checkCollisionBottom(currentX, currentY, tetromino, gridArray) {
 			// Check for collision with the bottom edge of the grid
 
-			let newGridArray = [...gridArrayRef.current];
+			let newGridArray = [...gridArray];
 			const collisionUnderneath = tetromino.some((row, rowIndex) =>
 				row.some((cell, colIndex) => {
 					// Calculate grid coordinates for the current cell
@@ -346,7 +355,7 @@ export function TetrisGrid() {
 
 			undraw();
 			// Move the object down until a collision is detected
-			while (!checkCollisionBottom(newX, newY, tetromino, gridArray)) {
+			while (!checkCollisionBottom(newX, newY, tetromino, newGridArray)) {
 				newY++; // Move down by incrementing the row index
 				stepsDown++; // Increment the steps down counter
 			}
@@ -647,10 +656,10 @@ export function TetrisGrid() {
 				if (completedLines === 1) {
 					playSound("line1", 0.4);
 				} else if (completedLines === 2) {
-					playSound("line1", 0.2);
+					playSound("line2", 0.8);
 					setTimeout(() => {
-						playSound("line2", 0.5);
-					}, 500);
+						playSound("line2", 0.8);
+					}, 300);
 				} else if (completedLines === 3) {
 				} else if (completedLines === 4) {
 				} else if (completedLines >= 5) {
