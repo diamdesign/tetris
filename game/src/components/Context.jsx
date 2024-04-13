@@ -21,7 +21,7 @@ export const GameContextProvider = ({ children }) => {
 	const [height, setHeight] = useState(22);
 	const [minidivs, setMinidivs] = useState([]);
 	const [gridArray, setGridArray] = useState([]);
-	const [startX, setStartX] = useState(Math.floor(width / 2) - 1);
+	const [startX, setStartX] = useState(Math.floor(width / 2) - 2);
 	const [showScore, setShowScore] = useState(false);
 	const [showFullDown, setShowFullDown] = useState(false);
 	const [gameOver, setGameOver] = useState(false);

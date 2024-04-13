@@ -449,7 +449,7 @@
 	position: fixed;
 	top: 1rem;
 	right: 1rem;
-	z-index: 1000;
+	z-index: 10000;
 	width: 3rem;
 	height: 3rem;
 	border: 2px solid black;
@@ -477,8 +477,8 @@
 #btn-back:hover {
 	cursor: pointer;
 	scale: 1.2;
-	background-color: white;
-	border-color: white;
+	background-color: yellow;
+	border-color: yellow;
 	filter: invert(0);
 }
 
@@ -583,14 +583,150 @@
 }
 
 #gameover {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: rgba(6, 17, 64, 0.532);
 	color: white;
 	position: fixed;
 	left: 50%;
 	top: 50%;
 	transform: translateX(-50%) translateY(-50%);
 	content: "";
-	z-index: 10000;
+	z-index: 1001;
+	text-align: center;
+	width: 100%;
+	height: 100%;
 }
+
+#gameover .banner {
+	margin-top: 2rem;
+	position: relative;
+	bottom: 0rem;
+}
+
+#gameover h1 {
+	line-height: 8rem;
+	font-family: "Gajraj One", sans-serif;
+	text-transform: uppercase;
+	white-space: nowrap;
+	font-size: 7rem;
+	background: linear-gradient(
+		0deg,
+		rgb(86, 83, 0) 16%,
+		rgb(255, 248, 37) 37%,
+		rgb(249, 255, 185) 51%,
+		rgb(244, 255, 37) 66%,
+		rgb(29, 33, 0) 100%
+	);
+	color: transparent;
+	background-size: contain;
+	-webkit-background-clip: text;
+	background-clip: text;
+	animation: bg-shift 0.5s ease-in-out infinite alternate;
+	filter: drop-shadow(0 0 1px white) drop-shadow(0 0 1px white) drop-shadow(0px 0.5rem 0px black)
+		drop-shadow(0px 12px 24px black) drop-shadow(1px 1px 1px magenta);
+}
+
+#playagain {
+	margin-top: 2rem;
+	padding: 1rem 2rem;
+	border: 2px solid white;
+	background: transparent;
+	color: white;
+	display: inline-block;
+	margin-left: auto;
+	margin-right: auto;
+	font-family: "Gajraj One", sans-serif;
+	text-transform: uppercase;
+	font-size: 1.4rem;
+}
+
+#playagain:hover {
+	background-color: yellow;
+	color: black;
+	box-shadow: 0 0 3rem 0 yellow;
+	border-color: yellow;
+	cursor: pointer;
+}
+
+#playagain:focus,
+#playagain:focus-visible {
+	outline: none;
+	background-color: yellow;
+	color: black;
+	border-color: yellow;
+	cursor: pointer;
+}
+
+#playagain:active {
+	scale: 0.9;
+	background-color: yellow;
+	color: black;
+	box-shadow: 0 0 3rem 0 yellow;
+	border-color: yellow;
+	cursor: pointer;
+}
+
+#highscores {
+	margin-top: 2rem;
+	align-items: center;
+	justify-items: center;
+	height: calc(90vh - 22rem);
+	overflow-y: scroll;
+	scrollbar-width: thin;
+	scrollbar-color: white transparent;
+}
+
+#highscores .row {
+	/*font-family: "Roboto", sans-serif;*/
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 960px;
+	grid-gap: 2rem;
+	display: grid;
+	grid-template-columns: 1fr 3fr 4fr 2fr 3fr 1fr 1fr 3fr 4fr;
+	border-radius: 0.4rem;
+}
+
+#highscores .row a {
+	color: yellow;
+}
+
+#highscores .row a:hover {
+	color: white;
+}
+
+#highscores .row:hover {
+	background: black;
+}
+#highscores .row div:nth-child(1),
+#highscores .row div:nth-child(2),
+#highscores .row div:nth-child(9) {
+	text-align: left;
+}
+#highscores .row div:nth-child(1),
+#highscores .row div:nth-child(3) {
+	color: yellow;
+}
+
+#highscores .row div:nth-child(3),
+#highscores .row div:nth-child(5),
+#highscores .row div:nth-child(8) {
+	text-align: right;
+}
+#highscores .row {
+	padding: 0.5rem;
+	font-size: 1.4rem;
+	filter: drop-shadow(0 0 1px black) drop-shadow(0 0 1px black) drop-shadow(0 0 1px black)
+		drop-shadow(0 0 1px black);
+}
+#highscores .thead {
+	font-size: 1rem;
+	border-bottom: 1px solid rgba(255, 255, 0, 0.549);
+	margin-bottom: 0.5rem;
+}
+
 #backanim {
 	position: fixed;
 	width: 100%;
@@ -1052,4 +1188,25 @@
 
 .green {
 	background-color: green;
+}
+
+.banner {
+	z-index: 10000;
+	left: 50%;
+	position: absolute;
+	bottom: 2rem;
+	transform: translateX(-50%);
+}
+
+.banner:hover {
+	animation: flash 0.33s ease-out 1 forwards;
+}
+
+@keyframes flash {
+	0% {
+		filter: brightness(4);
+	}
+	100% {
+		filter: brightness(1);
+	}
 }

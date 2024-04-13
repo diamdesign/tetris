@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
+import { Banner } from "./components/Banner";
 import { TetrisGrid } from "./components/TetrisGrid";
 import { MiniGrid } from "./components/MiniGrid";
 import { Score } from "./components/Score";
@@ -226,11 +227,32 @@ function App() {
 		setIsResetGame(true);
 		isPausedRef.current = true;
 		playSound("key", 0.5);
+		setTimeout(() => {
+			inputRef.current.focus();
+		}, 10);
 	}
+
+	const handleKeyPlayAgain = (e) => {
+		if (e.keyCode === "13" || e.keyCode === "32") {
+			handlePlayAgain();
+		}
+	};
+
+	const handlePlayAgain = () => {
+		isPausedRef.current = false;
+		setIsResetGame(true);
+		setShowDarkoverlay(false);
+		setGameOver(false);
+		setGameRunning(true);
+		setDisableControls(false);
+		playSound("key", 0.5);
+		playSound("start", 0.5);
+	};
 
 	return (
 		<>
 			<div id="gamecontainer" className={levelClassName}>
+				{!alias && <Banner />}
 				<Fullscreen />
 
 				<div id="settings"></div>
@@ -239,10 +261,20 @@ function App() {
 
 				{!gameRunning && gameOver && (
 					<div id="gameover">
-						<h1>Game Over</h1>
+						<div id="gameovercontainer">
+							<h1>Game Over</h1>
 
-						<Highscore />
-						<div id="playagain">Play again</div>
+							<Highscore />
+							<button
+								id="playagain"
+								onMouseOver={handleMouseOver}
+								onClick={handlePlayAgain}
+								onKeyDown={handleKeyPlayAgain}
+							>
+								Play again
+							</button>
+							<Banner />
+						</div>
 					</div>
 				)}
 
@@ -304,9 +336,7 @@ function App() {
 
 				{!gameRunning && alias && !gameOver && (
 					<div className="playbox">
-						<a
-							href="#"
-							tabIndex={1}
+						<button
 							className="start"
 							onClick={handleStartClick}
 							onKeyDown={handleStartKey}
@@ -314,7 +344,7 @@ function App() {
 							ref={startRef}
 						>
 							Play
-						</a>
+						</button>
 
 						<p>
 							Set up Tetris grid. <br /> (Normal is between 10x16 - 12x20)

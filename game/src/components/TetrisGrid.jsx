@@ -92,7 +92,12 @@ export function TetrisGrid() {
 	const currentRotation = useRef(startRotationRef.current);
 
 	// let random = Math.floor(Math.random() * theTetrominoes.length);
-	const current = useRef(theTetrominoes[randomRef.current][startRotationRef.current]);
+	let currentTry;
+	var current;
+	try {
+		currentTry = theTetrominoes[randomRef.current][startRotationRef.current];
+		current = useRef(currentTry);
+	} catch (error) {}
 
 	colorRef.current = randomRef.current;
 
@@ -172,7 +177,7 @@ export function TetrisGrid() {
 
 				const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
 				if (checkGameOver) {
-					gameOver();
+					gameOverHighscore();
 					return;
 				}
 
@@ -377,7 +382,7 @@ export function TetrisGrid() {
 					});
 				} catch (error) {
 					console.log("Game Over");
-					gameOver();
+					gameOverHighscore();
 				}
 
 				playSound("taken", 0.2);
@@ -394,14 +399,24 @@ export function TetrisGrid() {
 				colorRef.current = newRandom;
 				randomRef.current = newRandom;
 
-				current.current = theTetrominoes[newRandom][newRotation];
+				try {
+					current.current = theTetrominoes[newRandom][newRotation];
+				} catch (error) {
+					// Check if the game is over
+					gameOverHighscore();
+				}
 				currentX.current = startX;
 				currentY.current = startY;
 
 				gridArrayRef.current = newGridArray;
 				addScore();
 
-				displayShape();
+				const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+				if (!checkGameOver) {
+					setTimeout(() => {
+						displayShape();
+					}, 10);
+				}
 				draw();
 			}
 		}
@@ -489,7 +504,10 @@ export function TetrisGrid() {
 
 			addScore();
 
-			displayShape();
+			const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+			if (!checkGameOver) {
+				displayShape();
+			}
 		}
 
 		function resetGrid() {
@@ -583,7 +601,10 @@ export function TetrisGrid() {
 			levelRef.current = 1;
 			startXRef.current = Math.floor(width / 2 - 2);
 
-			displayShape();
+			const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+			if (!checkGameOver) {
+				displayShape();
+			}
 		}
 
 		function control(e) {
@@ -791,7 +812,7 @@ export function TetrisGrid() {
 
 				if (isNewLevel) {
 					scoreToAdd += 1000 * levelRef.current;
-
+					playSound("nextlevel", 0.6);
 					// Set Tick Speed after Level between 1000ms level 0 and 1ms level 33
 					if (levelRef.current === 2) {
 						tickSpeedRef.current = 900;
@@ -804,6 +825,9 @@ export function TetrisGrid() {
 					} else if (levelRef.current === 6) {
 						tickSpeedRef.current = 500;
 					} else if (levelRef.current === 5) {
+						setTimeout(() => {
+							playSound("amazing", 0.8);
+						}, 1500);
 						tickSpeedRef.current = 400;
 					} else if (levelRef.current === 6) {
 						tickSpeedRef.current = 350;
@@ -814,6 +838,9 @@ export function TetrisGrid() {
 					} else if (levelRef.current === 9) {
 						tickSpeedRef.current = 200;
 					} else if (levelRef.current === 10) {
+						setTimeout(() => {
+							playSound("incredible", 0.8);
+						}, 1500);
 						tickSpeedRef.current = 150;
 					} else if (levelRef.current === 11) {
 						tickSpeedRef.current = 140;
@@ -824,6 +851,9 @@ export function TetrisGrid() {
 					} else if (levelRef.current === 14) {
 						tickSpeedRef.current = 100;
 					} else if (levelRef.current === 15) {
+						setTimeout(() => {
+							playSound("outstanding", 0.8);
+						}, 1500);
 						tickSpeedRef.current = 90;
 					} else if (levelRef.current === 16) {
 						tickSpeedRef.current = 80;
@@ -834,6 +864,9 @@ export function TetrisGrid() {
 					} else if (levelRef.current === 19) {
 						tickSpeedRef.current = 65;
 					} else if (levelRef.current === 20) {
+						setTimeout(() => {
+							playSound("amazing2", 0.8);
+						}, 1500);
 						tickSpeedRef.current = 60;
 					} else if (levelRef.current === 21) {
 						tickSpeedRef.current = 55;
@@ -874,6 +907,16 @@ export function TetrisGrid() {
 				setMultiplier(newMultiplier);
 				multiplierRef.current = newMultiplier;
 
+				if (multiplierRef.current >= 5 && multiplierRef.current <= 9) {
+					playSound("amazing", 1);
+				} else if (multiplierRef.current >= 10 && multiplierRef.current <= 19) {
+					playSound("incredible", 1);
+				} else if (multiplierRef.current >= 20 && multiplierRef.current <= 29) {
+					playSound("outstanding", 1);
+				} else if (multiplierRef.current >= 30) {
+					playSound("amazing2", 1);
+				}
+
 				let scoreEl = document.querySelector(".score");
 				scoreEl.classList.add("addscore");
 
@@ -907,13 +950,18 @@ export function TetrisGrid() {
 
 		startIntervalDown();
 
-		function gameOver() {
+		function gameOverHighscore() {
 			setGameRunning(false);
 			setDisableControls(true);
 			setShowDarkoverlay(true);
 			isPausedRef.current = true;
 			setGameOver(true);
 			console.log("Game Over");
+			playSound("impact", 0.4);
+
+			setTimeout(() => {
+				playSound("gameover", 0.8);
+			}, 200);
 
 			// JSON to send to Database
 			highscoreArray.current = {
@@ -925,6 +973,10 @@ export function TetrisGrid() {
 				height: height,
 			};
 			console.log(highscoreArray.current);
+
+			setTimeout(() => {
+				document.querySelector("#playagain").focus();
+			}, 50);
 
 			clearInterval(timerId.current);
 		}

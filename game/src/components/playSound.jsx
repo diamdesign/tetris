@@ -15,6 +15,12 @@ import takenSound from "../assets/8-bit-game-2-186976.mp3";
 import line1Sound from "../assets/90s-game-ui-7-185100.mp3";
 import line2Sound from "../assets/high-zcore-96686.mp3";
 import undoSound from "../assets/cinematic-whoosh-reverse-161307.mp3";
+import gameoverSound from "../assets/gameover-86548.mp3";
+import announceAmazingSound from "../assets/announcements-amazing.mp3";
+import announceAmazingSound2 from "../assets/announcements-amazing2.mp3";
+import announceIncredibleSound from "../assets/announcements-incredible.mp3";
+import announceOutstandingSound from "../assets/announcements-outstanding.mp3";
+import nextlevelSound from "../assets/next-level-160613.mp3";
 
 const soundFiles = {
 	key: keydownSound,
@@ -32,6 +38,13 @@ const soundFiles = {
 	line1: line1Sound,
 	line2: line2Sound,
 	undo: undoSound,
+	gameover: gameoverSound,
+	amazing: announceAmazingSound,
+	amazing2: announceAmazingSound2,
+	incredible: announceIncredibleSound,
+	outstanding: announceOutstandingSound,
+	nextlevel: nextlevelSound,
+
 	// Add more mappings as needed
 };
 
