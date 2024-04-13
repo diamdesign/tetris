@@ -289,7 +289,7 @@ function App() {
 							<span>I</span>
 							<span>S</span>
 						</h1>
-						<h2>Styler</h2>
+
 						<input
 							type="text"
 							value={aliasInput}
@@ -299,11 +299,7 @@ function App() {
 							id="selectalias"
 							placeholder="Enter alias"
 						/>
-						<p>
-							Enter alias for highscore. Create your own Tetris design with your own
-							sounds, and save it. Get your own URL for your design. Read instructions
-							here.
-						</p>
+						<p>Enter alias for highscore.</p>
 					</div>
 				)}
 
