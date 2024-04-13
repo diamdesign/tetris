@@ -62,6 +62,7 @@ function App() {
 		levelClassName,
 		setIsResetGame,
 		isResetGame,
+		setTimerStarted,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -152,6 +153,7 @@ function App() {
 		setDisableControls(false);
 		setGameRunning(true);
 		setIsResetGame(true);
+		setTimerStarted(true);
 	};
 
 	// Function to handle start button
@@ -164,6 +166,7 @@ function App() {
 			setDisableControls(false);
 			setGameRunning(true);
 			setIsResetGame(true);
+			setTimerStarted(true);
 		}
 	};
 
@@ -247,6 +250,7 @@ function App() {
 		setDisableControls(false);
 		playSound("key", 0.5);
 		playSound("start", 0.5);
+		setTimerStarted(true);
 	};
 
 	return (

@@ -32,6 +32,8 @@ export const GameContextProvider = ({ children }) => {
 	const [rotation, setRotation] = useState(0);
 	const [levelClassName, setLevelClassName] = useState("");
 	const [isResetGame, setIsResetGame] = useState(false);
+	const [timerStarted, setTimerStarted] = useState(false);
+	const [milliseconds, setMilliseconds] = useState(0);
 
 	//The Tetrominoes
 	const lTetromino = [
@@ -280,13 +282,14 @@ export const GameContextProvider = ({ children }) => {
 	const fullDownScoreRef = useRef(10);
 	const highscoreArray = useRef([]);
 	const aliasRef = useRef("");
+	const millisecondsRef = useRef(0);
 
 	// Add more context variables here as needed
 
 	const displayShape = () => {
 		// Get the next tetromino shape
-
 		const upNextTetromino = theTetrominoes[nextRandomRef.current][nextStartRotationRef.current];
+
 		nextColorRef.current = color[nextRandomRef.current];
 		const upNextColor = nextColorRef.current;
 
@@ -370,6 +373,11 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				setMilliseconds,
+				milliseconds,
+				millisecondsRef,
+				timerStarted,
+				setTimerStarted,
 				isResetGame,
 				setIsResetGame,
 				levelClassName,

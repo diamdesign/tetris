@@ -443,6 +443,11 @@
 	font-size: 1.2rem;
 }
 
+#timer div span {
+	display: inline-block;
+	width: 0.85rem;
+}
+
 #btn-mute,
 #btn-fullscreen,
 #btn-back {

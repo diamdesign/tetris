@@ -66,6 +66,9 @@ export function TetrisGrid() {
 		setShowDarkoverlay,
 		isResetGame,
 		setIsResetGame,
+		milliseconds,
+		setTimerStarted,
+		millisecondsRef,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -388,16 +391,19 @@ export function TetrisGrid() {
 				playSound("taken", 0.2);
 
 				const newRandom = nextRandomRef.current;
-				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length - 1);
-
+				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
 				startRotationRef.current = nextStartRotationRef.current;
 				currentRotation.current = startRotationRef.current;
 				const newRotation = currentRotation.current;
 
 				nextStartRotationRef.current = Math.floor(Math.random() * 3);
-
-				colorRef.current = newRandom;
 				randomRef.current = newRandom;
+				colorRef.current = newRandom;
+				current.current = theTetrominoes[newRandom][startRotationRef.current];
+				currentX.current = startX;
+				currentY.current = startY;
+
+				gridArrayRef.current = newGridArray;
 
 				try {
 					current.current = theTetrominoes[newRandom][newRotation];
@@ -415,7 +421,7 @@ export function TetrisGrid() {
 				if (!checkGameOver) {
 					setTimeout(() => {
 						displayShape();
-					}, 10);
+					}, 50);
 				}
 				draw();
 			}
@@ -504,9 +510,11 @@ export function TetrisGrid() {
 
 			addScore();
 
-			const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+			const checkGameOver = isGameOver();
 			if (!checkGameOver) {
-				displayShape();
+				setTimeout(() => {
+					displayShape();
+				}, 50);
 			}
 		}
 
@@ -517,53 +525,6 @@ export function TetrisGrid() {
 			gridArrayRef.current = newGridArray;
 			currentY.current = startY;
 
-			// Iterate over the gridArray
-
-			/*
-			newGrid.forEach((row, rowIndex) => {
-				row.forEach((cell, columnIndex) => {
-					// Check if the cell has both "tetromino" and "taken" in classNames
-					if (
-						cell.classNames.includes("tetromino") &&
-						cell.classNames.includes("taken")
-					) {
-						// Array of color classes to remove
-						const colorsToRemove = [
-							"red",
-							"orange",
-							"purple",
-							"blue",
-							"yellow",
-							"green",
-							"white",
-						];
-
-						// Remove the "tetromino" class and any color class from classNames in the newGridArray
-						const cell = newGrid[rowIndex][columnIndex];
-						const indexesToRemove = [];
-
-						// Find and store indexes of classes to remove
-						["tetromino", ...colorsToRemove].forEach((className) => {
-							const index = cell.classNames.indexOf(className);
-							if (index !== -1) {
-								indexesToRemove.push(index);
-							}
-						});
-
-						// Remove classes from classNames array in reverse order to avoid changing indexes
-						indexesToRemove
-							.sort((a, b) => b - a)
-							.forEach((index) => {
-								cell.classNames.splice(index, 1);
-							});
-					}
-
-					movedDiv++;
-					cell.key = `div-moved-${movedDiv}-${Math.floor(Math.random() * 1000)}`;
-				});
-			});
-			*/
-
 			const newRandom = Math.floor(Math.random() * theTetrominoes.length);
 			randomRef.current = newRandom;
 			colorRef.current = newRandom;
@@ -572,8 +533,9 @@ export function TetrisGrid() {
 			setGridArray(newGridArray);
 			gridArrayRef.current = newGridArray;
 
-			currentY.current = 0; // Update currentY state
-			currentX.current = Math.floor(width / 2) - 1; // Update currentX state
+			currentY.current = 0;
+			currentX.current = Math.floor(width / 2) - 1;
+
 			// Redraw the grid
 			draw();
 		}
@@ -601,9 +563,11 @@ export function TetrisGrid() {
 			levelRef.current = 1;
 			startXRef.current = Math.floor(width / 2 - 2);
 
-			const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+			const checkGameOver = isGameOver();
 			if (!checkGameOver) {
-				displayShape();
+				setTimeout(() => {
+					displayShape();
+				}, 50);
 			}
 		}
 
@@ -963,11 +927,37 @@ export function TetrisGrid() {
 				playSound("gameover", 0.8);
 			}, 200);
 
+			var newMilliseconds = millisecondsRef.current;
+			console.log(newMilliseconds);
+
+			// Calculate days
+			const newD = Math.floor(newMilliseconds / (1000 * 60 * 60 * 24));
+			newMilliseconds -= newD * (1000 * 60 * 60 * 24);
+
+			// Calculate hours
+			const newH = Math.floor(newMilliseconds / (1000 * 60 * 60));
+			newMilliseconds -= newH * (1000 * 60 * 60);
+
+			// Calculate minutes
+			const newM = Math.floor(newMilliseconds / (1000 * 60));
+			newMilliseconds -= newM * (1000 * 60);
+
+			// Calculate seconds
+			const newS = Math.floor(newMilliseconds / 1000);
+			newMilliseconds -= newS * 1000;
+
+			// The remaining milliseconds will be the milliseconds
+			const newMs = newMilliseconds;
+
 			// JSON to send to Database
 			highscoreArray.current = {
 				alias: aliasRef.current,
-				highscore: scoreRef.current,
-				time: "10:32",
+				score: scoreRef.current,
+				days: newD,
+				hours: newH,
+				minutes: newM,
+				seconds: newS,
+				milliseconds: newMs,
 				level: levelRef.current,
 				width: width,
 				height: height,
@@ -976,6 +966,7 @@ export function TetrisGrid() {
 
 			setTimeout(() => {
 				document.querySelector("#playagain").focus();
+				setTimerStarted(false);
 			}, 50);
 
 			clearInterval(timerId.current);

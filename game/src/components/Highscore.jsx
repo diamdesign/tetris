@@ -22,11 +22,9 @@ export function Highscore() {
 				if (!response.ok) {
 					throw new Error("Network response was not ok");
 				}
-				console.log(response.json);
 				return response.json();
 			})
 			.then((data) => {
-				console.log(data); // Log the response here
 				setHighscoresArray(data);
 			})
 			.catch((error) => {
