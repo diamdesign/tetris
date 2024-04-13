@@ -68,7 +68,6 @@ export function Highscore() {
 				<div>Level</div>
 				<div>Time</div>
 				<div>Date</div>
-				<div>Theme</div>
 			</div>
 			<div className="row yourscore">
 				<div></div>
@@ -84,7 +83,6 @@ export function Highscore() {
 						highscoreArray.current.milliseconds
 					)}
 				</div>
-				<div></div>
 				<div></div>
 			</div>
 
@@ -106,13 +104,13 @@ export function Highscore() {
 								)}
 							</div>
 							<div>{formatDate(row.registered)}</div>
+							{/* 
 							<div>
-								{row.theme !== "default" && (
-									<a href={"https://diam.se/tetris/" + row.theme} target="_blank">
-										{row.theme}
-									</a>
-								)}
+								<a href={"https://diam.se/tetris/" + row.theme} target="_blank">
+									{row.theme}
+								</a>
 							</div>
+							*/}
 						</div>
 					))}
 			</div>

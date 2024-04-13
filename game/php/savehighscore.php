@@ -110,7 +110,7 @@ if (!$existingScore) {
         // If new score is better, update the existing record
 
         // Update the existing high score
-        $updateStmt = $pdo->prepare("UPDATE highscore SET score = :score, days = :days, hours = :hours, minutes = :minutes, seconds = :seconds, milliseconds = :milliseconds WHERE width = :width AND height = :height AND alias = :alias");
+        $updateStmt = $pdo->prepare("UPDATE highscore SET score = :score, days = :days, hours = :hours, minutes = :minutes, seconds = :seconds, milliseconds = :milliseconds, level = :level WHERE width = :width AND height = :height AND alias = :alias");
 
         $updateStmt->bindParam(':alias', $alias, PDO::PARAM_STR);
         $updateStmt->bindParam(':score', $score, PDO::PARAM_INT);
