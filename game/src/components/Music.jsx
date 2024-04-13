@@ -9,12 +9,15 @@ export function Music() {
 	const [musicAudio, setMusicAudio] = useState(song1);
 
 	useEffect(() => {
+		const musicPlayer = audioRef.current;
+		musicPlayer.src = musicAudio;
+	}, []);
+
+	useEffect(() => {
 		// Play music when music state changes
 		const musicPlayer = audioRef.current;
 
 		if (musicAudio && musicPlayer) {
-			musicPlayer.src = musicAudio;
-
 			if (isMuted) {
 				musicPlayer.volume = 0;
 			} else {
@@ -22,7 +25,9 @@ export function Music() {
 			}
 
 			musicPlayer.loop = true;
-			musicPlayer.play();
+			if (musicPlayer.paused) {
+				musicPlayer.play();
+			}
 		}
 	}, [isMuted, musicAudio]);
 
