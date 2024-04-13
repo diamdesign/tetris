@@ -17,27 +17,32 @@ export function Highscore() {
 		let newHeight = height - 2;
 		const params = { width: newWidth, height: newHeight };
 
-		fetch(highscoreUrl + "?" + new URLSearchParams(params))
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error("Network response was not ok");
-				}
-				return response.json();
-			})
-			.then((data) => {
-				setHighscoresArray(data);
-			})
-			.catch((error) => {
-				console.error("Error fetching data:", error);
-			});
+		setTimeout(() => {
+			fetch(highscoreUrl + "?" + new URLSearchParams(params))
+				.then((response) => {
+					if (!response.ok) {
+						throw new Error("Network response was not ok");
+					}
+					return response.json();
+				})
+				.then((data) => {
+					setHighscoresArray(data);
+				})
+				.catch((error) => {
+					console.error("Error fetching data:", error);
+				});
+		}, 500);
 	};
 
 	function formatTime(days, hours, minutes, seconds, milliseconds) {
 		let totalMinutes = days * 24 * 60 + hours * 60 + minutes;
 		let remainingSeconds = seconds + milliseconds / 1000;
+
+		// Limit remainingSeconds to 3 decimal places
+		remainingSeconds = remainingSeconds.toFixed(3);
+
 		return totalMinutes + ":" + remainingSeconds;
 	}
-
 	function formatDate(dateString) {
 		const date = new Date(dateString);
 		return date.toISOString().split("T")[0];

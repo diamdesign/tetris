@@ -916,6 +916,8 @@ export function TetrisGrid() {
 
 		startIntervalDown();
 
+		let requestSent = false;
+
 		function gameOverHighscore() {
 			setGameRunning(false);
 			setDisableControls(true);
@@ -954,16 +956,40 @@ export function TetrisGrid() {
 			// JSON to send to Database
 			highscoreArray.current = {
 				alias: aliasRef.current,
-				score: scoreRef.current,
-				days: newD,
-				hours: newH,
-				minutes: newM,
-				seconds: newS,
-				milliseconds: newMs,
-				level: levelRef.current,
-				width: width,
-				height: height,
+				score: parseInt(scoreRef.current),
+				days: parseInt(newD),
+				hours: parseInt(newH),
+				minutes: parseInt(newM),
+				seconds: parseInt(newS),
+				milliseconds: parseInt(newMs),
+				level: parseInt(levelRef.current),
+				width: parseInt(width - 2),
+				height: parseInt(height - 2),
 			};
+
+			if (!requestSent) {
+				// Set the flag to true to indicate that the request is being sent
+				requestSent = true;
+
+				// Create an instance of XMLHttpRequest
+				const xhr = new XMLHttpRequest();
+
+				// Set up the request method, URL, and headers
+				xhr.open("POST", "https://diam.se/tetris/php/savehighscore.php");
+				xhr.setRequestHeader("Content-Type", "application/json");
+
+				// Send the request with the JSON data
+				xhr.send(JSON.stringify(highscoreArray.current));
+
+				// Log the data being sent (optional)
+				console.log(highscoreArray.current);
+
+				// After 10 seconds, reset the flag to allow another request
+				setTimeout(() => {
+					requestSent = false;
+				}, 10000);
+			}
+
 			console.log(highscoreArray.current);
 
 			setTimeout(() => {

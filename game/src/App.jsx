@@ -345,7 +345,8 @@ function App() {
 						>
 							Play
 						</button>
-
+						<p>Click "Play" to start.</p>
+						{/* 
 						<p>
 							Set up Tetris grid. <br /> (Normal is between 10x16 - 12x20)
 						</p>
@@ -388,6 +389,7 @@ function App() {
 								</button>
 							</div>
 						</div>
+						*/}
 					</div>
 				)}
 
