@@ -54,9 +54,12 @@ export function Highscore() {
 
 	return (
 		<div id="highscores">
+			{/*  
 			<p>
 				Showing records for board size: {width - 2}x{height - 2}
 			</p>
+
+			*/}
 
 			<div className="row thead">
 				<div>Rank</div>
