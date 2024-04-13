@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext, useRef } from "react";
 import { useGameContext } from "./Context";
 
 export function Highscore() {
-	const { width, height } = useGameContext();
+	const { width, height, highscoreArray } = useGameContext();
 
 	const highscoreUrl = "https://diam.se/tetris/php/gethighscore.php";
 
@@ -43,11 +43,16 @@ export function Highscore() {
 		return date.toISOString().split("T")[0];
 	}
 
+	function formatScore(score) {
+		return score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
 	return (
 		<div id="highscores">
 			<p>
 				Showing records for board size: {width - 2}x{height - 2}
 			</p>
+
 			<div className="row thead">
 				<div>Rank</div>
 				<div>Alias</div>
@@ -57,13 +62,31 @@ export function Highscore() {
 				<div>Date</div>
 				<div>Theme</div>
 			</div>
+			<div className="row yourscore">
+				<div></div>
+				<div>{highscoreArray.current.alias}</div>
+				<div>{formatScore(highscoreArray.current.score)}</div>
+				<div>{highscoreArray.current.level}</div>
+				<div>
+					{formatTime(
+						highscoreArray.current.days,
+						highscoreArray.current.hours,
+						highscoreArray.current.minutes,
+						highscoreArray.current.seconds,
+						highscoreArray.current.milliseconds
+					)}
+				</div>
+				<div></div>
+				<div></div>
+			</div>
+
 			<div className="highscoretable">
 				{highscoresArray &&
 					highscoresArray.map((row, index) => (
 						<div className="row" key={index}>
 							<div>{row.rank}</div>
 							<div>{row.alias}</div>
-							<div>{row.score}</div>
+							<div>{formatScore(row.score)}</div>
 							<div>{row.level}</div>
 							<div>
 								{formatTime(

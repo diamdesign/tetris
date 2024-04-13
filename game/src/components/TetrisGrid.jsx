@@ -563,6 +563,8 @@ export function TetrisGrid() {
 			levelRef.current = 1;
 			startXRef.current = Math.floor(width / 2 - 2);
 
+			tickSpeedRef.current = 1000;
+
 			const checkGameOver = isGameOver();
 			if (!checkGameOver) {
 				setTimeout(() => {
@@ -779,85 +781,85 @@ export function TetrisGrid() {
 					playSound("nextlevel", 0.6);
 					// Set Tick Speed after Level between 1000ms level 0 and 1ms level 33
 					if (levelRef.current === 2) {
-						tickSpeedRef.current = 900;
+						tickSpeedRef.current = 950;
 					} else if (levelRef.current === 3) {
-						tickSpeedRef.current = 800;
+						tickSpeedRef.current = 850;
 					} else if (levelRef.current === 4) {
-						tickSpeedRef.current = 700;
+						tickSpeedRef.current = 800;
 					} else if (levelRef.current === 5) {
-						tickSpeedRef.current = 600;
+						tickSpeedRef.current = 750;
 					} else if (levelRef.current === 6) {
-						tickSpeedRef.current = 500;
+						tickSpeedRef.current = 700;
 					} else if (levelRef.current === 5) {
 						setTimeout(() => {
 							playSound("amazing", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 400;
+						tickSpeedRef.current = 650;
 					} else if (levelRef.current === 6) {
-						tickSpeedRef.current = 350;
+						tickSpeedRef.current = 600;
 					} else if (levelRef.current === 7) {
-						tickSpeedRef.current = 300;
+						tickSpeedRef.current = 550;
 					} else if (levelRef.current === 8) {
-						tickSpeedRef.current = 250;
+						tickSpeedRef.current = 500;
 					} else if (levelRef.current === 9) {
-						tickSpeedRef.current = 200;
+						tickSpeedRef.current = 450;
 					} else if (levelRef.current === 10) {
 						setTimeout(() => {
 							playSound("incredible", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 150;
+						tickSpeedRef.current = 400;
 					} else if (levelRef.current === 11) {
-						tickSpeedRef.current = 140;
+						tickSpeedRef.current = 350;
 					} else if (levelRef.current === 12) {
-						tickSpeedRef.current = 130;
+						tickSpeedRef.current = 300;
 					} else if (levelRef.current === 13) {
-						tickSpeedRef.current = 120;
+						tickSpeedRef.current = 250;
 					} else if (levelRef.current === 14) {
-						tickSpeedRef.current = 100;
+						tickSpeedRef.current = 200;
 					} else if (levelRef.current === 15) {
 						setTimeout(() => {
 							playSound("outstanding", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 90;
+						tickSpeedRef.current = 150;
 					} else if (levelRef.current === 16) {
-						tickSpeedRef.current = 80;
+						tickSpeedRef.current = 100;
 					} else if (levelRef.current === 17) {
-						tickSpeedRef.current = 75;
+						tickSpeedRef.current = 95;
 					} else if (levelRef.current === 18) {
-						tickSpeedRef.current = 70;
+						tickSpeedRef.current = 90;
 					} else if (levelRef.current === 19) {
-						tickSpeedRef.current = 65;
+						tickSpeedRef.current = 85;
 					} else if (levelRef.current === 20) {
 						setTimeout(() => {
 							playSound("amazing2", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 60;
+						tickSpeedRef.current = 80;
 					} else if (levelRef.current === 21) {
-						tickSpeedRef.current = 55;
+						tickSpeedRef.current = 75;
 					} else if (levelRef.current === 22) {
-						tickSpeedRef.current = 50;
+						tickSpeedRef.current = 70;
 					} else if (levelRef.current === 23) {
-						tickSpeedRef.current = 45;
+						tickSpeedRef.current = 65;
 					} else if (levelRef.current === 24) {
-						tickSpeedRef.current = 40;
+						tickSpeedRef.current = 60;
 					} else if (levelRef.current === 25) {
-						tickSpeedRef.current = 35;
+						tickSpeedRef.current = 55;
 					} else if (levelRef.current === 26) {
-						tickSpeedRef.current = 30;
+						tickSpeedRef.current = 50;
 					} else if (levelRef.current === 27) {
-						tickSpeedRef.current = 25;
+						tickSpeedRef.current = 45;
 					} else if (levelRef.current === 28) {
-						tickSpeedRef.current = 20;
+						tickSpeedRef.current = 40;
 					} else if (levelRef.current === 29) {
-						tickSpeedRef.current = 15;
+						tickSpeedRef.current = 35;
 					} else if (levelRef.current === 30) {
-						tickSpeedRef.current = 10;
+						tickSpeedRef.current = 30;
 					} else if (levelRef.current === 31) {
-						tickSpeedRef.current = 5;
+						tickSpeedRef.current = 25;
 					} else if (levelRef.current === 32) {
-						tickSpeedRef.current = 3;
+						tickSpeedRef.current = 20;
 					} else if (levelRef.current === 33) {
-						tickSpeedRef.current = 1;
+						tickSpeedRef.current = 15;
 					}
 
 					startIntervalDown();

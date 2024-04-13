@@ -680,8 +680,8 @@
 }
 
 #highscores .highscoretable {
-	height: calc(90vh - 27rem);
-	overflow-y: scroll;
+	height: calc(90vh - 30rem);
+	overflow-y: auto;
 	scrollbar-width: thin;
 	scrollbar-color: white transparent;
 }
@@ -693,7 +693,11 @@
 	margin-bottom: 1rem;
 }
 
-#highscores .row {
+#highscores .row,
+.yourscore {
+	filter: drop-shadow(0 0 1px black) drop-shadow(0 0 1px black) drop-shadow(0 0 1px black)
+		drop-shadow(0 0 1px black);
+	font-size: 1.2rem;
 	/*font-family: "Roboto", sans-serif;*/
 	margin-left: auto;
 	margin-right: auto;
@@ -702,6 +706,14 @@
 	display: grid;
 	grid-template-columns: 1fr 3fr 4fr 2fr 3fr 3fr 4fr;
 	border-radius: 0.4rem;
+}
+
+.yourscore {
+	border-bottom: 1px solid rgba(255, 255, 0, 0.549);
+	padding: 0.5rem;
+	border-radius: 0 !important;
+	margin-bottom: 0.5rem;
+	padding-bottom: 0.9rem !important;
 }
 
 #highscores .row a {
@@ -715,6 +727,11 @@
 #highscores .row:hover {
 	background: black;
 }
+
+#highscores .row.thead:hover {
+	background: transparent;
+}
+
 #highscores .row div:nth-child(1),
 #highscores .row div:nth-child(2),
 #highscores .row div:nth-child(7) {
@@ -737,6 +754,7 @@
 		drop-shadow(0 0 1px black);
 }
 #highscores .thead {
+	border-radius: 0;
 	text-transform: uppercase;
 	font-size: 1rem;
 	border-bottom: 1px solid rgba(255, 255, 0, 0.549);
