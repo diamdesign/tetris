@@ -565,6 +565,12 @@ export function TetrisGrid() {
 
 			tickSpeedRef.current = 1000;
 
+			setTimerStarted(false);
+
+			setTimeout(() => {
+				setTimerStarted(true);
+			}, 10);
+
 			const checkGameOver = isGameOver();
 			if (!checkGameOver) {
 				setTimeout(() => {

@@ -63,6 +63,7 @@ function App() {
 		setIsResetGame,
 		isResetGame,
 		setTimerStarted,
+		disableControls,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -72,6 +73,11 @@ function App() {
 	const inputRef = useRef(null);
 
 	function pauseGame() {
+		if (disableControls) {
+			setDisableControls(false);
+		} else {
+			setDisableControls(true);
+		}
 		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
 	}
 
@@ -139,34 +145,35 @@ function App() {
 				setTimeout(() => {
 					startRef.current.focus();
 				}, 10);
+				setTimerStarted(false);
 			} else {
 				alert("You need to enter an alias for the highscores");
 			}
 		}
 	};
 
-	// Function to handle start button
-	const handleStartClick = () => {
+	function handleStart() {
 		playSound("enter", 0.5);
 		playSound("start", 0.5);
 		isPausedRef.current = false;
 		setDisableControls(false);
 		setGameRunning(true);
 		setIsResetGame(true);
+		setTimerStarted(false);
+		setTimeout(() => {}, 10);
 		setTimerStarted(true);
+	}
+
+	// Function to handle start button
+	const handleStartClick = () => {
+		handleStart();
 	};
 
 	// Function to handle start button
 	const handleStartKey = (e) => {
 		e.stopPropagation();
 		if (e.keyCode === 13 || e.keyCode === 32) {
-			playSound("enter", 0.5);
-			playSound("start", 0.5);
-			isPausedRef.current = false;
-			setDisableControls(false);
-			setGameRunning(true);
-			setIsResetGame(true);
-			setTimerStarted(true);
+			handleStart();
 		}
 	};
 
@@ -229,10 +236,13 @@ function App() {
 		setDisableControls(true);
 		setIsResetGame(true);
 		isPausedRef.current = true;
+		setTimerStarted(false);
 		playSound("key", 0.5);
 		setTimeout(() => {
 			inputRef.current.focus();
 		}, 10);
+
+		isPausedRef.current = true;
 	}
 
 	const handleKeyPlayAgain = (e) => {
