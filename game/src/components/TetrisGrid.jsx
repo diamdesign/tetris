@@ -781,83 +781,83 @@ export function TetrisGrid() {
 					if (levelRef.current === 2) {
 						tickSpeedRef.current = 950;
 					} else if (levelRef.current === 3) {
-						tickSpeedRef.current = 850;
+						tickSpeedRef.current = 900;
 					} else if (levelRef.current === 4) {
-						tickSpeedRef.current = 800;
+						tickSpeedRef.current = 850;
 					} else if (levelRef.current === 5) {
-						tickSpeedRef.current = 750;
+						tickSpeedRef.current = 800;
 					} else if (levelRef.current === 6) {
-						tickSpeedRef.current = 700;
+						tickSpeedRef.current = 750;
 					} else if (levelRef.current === 5) {
 						setTimeout(() => {
 							playSound("amazing", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 650;
+						tickSpeedRef.current = 700;
 					} else if (levelRef.current === 6) {
-						tickSpeedRef.current = 600;
+						tickSpeedRef.current = 675;
 					} else if (levelRef.current === 7) {
-						tickSpeedRef.current = 550;
+						tickSpeedRef.current = 650;
 					} else if (levelRef.current === 8) {
-						tickSpeedRef.current = 500;
+						tickSpeedRef.current = 625;
 					} else if (levelRef.current === 9) {
-						tickSpeedRef.current = 450;
+						tickSpeedRef.current = 600;
 					} else if (levelRef.current === 10) {
 						setTimeout(() => {
 							playSound("incredible", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 400;
+						tickSpeedRef.current = 575;
 					} else if (levelRef.current === 11) {
-						tickSpeedRef.current = 350;
+						tickSpeedRef.current = 550;
 					} else if (levelRef.current === 12) {
-						tickSpeedRef.current = 300;
+						tickSpeedRef.current = 525;
 					} else if (levelRef.current === 13) {
-						tickSpeedRef.current = 250;
+						tickSpeedRef.current = 500;
 					} else if (levelRef.current === 14) {
-						tickSpeedRef.current = 200;
+						tickSpeedRef.current = 475;
 					} else if (levelRef.current === 15) {
 						setTimeout(() => {
 							playSound("outstanding", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 150;
+						tickSpeedRef.current = 450;
 					} else if (levelRef.current === 16) {
-						tickSpeedRef.current = 100;
+						tickSpeedRef.current = 425;
 					} else if (levelRef.current === 17) {
-						tickSpeedRef.current = 95;
+						tickSpeedRef.current = 400;
 					} else if (levelRef.current === 18) {
-						tickSpeedRef.current = 90;
+						tickSpeedRef.current = 375;
 					} else if (levelRef.current === 19) {
-						tickSpeedRef.current = 85;
+						tickSpeedRef.current = 350;
 					} else if (levelRef.current === 20) {
 						setTimeout(() => {
 							playSound("amazing2", 0.8);
 						}, 1500);
-						tickSpeedRef.current = 80;
+						tickSpeedRef.current = 325;
 					} else if (levelRef.current === 21) {
-						tickSpeedRef.current = 75;
+						tickSpeedRef.current = 300;
 					} else if (levelRef.current === 22) {
-						tickSpeedRef.current = 70;
+						tickSpeedRef.current = 275;
 					} else if (levelRef.current === 23) {
-						tickSpeedRef.current = 65;
+						tickSpeedRef.current = 250;
 					} else if (levelRef.current === 24) {
-						tickSpeedRef.current = 60;
+						tickSpeedRef.current = 225;
 					} else if (levelRef.current === 25) {
-						tickSpeedRef.current = 55;
+						tickSpeedRef.current = 200;
 					} else if (levelRef.current === 26) {
-						tickSpeedRef.current = 50;
+						tickSpeedRef.current = 175;
 					} else if (levelRef.current === 27) {
-						tickSpeedRef.current = 45;
+						tickSpeedRef.current = 150;
 					} else if (levelRef.current === 28) {
-						tickSpeedRef.current = 40;
+						tickSpeedRef.current = 140;
 					} else if (levelRef.current === 29) {
-						tickSpeedRef.current = 35;
+						tickSpeedRef.current = 130;
 					} else if (levelRef.current === 30) {
-						tickSpeedRef.current = 30;
+						tickSpeedRef.current = 120;
 					} else if (levelRef.current === 31) {
-						tickSpeedRef.current = 25;
+						tickSpeedRef.current = 100;
 					} else if (levelRef.current === 32) {
-						tickSpeedRef.current = 20;
+						tickSpeedRef.current = 90;
 					} else if (levelRef.current === 33) {
-						tickSpeedRef.current = 15;
+						tickSpeedRef.current = 80;
 					}
 
 					startIntervalDown();
@@ -878,13 +878,13 @@ export function TetrisGrid() {
 				setMultiplier(newMultiplier);
 				multiplierRef.current = newMultiplier;
 
-				if (multiplierRef.current >= 5 && multiplierRef.current <= 9) {
+				if (multiplierRef.current === 5) {
 					playSound("amazing", 1);
-				} else if (multiplierRef.current >= 10 && multiplierRef.current <= 19) {
+				} else if (multiplierRef.current === 6) {
 					playSound("incredible", 1);
-				} else if (multiplierRef.current >= 20 && multiplierRef.current <= 29) {
+				} else if (multiplierRef.current === 7) {
 					playSound("outstanding", 1);
-				} else if (multiplierRef.current >= 30) {
+				} else if (multiplierRef.current >= 8) {
 					playSound("amazing2", 1);
 				}
 
