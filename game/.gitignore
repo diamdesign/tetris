@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 database.txt
 php/dbconfig.php
+fixthis.txt

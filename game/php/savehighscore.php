@@ -119,6 +119,7 @@ if (!$existingScore) {
         $updateStmt->bindParam(':minutes', $minutes, PDO::PARAM_INT);
         $updateStmt->bindParam(':seconds', $seconds, PDO::PARAM_INT);
         $updateStmt->bindParam(':milliseconds', $milliseconds, PDO::PARAM_INT);
+        $updateStmt->bindParam(':level', $level, PDO::PARAM_INT);
         $updateStmt->bindParam(':width', $width, PDO::PARAM_INT);
         $updateStmt->bindParam(':height', $height, PDO::PARAM_INT);
         $updateStmt->execute();

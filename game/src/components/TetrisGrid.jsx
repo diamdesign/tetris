@@ -769,12 +769,10 @@ export function TetrisGrid() {
 				}
 
 				var scoreToAdd;
-				if (multiplierRef.current === 0) {
-					scoreToAdd = completedRows.length * 100;
-				} else {
-					scoreToAdd = completedRows.length * 100 * multiplierRef.current;
-				}
-				setAddedLines(completedLines);
+
+				var levelScoreAdd = levelRef.current * 100;
+
+				scoreToAdd += levelScoreAdd;
 
 				if (isNewLevel) {
 					scoreToAdd += 1000 * levelRef.current;
@@ -864,6 +862,13 @@ export function TetrisGrid() {
 
 					startIntervalDown();
 				}
+
+				if (multiplierRef.current === 0) {
+					scoreToAdd = completedRows.length * 100;
+				} else {
+					scoreToAdd = completedRows.length * 100 * multiplierRef.current;
+				}
+				setAddedLines(completedLines);
 
 				setAddedScore(scoreToAdd);
 				scoreRef.current += scoreToAdd;

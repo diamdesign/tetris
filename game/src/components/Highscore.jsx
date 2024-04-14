@@ -31,7 +31,7 @@ export function Highscore() {
 				.catch((error) => {
 					console.error("Error fetching data:", error);
 				});
-		}, 500);
+		}, 1000);
 	};
 
 	function formatTime(days, hours, minutes, seconds, milliseconds) {
