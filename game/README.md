@@ -44,10 +44,10 @@ cd .\tetris\game\
 npm install
 ```
 
-3. Install dependencies:
+4. Run development server:
 
 ```bash
-npm install
+npm run dev
 ```
 
 ### Building for Production
