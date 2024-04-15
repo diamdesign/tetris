@@ -141,6 +141,27 @@ export function TetrisGrid() {
 				});
 			});
 
+			// Show full-down placement
+			let newY = currentY.current + 1;
+			let newX = currentX.current;
+			let stepsDown = 0;
+
+			// Move the object down until a collision is detected
+			while (!checkCollisionBottom(newX, newY, tetromino, newGridArray)) {
+				newY++; // Move down by incrementing the row index
+				stepsDown++; // Increment the steps down counter
+			}
+
+			tetromino.forEach((row, rowIndex) => {
+				row.forEach((cell, colIndex) => {
+					if (cell === 1) {
+						const x = currentX.current + colIndex;
+						const y = newY + rowIndex - 1;
+						newGridArray[y][x].classNames.push("newplace");
+					}
+				});
+			});
+
 			// Set the newGridArray as the new state to draw it
 			setGridArray(newGridArray);
 			gridArrayRef.current = newGridArray;
@@ -197,6 +218,10 @@ export function TetrisGrid() {
 			newGridArray.forEach((row, rowIndex) => {
 				row.forEach((cell, columnIndex) => {
 					// Check if the cell has the "tetromino" class and does not have the "taken" class
+					cell.classNames = cell.classNames.filter(
+						(className) => className !== "newplace"
+					);
+
 					if (
 						cell.classNames.includes("tetromino") &&
 						!cell.classNames.includes("taken")
@@ -275,8 +300,8 @@ export function TetrisGrid() {
 		function rotate() {
 			undraw();
 			let nextRotation = currentRotation.current + 1;
-			console.log(nextRotation);
-			if (nextRotation === theTetrominoes[randomRef.current].length) {
+
+			if (nextRotation === theTetrominoes[0].length) {
 				// Loop back order at the end
 				nextRotation = 0;
 			}
@@ -288,6 +313,7 @@ export function TetrisGrid() {
 			if (!isCollision) {
 				currentRotation.current = nextRotation;
 				current.current = nextTetromino;
+				setRotation(currentRotation.current);
 				// setRotation(nextRotation);
 				playSound("rotate", 0.6);
 			}
@@ -297,12 +323,11 @@ export function TetrisGrid() {
 		function rotateBack() {
 			undraw();
 			let nextRotation = currentRotation.current - 1;
-			console.log(nextRotation);
+
 			if (nextRotation < 0) {
 				// Loop back order at the end
 				nextRotation = theTetrominoes[randomRef.current].length - 1;
 			}
-			console.log(nextRotation);
 			const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
 
 			const isCollision = checkCollision(nextTetromino, currentX.current, currentY.current);
@@ -310,6 +335,7 @@ export function TetrisGrid() {
 			if (!isCollision) {
 				currentRotation.current = nextRotation;
 				current.current = nextTetromino;
+				setRotation(currentRotation.current);
 				// setRotation(nextRotation);
 				playSound("rotate", 0.6);
 			}
@@ -384,7 +410,6 @@ export function TetrisGrid() {
 						});
 					});
 				} catch (error) {
-					console.log("Game Over");
 					gameOverHighscore();
 				}
 
@@ -394,7 +419,9 @@ export function TetrisGrid() {
 				nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
 				startRotationRef.current = nextStartRotationRef.current;
 				currentRotation.current = startRotationRef.current;
+
 				const newRotation = currentRotation.current;
+				setRotation(currentRotation.current);
 
 				nextStartRotationRef.current = Math.floor(Math.random() * 3);
 				randomRef.current = newRandom;
@@ -499,6 +526,8 @@ export function TetrisGrid() {
 			const newRandom = nextRandomRef.current;
 			nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
 			startRotationRef.current = nextStartRotationRef.current;
+			currentRotation.current = startRotationRef.current;
+			setRotation(currentRotation.current);
 			nextStartRotationRef.current = Math.floor(Math.random() * 3);
 			randomRef.current = newRandom;
 			colorRef.current = newRandom;
@@ -528,6 +557,12 @@ export function TetrisGrid() {
 			const newRandom = Math.floor(Math.random() * theTetrominoes.length);
 			randomRef.current = newRandom;
 			colorRef.current = newRandom;
+
+			const newRandomRotation = Math.floor(Math.random() * theTetrominoes[0].length);
+
+			startRotationRef.current = newRandomRotation;
+			currentRotation.current = startRotationRef.current;
+			setRotation(currentRotation.current);
 			current.current = theTetrominoes[randomRef.current][currentRotation.current];
 
 			setGridArray(newGridArray);
@@ -943,7 +978,6 @@ export function TetrisGrid() {
 			}, 200);
 
 			var newMilliseconds = millisecondsRef.current;
-			console.log(newMilliseconds);
 
 			// Calculate days
 			const newD = Math.floor(newMilliseconds / (1000 * 60 * 60 * 24));
@@ -993,7 +1027,6 @@ export function TetrisGrid() {
 				xhr.send(JSON.stringify(highscoreArray.current));
 
 				// Log the data being sent (optional)
-				console.log(highscoreArray.current);
 
 				// After 10 seconds, reset the flag to allow another request
 				setTimeout(() => {

@@ -5,7 +5,7 @@ import song1 from "./../assets/80s-synthpop-synthwave-148202.mp3";
 
 export function Music() {
 	const audioRef = useRef(null);
-	const { isMuted, setMuted, music, setMusic } = useGameContext();
+	const { isMuted, setMuted, music, alias, setMusic } = useGameContext();
 	const [musicAudio, setMusicAudio] = useState(song1);
 
 	useEffect(() => {
@@ -29,7 +29,7 @@ export function Music() {
 				musicPlayer.play();
 			}
 		}
-	}, [isMuted, musicAudio]);
+	}, [isMuted, musicAudio, alias]);
 
 	function handleClickMute() {
 		playSound("key", 0.5);
