@@ -645,7 +645,7 @@ export function TetrisGrid() {
 					rotate();
 				} else if (e.keyCode === 90) {
 					rotateBack();
-				} else if (e.keyCode === 32) {
+				} else if (e.keyCode === 32 || e.keyCode === 13) {
 					fullDown();
 				} else if (e.keyCode === 82) {
 					resetGame();
