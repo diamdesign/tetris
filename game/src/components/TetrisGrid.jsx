@@ -108,9 +108,11 @@ export function TetrisGrid() {
 
 	const timerId = useRef(null);
 
-	let newValue = Math.floor(width / 2 - 1);
-	setStartX(newValue);
-	currentX.current = newValue;
+	useEffect(() => {
+		let newValue = Math.floor(width / 2 - 1);
+		setStartX(newValue);
+		currentX.current = newValue;
+	}, []);
 
 	useEffect(() => {
 		document.addEventListener("keydown", control);
@@ -275,7 +277,7 @@ export function TetrisGrid() {
 				return;
 			}
 
-			currentX.current = currentX.current - 1;
+			currentX.current = newLeft;
 			playSound("ticksmall", 0.6);
 
 			draw(); // Redraw the grid with the updated position
@@ -292,7 +294,7 @@ export function TetrisGrid() {
 				return;
 			}
 
-			currentX.current = currentX.current + 1;
+			currentX.current = newRight;
 			playSound("ticksmall", 0.6);
 			draw();
 		}
@@ -313,8 +315,7 @@ export function TetrisGrid() {
 			if (!isCollision) {
 				currentRotation.current = nextRotation;
 				current.current = nextTetromino;
-				setRotation(currentRotation.current);
-				// setRotation(nextRotation);
+				// setRotation(currentRotation.current);
 				playSound("rotate", 0.6);
 			}
 			draw();
@@ -335,8 +336,8 @@ export function TetrisGrid() {
 			if (!isCollision) {
 				currentRotation.current = nextRotation;
 				current.current = nextTetromino;
-				setRotation(currentRotation.current);
-				// setRotation(nextRotation);
+				// setRotation(currentRotation.current);
+
 				playSound("rotate", 0.6);
 			}
 			draw();
@@ -421,7 +422,7 @@ export function TetrisGrid() {
 				currentRotation.current = startRotationRef.current;
 
 				const newRotation = currentRotation.current;
-				setRotation(currentRotation.current);
+				// setRotation(currentRotation.current);
 
 				nextStartRotationRef.current = Math.floor(Math.random() * 3);
 				randomRef.current = newRandom;
@@ -527,7 +528,7 @@ export function TetrisGrid() {
 			nextRandomRef.current = Math.floor(Math.random() * theTetrominoes.length);
 			startRotationRef.current = nextStartRotationRef.current;
 			currentRotation.current = startRotationRef.current;
-			setRotation(currentRotation.current);
+			// setRotation(currentRotation.current);
 			nextStartRotationRef.current = Math.floor(Math.random() * 3);
 			randomRef.current = newRandom;
 			colorRef.current = newRandom;
@@ -562,7 +563,7 @@ export function TetrisGrid() {
 
 			startRotationRef.current = newRandomRotation;
 			currentRotation.current = startRotationRef.current;
-			setRotation(currentRotation.current);
+			// setRotation(currentRotation.current);
 			current.current = theTetrominoes[randomRef.current][currentRotation.current];
 
 			setGridArray(newGridArray);
