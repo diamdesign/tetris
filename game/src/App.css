@@ -1263,7 +1263,7 @@
 	display: none;
 }
 
-@media (hover: none) {
+@media (hover: none), (pointer: coarse) {
 	#rightcontrols {
 		position: fixed;
 		bottom: 3rem;
