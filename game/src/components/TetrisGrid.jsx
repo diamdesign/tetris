@@ -185,30 +185,32 @@ export function TetrisGrid() {
 		};
 
 		function moveDown() {
-			const newY = currentY.current + 1;
-			const isCollision = checkCollisionBottom(
-				currentX.current,
-				newY,
-				current.current,
-				gridArrayRef.current
-			);
-			if (isCollision) {
-				freeze();
-			}
-			if (!disableControlsRef.current && !winRow.current) {
-				playSound("tickbig", 0.6);
-				undraw();
-
-				currentY.current = currentY.current + 1;
-
-				const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
-				if (checkGameOver) {
-					gameOverHighscore();
-					return;
+			if (!disableControlsRef.current) {
+				const newY = currentY.current + 1;
+				const isCollision = checkCollisionBottom(
+					currentX.current,
+					newY,
+					current.current,
+					gridArrayRef.current
+				);
+				if (isCollision) {
+					freeze();
 				}
+				if (!disableControlsRef.current && !winRow.current) {
+					playSound("tickbig", 0.6);
+					undraw();
 
-				draw();
-				freeze();
+					currentY.current = currentY.current + 1;
+
+					const checkGameOver = isGameOver(); // Changed variable name to avoid conflict
+					if (checkGameOver) {
+						gameOverHighscore();
+						return;
+					}
+
+					draw();
+					freeze();
+				}
 			}
 		}
 
@@ -267,80 +269,96 @@ export function TetrisGrid() {
 		}
 
 		function moveLeft() {
-			undraw();
+			if (!disableControlsRef.current) {
+				undraw();
 
-			let newLeft = currentX.current - 1;
-			const isCollision = checkCollision(current.current, newLeft, currentY.current);
+				let newLeft = currentX.current - 1;
+				const isCollision = checkCollision(current.current, newLeft, currentY.current);
 
-			if (isCollision) {
-				draw();
-				return;
+				if (isCollision) {
+					draw();
+					return;
+				}
+
+				currentX.current = newLeft;
+				playSound("ticksmall", 0.6);
+
+				draw(); // Redraw the grid with the updated position
 			}
-
-			currentX.current = newLeft;
-			playSound("ticksmall", 0.6);
-
-			draw(); // Redraw the grid with the updated position
 		}
 
 		function moveRight() {
-			undraw();
+			if (!disableControlsRef.current) {
+				undraw();
 
-			let newRight = currentX.current + 1;
-			const isCollision = checkCollision(current.current, newRight, currentY.current);
+				let newRight = currentX.current + 1;
+				const isCollision = checkCollision(current.current, newRight, currentY.current);
 
-			if (isCollision) {
+				if (isCollision) {
+					draw();
+					return;
+				}
+
+				currentX.current = newRight;
+				playSound("ticksmall", 0.6);
 				draw();
-				return;
 			}
-
-			currentX.current = newRight;
-			playSound("ticksmall", 0.6);
-			draw();
 		}
 
 		function rotate() {
-			undraw();
-			let nextRotation = currentRotation.current + 1;
+			if (!disableControlsRef.current) {
+				undraw();
+				let nextRotation = currentRotation.current + 1;
 
-			if (nextRotation === theTetrominoes[0].length) {
-				// Loop back order at the end
-				nextRotation = 0;
+				if (nextRotation === theTetrominoes[0].length) {
+					// Loop back order at the end
+					nextRotation = 0;
+				}
+
+				const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
+
+				const isCollision = checkCollision(
+					nextTetromino,
+					currentX.current,
+					currentY.current
+				);
+
+				if (!isCollision) {
+					currentRotation.current = nextRotation;
+					current.current = nextTetromino;
+					// setRotation(currentRotation.current);
+					playSound("rotate", 0.6);
+				}
+				draw();
 			}
-
-			const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
-
-			const isCollision = checkCollision(nextTetromino, currentX.current, currentY.current);
-
-			if (!isCollision) {
-				currentRotation.current = nextRotation;
-				current.current = nextTetromino;
-				// setRotation(currentRotation.current);
-				playSound("rotate", 0.6);
-			}
-			draw();
 		}
 
 		function rotateBack() {
-			undraw();
-			let nextRotation = currentRotation.current - 1;
+			if (!disableControlsRef.current) {
+				undraw();
+				let nextRotation = currentRotation.current - 1;
 
-			if (nextRotation < 0) {
-				// Loop back order at the end
-				nextRotation = theTetrominoes[randomRef.current].length - 1;
+				if (nextRotation < 0) {
+					// Loop back order at the end
+					nextRotation = theTetrominoes[randomRef.current].length - 1;
+				}
+				const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
+
+				const isCollision = checkCollision(
+					nextTetromino,
+					currentX.current,
+					currentY.current
+				);
+
+				if (!isCollision) {
+					currentRotation.current = nextRotation;
+					current.current = nextTetromino;
+					// setRotation(currentRotation.current);
+
+					playSound("rotate", 0.6);
+				}
+				draw();
 			}
-			const nextTetromino = theTetrominoes[randomRef.current][nextRotation];
-
-			const isCollision = checkCollision(nextTetromino, currentX.current, currentY.current);
-
-			if (!isCollision) {
-				currentRotation.current = nextRotation;
-				current.current = nextTetromino;
-				// setRotation(currentRotation.current);
-
-				playSound("rotate", 0.6);
-			}
-			draw();
 		}
 
 		function checkCollision(tetromino, x, y) {

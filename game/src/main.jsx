@@ -8,10 +8,8 @@ import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
 	<HashRouter>
-		<React.StrictMode>
-			<GameContextProvider>
-				<App />
-			</GameContextProvider>
-		</React.StrictMode>
+		<GameContextProvider>
+			<App />
+		</GameContextProvider>
 	</HashRouter>
 );

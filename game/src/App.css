@@ -1728,7 +1728,7 @@
 
 	#intro h1 span,
 	#container h1 span,
-	#gameover h1 span {
+	#gameover h1 {
 		animation: none !important;
 	}
 
@@ -1751,5 +1751,17 @@
 	#twinkling,
 	#clouds {
 		display: none !important;
+	}
+	* {
+		box-shadow: none !important;
+	}
+
+	.newfastdown,
+	.newscore {
+		filter: none;
+	}
+
+	.fulldown {
+		box-shadow: none !important;
 	}
 }
