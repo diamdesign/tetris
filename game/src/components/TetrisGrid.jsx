@@ -4,6 +4,7 @@ import { playSound } from "./playSound";
 
 export function TetrisGrid() {
 	const {
+		pauseGame,
 		levelClassName,
 		setLevelClassName,
 		color,
@@ -107,10 +108,14 @@ export function TetrisGrid() {
 
 	const timerId = useRef(null);
 
+	let newValue = Math.floor(width / 2 - 1);
+	setStartX(newValue);
+	currentX.current = newValue;
+
 	useEffect(() => {
-		let newValue = Math.floor(width / 2 - 2);
+		let newValue = Math.floor(width / 2 - 1);
 		setStartX(newValue);
-		currentX.current = startX;
+		currentX.current = newValue;
 	}, [gameRunning]);
 
 	useEffect(() => {
@@ -570,7 +575,7 @@ export function TetrisGrid() {
 			gridArrayRef.current = newGridArray;
 
 			currentY.current = 0;
-			currentX.current = Math.floor(width / 2) - 1;
+			currentX.current = Math.floor(width / 2 - 1);
 
 			// Redraw the grid
 			draw();
@@ -597,7 +602,7 @@ export function TetrisGrid() {
 			linesRef.current = 10;
 			setLevel(1);
 			levelRef.current = 1;
-			startXRef.current = Math.floor(width / 2 - 2);
+			startXRef.current = Math.floor(width / 2 - 1);
 
 			tickSpeedRef.current = 1000;
 
@@ -1057,6 +1062,7 @@ export function TetrisGrid() {
 		const controlAbutton = document.getElementById("a-button");
 		const controlBbutton = document.getElementById("b-button");
 		const controlZbutton = document.getElementById("z-button");
+		const controlPbutton = document.getElementById("p-button");
 
 		// Function to check if an event listener is already attached
 		function hasEventListener(element, eventType, handler) {
@@ -1084,6 +1090,7 @@ export function TetrisGrid() {
 		addEventListenerIfNotExists(controlAbutton, "click", rotateBack);
 		addEventListenerIfNotExists(controlBbutton, "click", fullDown);
 		addEventListenerIfNotExists(controlZbutton, "click", resetGame);
+		addEventListenerIfNotExists(controlPbutton, "click", pauseGame);
 
 		return () => {
 			clearInterval(timerId.current);
@@ -1095,6 +1102,7 @@ export function TetrisGrid() {
 			controlAbutton.removeEventListener("click", rotateBack);
 			controlBbutton.removeEventListener("click", fullDown);
 			controlZbutton.removeEventListener("click", resetGame);
+			controlPbutton.removeEventListener("click", pauseGame);
 		};
 	}, [gameRunning, gridArrayRef, isResetGame]);
 
@@ -1142,6 +1150,7 @@ export function TetrisGrid() {
 				<div id="a-button">A</div>
 				<div id="b-button">B</div>
 				<div id="z-button">Z</div>
+				<div id="p-button">P</div>
 			</div>
 		</>
 	);

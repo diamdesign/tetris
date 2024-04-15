@@ -170,23 +170,23 @@ export const GameContextProvider = ({ children }) => {
 	const oTetromino = [
 		[
 			// Original rotation (0 degrees)
-			[0, 1, 1],
-			[0, 1, 1],
+			[1, 1],
+			[1, 1],
 		],
 		[
 			// 90 degrees clockwise rotation
-			[0, 1, 1],
-			[0, 1, 1],
+			[1, 1],
+			[1, 1],
 		],
 		[
 			// 180 degrees clockwise rotation
-			[0, 1, 1],
-			[0, 1, 1],
+			[1, 1],
+			[1, 1],
 		],
 		[
 			// 270 degrees clockwise rotation
-			[0, 1, 1],
-			[0, 1, 1],
+			[1, 1],
+			[1, 1],
 		],
 	];
 
@@ -271,7 +271,7 @@ export const GameContextProvider = ({ children }) => {
 	const colorRef = useRef(color[randomRef.current]);
 	const nextColorRef = useRef(color[nextRandomRef.current]);
 
-	const startXRef = useRef(Math.floor(width / 2 - 2));
+	const startXRef = useRef(Math.floor(width / 2 - 1));
 	const isPausedRef = useRef(true);
 	const gridArrayRef = useRef([]);
 	const winRow = useRef(false);
@@ -371,10 +371,22 @@ export const GameContextProvider = ({ children }) => {
 		return newGridArray;
 	}
 
+	function pauseGame() {
+		if (disableControlsRef.current) {
+			setDisableControls(false);
+			disableControlsRef.current = false;
+		} else {
+			setDisableControls(true);
+			disableControlsRef.current = true;
+		}
+		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
+	}
+
 	// Return the context provider with the variables as context values
 	return (
 		<GameContext.Provider
 			value={{
+				pauseGame,
 				disableControlsRef,
 				setMilliseconds,
 				milliseconds,

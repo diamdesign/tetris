@@ -13,6 +13,7 @@ import "./css/stars.css";
 
 function App() {
 	const {
+		pauseGame,
 		page,
 		setPage,
 		alias,
@@ -72,17 +73,6 @@ function App() {
 
 	const startRef = useRef(null);
 	const inputRef = useRef(null);
-
-	function pauseGame() {
-		if (disableControlsRef.current) {
-			setDisableControls(false);
-			disableControlsRef.current = false;
-		} else {
-			setDisableControls(true);
-			disableControlsRef.current = true;
-		}
-		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
-	}
 
 	useEffect(() => {
 		setTimeout(() => {

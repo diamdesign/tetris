@@ -610,6 +610,10 @@
 	bottom: 0rem;
 }
 
+.banner img {
+	width: 100%;
+}
+
 #gameover h1 {
 	line-height: 8rem;
 	font-family: "Gajraj One", sans-serif;
@@ -1258,66 +1262,6 @@
 	display: none;
 }
 
-@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
-	#container {
-		max-width: 48rem;
-		margin-top: 3rem;
-		margin-right: 14rem;
-		width: 51vh;
-	}
-
-	.gamesymbols {
-		top: 50%;
-		transform: translateY(-50%);
-		width: 12rem;
-		right: 2rem;
-	}
-
-	.alias,
-	.score,
-	#timer {
-		text-align: left !important;
-	}
-
-	.comingsymbol {
-		top: 36%;
-
-		right: 2rem;
-	}
-
-	.addscore {
-		transform-origin: left center;
-	}
-
-	.lines {
-		margin-top: 26rem;
-	}
-
-	.multiplier {
-		top: 23rem;
-		width: 13.5rem;
-	}
-
-	#selectalias {
-		width: 70vw;
-	}
-
-	.banner {
-		bottom: 6rem;
-	}
-
-	#intro {
-		top: 30%;
-	}
-
-	#backanim i:nth-child(6) {
-		bottom: -20rem;
-		left: -20rem;
-		opacity: 1;
-		filter: brightness(0.4);
-	}
-}
-
 @media (hover: none) {
 	#rightcontrols {
 		position: fixed;
@@ -1331,7 +1275,8 @@
 
 	#a-button,
 	#b-button,
-	#z-button {
+	#z-button,
+	#p-button {
 		font-family: "Gajraj One", sans-serif;
 		font-size: 2rem;
 		display: flex;
@@ -1358,6 +1303,11 @@
 	#b-button {
 		right: 5rem;
 		bottom: 0rem;
+	}
+
+	#p-button {
+		right: 0;
+		bottom: 23rem;
 	}
 
 	#leftcontrols {
@@ -1420,7 +1370,9 @@
 	#leftarrow:active,
 	#leftarrow:focus-visible,
 	#rightarrow:active,
-	#rightarrow:focus-visible {
+	#rightarrow:focus-visible,
+	#p-button:active,
+	#p-button:focus-visible {
 		background: white;
 	}
 
@@ -1462,5 +1414,326 @@
 		background-repeat: no-repeat;
 		background-position: center center;
 		rotate: -90deg;
+	}
+}
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+	#container {
+		max-width: 48rem;
+		margin-top: 3rem;
+		margin-right: 14rem;
+		width: 51vh;
+	}
+
+	.gamesymbols {
+		top: 50%;
+		transform: translateY(-50%);
+		width: 12rem;
+		right: 2rem;
+	}
+
+	.alias,
+	.score,
+	#timer {
+		text-align: left !important;
+	}
+
+	.comingsymbol {
+		top: 36%;
+
+		right: 2rem;
+	}
+
+	.addscore {
+		transform-origin: left center;
+	}
+
+	.lines {
+		margin-top: 26rem;
+	}
+
+	.multiplier {
+		top: 23rem;
+		width: 13.5rem;
+	}
+
+	#selectalias {
+		width: 70vw;
+	}
+
+	.banner {
+		bottom: 6rem;
+	}
+
+	#intro {
+		top: 30%;
+	}
+
+	#backanim i:nth-child(6) {
+		bottom: -20rem;
+		left: -20rem;
+		opacity: 1;
+		filter: brightness(0.4);
+	}
+}
+
+@media only screen and (max-width: 512px) and (orientation: portrait) {
+	.gamesymbols {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		top: 0rem;
+		right: 0rem;
+		z-index: 200;
+	}
+
+	.alias {
+		position: absolute;
+		top: 0.5rem;
+		left: 0;
+		text-align: center;
+		font-size: 1rem;
+		width: 100%;
+	}
+
+	.score {
+		position: absolute;
+		top: 1.2rem;
+		left: 0;
+		text-align: center;
+		font-size: 1rem;
+		width: 100%;
+	}
+
+	.addscore {
+		transform-origin: center center;
+	}
+
+	#container h1 {
+		display: none;
+	}
+
+	.lines {
+		margin-top: 0;
+		background: rgba(255, 255, 255, 0.2);
+		width: 5rem;
+		position: absolute;
+		left: 0.4rem;
+		top: 3.5rem;
+		padding: 0.3rem;
+		font-size: 0.7rem;
+	}
+
+	.comingsymbol {
+		margin-top: 0;
+		background: rgba(255, 255, 255, 0.2);
+		width: 5rem;
+		position: absolute;
+		left: 0.4rem;
+		top: 8.5rem;
+		padding: 0.3rem;
+		font-size: 0.7rem;
+		z-index: 200;
+	}
+
+	.level {
+		margin-top: 0;
+		background: rgba(255, 255, 255, 0.2);
+		width: 5rem;
+		position: absolute;
+		right: 0.4rem;
+		top: 3.5rem;
+		padding: 0.3rem;
+		font-size: 0.7rem;
+	}
+
+	.multiplier {
+		margin-top: 0;
+		background: rgba(255, 255, 255, 0.2);
+		font-size: 0.7rem;
+		position: absolute;
+		right: 0.4rem;
+		top: 8.5rem;
+		padding: 0.3rem;
+		font-size: 0.67rem;
+		z-index: 200;
+	}
+
+	.lines span,
+	.level span,
+	.multiplier span {
+		display: block;
+		width: 100%;
+		text-align: center;
+		font-size: 2rem;
+	}
+
+	.gamesymbols,
+	.multiplier,
+	.comingsymbol {
+		animation: none;
+	}
+
+	#timer {
+		position: absolute;
+		top: 2.8rem;
+		left: 0;
+		text-align: center;
+		font-size: 1rem;
+		width: 100%;
+	}
+
+	#timer div span {
+		font-size: 1rem;
+	}
+
+	#timer h1 {
+		display: none;
+		font-size: 1rem;
+	}
+
+	#darkoverlay {
+		backdrop-filter: blur(0);
+		background: black;
+	}
+	#intro {
+		top: 30%;
+	}
+	#intro h1 {
+		font-size: 20vw;
+	}
+	#selectalias {
+		width: 80vw;
+		font-size: 2rem;
+	}
+
+	.banner {
+		width: 90%;
+	}
+
+	#btn-mute,
+	#btn-fullscreen,
+	#btn-back {
+		width: 2.5rem;
+		height: 2.5rem;
+		background-size: 1.5rem;
+	}
+
+	.playbox {
+		backdrop-filter: blur(0);
+		background: black;
+		width: 80vw;
+	}
+	.start {
+		font-size: 2rem;
+		padding: 0.5rem 0;
+		width: 100%;
+	}
+	.playbox p {
+		font-size: 1.2rem;
+	}
+
+	#backanim i:nth-child(6) {
+		width: 20rem;
+		height: 20rem;
+		bottom: -10rem;
+		left: -10rem;
+		opacity: 1;
+		filter: brightness(0.4);
+	}
+
+	#rightcontrols {
+		bottom: 0rem;
+		right: 1rem;
+	}
+
+	#a-button,
+	#b-button,
+	#z-button,
+	#p-button {
+		width: 4rem;
+		height: 4rem;
+		font-size: 1.5rem;
+	}
+
+	#b-button {
+		bottom: 2rem;
+		right: 4rem;
+	}
+
+	#z-button {
+		bottom: 12rem;
+	}
+
+	#p-button {
+		bottom: 18rem;
+	}
+
+	#leftarrow,
+	#rightarrow,
+	#uparrow,
+	#downarrow {
+		width: 3rem;
+		height: 3rem;
+	}
+
+	#leftcontrols {
+		left: 1rem;
+		width: 9rem;
+		height: 9rem;
+		bottom: 1rem;
+	}
+
+	#container {
+		margin-top: 0;
+
+		width: 85% !important;
+		animation: none;
+		outline: none;
+		border: none;
+	}
+
+	#container h1 {
+		top: -3rem;
+	}
+
+	#btn-back {
+		top: 0.4rem;
+		left: 0.4rem;
+	}
+
+	#btn-mute {
+		top: 0.4rem;
+		right: 0.4rem;
+	}
+	#btn-fullscreen {
+		bottom: 0.4rem;
+		right: 0.4rem;
+	}
+
+	.minigrid {
+		width: 55%;
+	}
+
+	#gameovercontainer {
+		top: 0;
+	}
+
+	#gameover h1 {
+		font-size: 3rem;
+		line-height: 4rem;
+	}
+
+	#highscores {
+		width: 100%;
+		padding: 2rem;
+	}
+
+	#highscores .row div:nth-child(6) {
+		display: none;
+	}
+	#highscores .row {
+		grid-template-columns: 1fr 3fr 4fr 2fr 3fr;
+		font-size: 1rem;
 	}
 }
