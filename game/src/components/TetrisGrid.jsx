@@ -92,7 +92,7 @@ export function TetrisGrid() {
 	const startY = -1; // Assuming the tetromino starts at the top row
 
 	const currentY = useRef(startY);
-	const currentX = useRef(startX);
+	const currentX = useRef(startXRef.current);
 
 	const currentRotation = useRef(startRotationRef.current);
 
@@ -111,12 +111,6 @@ export function TetrisGrid() {
 	let newValue = Math.floor(width / 2 - 1);
 	setStartX(newValue);
 	currentX.current = newValue;
-
-	useEffect(() => {
-		let newValue = Math.floor(width / 2 - 1);
-		setStartX(newValue);
-		currentX.current = newValue;
-	}, [gameRunning]);
 
 	useEffect(() => {
 		document.addEventListener("keydown", control);
@@ -637,6 +631,10 @@ export function TetrisGrid() {
 				} else if (e.keyCode === 82) {
 					resetGame();
 				}
+			}
+
+			if (e.keyCode === 80) {
+				pauseGame();
 			}
 		}
 

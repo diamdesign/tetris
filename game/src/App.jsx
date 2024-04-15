@@ -80,20 +80,6 @@ function App() {
 		}, 10);
 	}, []);
 
-	useEffect(() => {
-		function control(e) {
-			if (e.keyCode === 80) {
-				pauseGame();
-			}
-		}
-		document.addEventListener("keydown", control);
-
-		// Cleanup function to remove event listener
-		return () => {
-			document.removeEventListener("keydown", control);
-		};
-	}, []);
-
 	function Credits() {
 		return (
 			<div id="credits">

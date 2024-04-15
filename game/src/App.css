@@ -127,6 +127,7 @@
 }
 
 #selectalias {
+	max-width: 90vw;
 	margin-top: 4rem;
 	position: relative;
 	transform: none;
@@ -1713,6 +1714,7 @@
 
 	.minigrid {
 		width: 55%;
+		animation: none !important;
 	}
 
 	#gameovercontainer {
@@ -1722,6 +1724,12 @@
 	#gameover h1 {
 		font-size: 3rem;
 		line-height: 4rem;
+	}
+
+	#intro h1 span,
+	#container h1 span,
+	#gameover h1 span {
+		animation: none !important;
 	}
 
 	#highscores {
@@ -1735,5 +1743,14 @@
 	#highscores .row {
 		grid-template-columns: 1fr 3fr 4fr 2fr 3fr;
 		font-size: 1rem;
+	}
+
+	#stars,
+	#backanim,
+	.colorize,
+	.colorize:after,
+	#twinkling,
+	#clouds {
+		display: none !important;
 	}
 }
