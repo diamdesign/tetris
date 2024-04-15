@@ -69,6 +69,7 @@ export function TetrisGrid() {
 		milliseconds,
 		setTimerStarted,
 		millisecondsRef,
+		disableControlsRef,
 	} = useGameContext();
 
 	useEffect(() => {
@@ -193,7 +194,7 @@ export function TetrisGrid() {
 			if (isCollision) {
 				freeze();
 			}
-			if (!disableControls && !winRow.current) {
+			if (!disableControlsRef.current && !winRow.current) {
 				playSound("tickbig", 0.6);
 				undraw();
 
@@ -615,7 +616,7 @@ export function TetrisGrid() {
 		}
 
 		function control(e) {
-			if (!disableControls) {
+			if (!disableControlsRef.current) {
 				if (e.keyCode === 37 || e.keyCode === 65) {
 					moveLeft();
 				} else if (e.keyCode === 39 || e.keyCode === 68) {
@@ -967,6 +968,7 @@ export function TetrisGrid() {
 		function gameOverHighscore() {
 			setGameRunning(false);
 			setDisableControls(true);
+			disableControlsRef.current = true;
 			setShowDarkoverlay(true);
 			isPausedRef.current = true;
 			setGameOver(true);
@@ -1048,9 +1050,51 @@ export function TetrisGrid() {
 			resetGame("start");
 		}
 
+		const controlUparrow = document.getElementById("uparrow");
+		const controlDownarrow = document.getElementById("downarrow");
+		const controlLeftarrow = document.getElementById("leftarrow");
+		const controlRightarrow = document.getElementById("rightarrow");
+		const controlAbutton = document.getElementById("a-button");
+		const controlBbutton = document.getElementById("b-button");
+		const controlZbutton = document.getElementById("z-button");
+
+		// Function to check if an event listener is already attached
+		function hasEventListener(element, eventType, handler) {
+			const events = element.events;
+			if (events) {
+				return (
+					events[eventType] &&
+					events[eventType].findIndex((ev) => ev.handler === handler) !== -1
+				);
+			}
+			return false;
+		}
+
+		// Function to add event listener only if it's not already attached
+		function addEventListenerIfNotExists(element, eventType, handler) {
+			if (!hasEventListener(element, eventType, handler)) {
+				element.addEventListener(eventType, handler);
+			}
+		}
+
+		addEventListenerIfNotExists(controlUparrow, "click", rotate);
+		addEventListenerIfNotExists(controlDownarrow, "click", moveDown);
+		addEventListenerIfNotExists(controlLeftarrow, "click", moveLeft);
+		addEventListenerIfNotExists(controlRightarrow, "click", moveRight);
+		addEventListenerIfNotExists(controlAbutton, "click", rotateBack);
+		addEventListenerIfNotExists(controlBbutton, "click", fullDown);
+		addEventListenerIfNotExists(controlZbutton, "click", resetGame);
+
 		return () => {
 			clearInterval(timerId.current);
 			document.removeEventListener("keydown", control);
+			controlUparrow.removeEventListener("click", rotate);
+			controlDownarrow.removeEventListener("click", moveDown);
+			controlLeftarrow.removeEventListener("click", moveLeft);
+			controlRightarrow.removeEventListener("click", moveRight);
+			controlAbutton.removeEventListener("click", rotateBack);
+			controlBbutton.removeEventListener("click", fullDown);
+			controlZbutton.removeEventListener("click", resetGame);
 		};
 	}, [gameRunning, gridArrayRef, isResetGame]);
 
@@ -1063,12 +1107,41 @@ export function TetrisGrid() {
 	// Render the grid based on the grid array
 	return (
 		<>
-			<div className="grid" style={gridStyle}>
-				{gridArrayRef.current.map((row, rowIndex) =>
-					row.map((cell) => (
-						<div key={cell.key + rowIndex} className={cell.classNames.join(" ")}></div>
-					))
-				)}
+			<div id="container" className={levelClassName}>
+				<h1>
+					<span>T</span>
+					<span>E</span>
+					<span>T</span>
+					<span>R</span>
+					<span>I</span>
+					<span>S</span>
+				</h1>
+				<i></i>
+				<i></i>
+				<i></i>
+				<i></i>
+				<div className="grid" style={gridStyle}>
+					{gridArrayRef.current.map((row, rowIndex) =>
+						row.map((cell) => (
+							<div
+								key={cell.key + rowIndex}
+								className={cell.classNames.join(" ")}
+							></div>
+						))
+					)}
+				</div>
+			</div>
+			<div id="leftcontrols">
+				<div id="uparrow"></div>
+				<div id="leftarrow"></div>
+				<div id="rightarrow"></div>
+				<div id="downarrow"></div>
+			</div>
+
+			<div id="rightcontrols">
+				<div id="a-button">A</div>
+				<div id="b-button">B</div>
+				<div id="z-button">Z</div>
 			</div>
 		</>
 	);

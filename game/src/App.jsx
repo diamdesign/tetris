@@ -64,6 +64,7 @@ function App() {
 		isResetGame,
 		setTimerStarted,
 		disableControls,
+		disableControlsRef,
 	} = useGameContext();
 
 	const [aliasInput, setAliasInput] = useState("");
@@ -73,10 +74,12 @@ function App() {
 	const inputRef = useRef(null);
 
 	function pauseGame() {
-		if (disableControls) {
+		if (disableControlsRef.current) {
 			setDisableControls(false);
+			disableControlsRef.current = false;
 		} else {
 			setDisableControls(true);
+			disableControlsRef.current = true;
 		}
 		isPausedRef.current = !isPausedRef.current; // Toggle the paused state
 	}
@@ -157,6 +160,7 @@ function App() {
 		playSound("start", 0.5);
 		isPausedRef.current = false;
 		setDisableControls(false);
+		disableControlsRef.current = false;
 		setGameRunning(true);
 		setIsResetGame(true);
 		setTimerStarted(false);
@@ -234,6 +238,7 @@ function App() {
 		setAlias(null);
 		setShowDarkoverlay(true);
 		setDisableControls(true);
+		disableControlsRef.current = true;
 		setIsResetGame(true);
 		isPausedRef.current = true;
 		setTimerStarted(false);
@@ -258,6 +263,7 @@ function App() {
 		setGameOver(false);
 		setGameRunning(true);
 		setDisableControls(false);
+		disableControlsRef.current = false;
 		playSound("key", 0.5);
 		playSound("start", 0.5);
 		setTimerStarted(true);
@@ -437,21 +443,8 @@ function App() {
 				</div>
 
 				{/* Tetris container */}
-				<div id="container" className={levelClassName}>
-					<h1>
-						<span>T</span>
-						<span>E</span>
-						<span>T</span>
-						<span>R</span>
-						<span>I</span>
-						<span>S</span>
-					</h1>
-					<i></i>
-					<i></i>
-					<i></i>
-					<i></i>
-					<TetrisGrid />
-				</div>
+
+				<TetrisGrid />
 
 				<div id="stars"></div>
 				<div id="twinkling"></div>
@@ -514,6 +507,7 @@ function App() {
 						onClick={handleClickBack}
 					></div>
 				)}
+
 				<div className="copyright">
 					© 2024{" "}
 					<a href="https://diam.se" target="_blank">

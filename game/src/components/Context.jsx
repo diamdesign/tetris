@@ -284,6 +284,8 @@ export const GameContextProvider = ({ children }) => {
 	const aliasRef = useRef("");
 	const millisecondsRef = useRef(0);
 
+	const disableControlsRef = useRef(false);
+
 	// Add more context variables here as needed
 
 	const displayShape = () => {
@@ -373,6 +375,7 @@ export const GameContextProvider = ({ children }) => {
 	return (
 		<GameContext.Provider
 			value={{
+				disableControlsRef,
 				setMilliseconds,
 				milliseconds,
 				millisecondsRef,
