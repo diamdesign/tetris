@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-php/
+game/php/
 
 # Editor directories and files
 .vscode/*
@@ -23,5 +23,5 @@ php/
 *.njsproj
 *.sln
 *.sw?
-.php/*
-php/db.php
+.php/game/php/*
+game/php/db.php
