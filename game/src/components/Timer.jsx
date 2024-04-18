@@ -6,43 +6,35 @@ export function Timer() {
 		useGameContext();
 
 	const formatTime = (time) => {
-		const ms = String(time % 1000)
-			.padStart(3, "0")
-			.split("");
-		const seconds = String(Math.floor((time / 1000) % 60))
-			.padStart(2, "0")
-			.split("");
-		const minutes = String(Math.floor((time / (1000 * 60)) % 60))
-			.padStart(2, "0")
-			.split("");
-		const hours = String(Math.floor((time / (1000 * 60 * 60)) % 24))
-			.padStart(2, "0")
-			.split("");
-		const days = String(Math.floor(time / (1000 * 60 * 60 * 24)))
-			.padStart(2, "0")
-			.split("");
-		return [days, hours, minutes, seconds, ms].flat(); // Use flat to flatten the array
+		const totalMilliseconds = Math.floor(time);
+		const totalSeconds = Math.floor(totalMilliseconds / 1000);
+		const totalMinutes = Math.floor(totalSeconds / 60);
+		const totalHours = Math.floor(totalMinutes / 60);
+		const totalDays = Math.floor(totalHours / 24);
+
+		const milliseconds = String(totalMilliseconds % 1000).padStart(3, "0");
+		const seconds = String(totalSeconds % 60).padStart(2, "0");
+		const minutes = String(totalMinutes % 60).padStart(2, "0");
+		const hours = String(totalHours % 24).padStart(2, "0");
+		const days = String(totalDays).padStart(2, "0");
+
+		return [days, hours, minutes, seconds, milliseconds];
 	};
 
 	useEffect(() => {
-		let elapsedTimeId;
-
-		// Reset the timer if it goes from false to true
-		if (!timerStarted) {
-			setMilliseconds(0);
-			millisecondsRef.current = 0;
-		}
+		let startTime;
 
 		if (timerStarted) {
-			elapsedTimeId = setInterval(() => {
-				setMilliseconds((prev) => {
-					millisecondsRef.current++;
-					return prev + 1;
-				});
-			}, 1);
-		}
+			startTime = performance.now();
+			const timerId = setInterval(() => {
+				const now = performance.now();
+				const delta = now - startTime;
+				setMilliseconds(delta);
+				millisecondsRef.current = delta;
+			}, 100); // Update every 10 milliseconds
 
-		return () => clearInterval(elapsedTimeId);
+			return () => clearInterval(timerId);
+		}
 	}, [timerStarted]);
 
 	/*

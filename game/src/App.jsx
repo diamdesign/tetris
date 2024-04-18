@@ -10,6 +10,7 @@ import { playSound } from "./components/playSound";
 import { Music } from "./components/Music";
 import "./App.css";
 import "./css/stars.css";
+import "./css/default.css";
 
 function App() {
 	const {

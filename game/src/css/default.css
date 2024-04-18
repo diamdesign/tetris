@@ -1,0 +1,210 @@
+#darkoverlay,
+#backanim {
+	background: black;
+	backdrop-filter: blur(0);
+}
+
+#darkoverlay:before,
+#backanim:before,
+#backanim:after,
+#darkoverlay:after,
+#gameover:after,
+#gameover:before {
+	display: block;
+	content: "";
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+	top: 0;
+	left: 0;
+	position: absolute;
+	filter: brightness(3);
+}
+
+#darkoverlay:before,
+#backanim:before,
+#gameover:before {
+	background-image: url("https://diam.se/tetris/newfiles/tile.jpg") !important;
+}
+
+#darkoverlay:after,
+#backanim:after,
+#gameover:after {
+	opacity: 0.8;
+	background: radial-gradient(circle, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 1) 100%);
+}
+
+#selectalias {
+	background: #26074a;
+	box-shadow: 0 0 1rem 2px black inset;
+}
+
+.start {
+	background: #26074a;
+}
+
+#highscores {
+	padding: 2rem;
+	border: 2px solid white;
+	background: #2f095c;
+}
+
+#highscores .row {
+	filter: none !important;
+}
+
+#highscores .row:hover {
+	background: transparent;
+}
+
+#stars,
+#clouds,
+#twinkling,
+#startanim,
+#backanim i,
+#colorize {
+	display: none !important;
+}
+
+#container {
+	max-width: 35rem;
+	margin-top: 3rem;
+	width: 60vh;
+	border: none !important;
+	outline: none !important;
+	animation: none !important;
+	background: transparent !important;
+}
+
+#gamecontainer #container h1 {
+	top: -5rem !important;
+	z-index: 200;
+}
+
+.grid div {
+	background: #360a6a;
+	border: none;
+}
+
+.tetromino {
+	border: 1px solid white !important;
+	outline: 1px solid white;
+	border-radius: 0.2rem;
+	box-shadow: none !important;
+	position: relative;
+	z-index: 10;
+}
+
+.newplace {
+	border: 1px solid rgba(255, 255, 255, 0.5) !important;
+	outline: 1px solid rgba(255, 255, 255, 0.5);
+	border-radius: 0.2rem;
+	position: relative;
+	z-index: 10;
+}
+
+.white {
+	background: #bdbdbd !important;
+}
+
+.yellow {
+	background: rgb(197, 197, 6) !important;
+}
+
+.orange {
+	background: rgb(191, 126, 4) !important;
+}
+
+.red {
+	background: rgb(255, 51, 51) !important;
+}
+
+.green {
+	background: rgb(24, 93, 24) !important;
+}
+
+.blue {
+	background: rgb(68, 68, 255) !important;
+}
+
+.purple {
+	background: rgb(166, 5, 166) !important;
+}
+
+.leftborder,
+.rightborder,
+.firstrow,
+.lastrow {
+	background: transparent !important;
+}
+
+.leftborder {
+	border-right: 2px solid white !important;
+}
+
+.rightborder {
+	border-left: 2px solid white !important;
+}
+
+.firstrow {
+	border-bottom: 2px solid white !important;
+}
+
+.lastrow {
+	border-top: 2px solid white !important;
+}
+
+.firstrow.leftborder {
+	border-right: none !important;
+	border-bottom: none !important;
+}
+
+.firstrow.rightborder {
+	border-left: none !important;
+	border-bottom: none !important;
+}
+
+.lastrow.leftborder {
+	border-top: none !important;
+	border-right: none !important;
+}
+
+.lastrow.rightborder {
+	border-top: none !important;
+	border-left: none !important;
+}
+
+.firstrow.tetromino {
+	border: none !important;
+	outline: none !important;
+	border-bottom: 2px solid white !important;
+	background: transparent !important;
+}
+
+.comingsymbol {
+	background: rgba(255, 255, 255, 0.2);
+	animation: none !important;
+	border: 2px solid white;
+	top: 5.3rem;
+	width: 13rem;
+	padding-right: 3rem;
+	right: calc(50% - 28vh - 13.5rem);
+	z-index: 100;
+}
+
+.gamesymbols {
+	animation: none !important;
+}
+
+.lines {
+	background: rgba(255, 255, 255, 0.2);
+	animation: none !important;
+	border: 2px solid white;
+}
+
+.level {
+	background: rgba(255, 255, 255, 0.2);
+	animation: none !important;
+	border: 2px solid white;
+	margin-top: 1rem;
+}

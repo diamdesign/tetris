@@ -325,12 +325,15 @@ export const GameContextProvider = ({ children }) => {
 				// Add class "firstrow" to cells in the first row
 				if (isFirstRow) {
 					cell.classNames.push("firstrow", "border");
-					if (isFirstColumn) {
-						cell.classNames.push("leftborder");
-					}
-					if (isLastColumn) {
-						cell.classNames.push("rightborder");
-					}
+				}
+
+				if (isFirstColumn) {
+					cell.classNames.push("leftborder");
+				}
+
+				// Add class "rightborder" to cells in the last column
+				if (isLastColumn) {
+					cell.classNames.push("rightborder");
 				}
 
 				rowArray.push(cell);
