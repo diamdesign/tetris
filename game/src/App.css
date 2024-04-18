@@ -225,7 +225,7 @@
 
 #intro h1,
 #container h1 {
-	background-image: url("src/assets/tetrislogo.png");
+	background-image: url("https://diam.se/tetris/newfiles/tetrislogo.png");
 	background-repeat: no-repeat;
 	background-size: contain;
 	width: 640px;

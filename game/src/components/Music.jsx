@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useGameContext } from "./Context";
 import { playSound } from "./playSound";
-import song1 from "./../assets/80s-synthpop-synthwave-148202.mp3";
+import song1 from "./../assets/8-bit-dream-land-142093.mp3";
 
 export function Music() {
 	const audioRef = useRef(null);

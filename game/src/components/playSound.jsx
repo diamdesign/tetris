@@ -2,25 +2,25 @@ import { useEffect, useState } from "react";
 
 import keydownSound from "./../assets/mech-keyboard-02-102918.mp3";
 import enterkeySound from "./../assets/analog-appliance-button-15-186961.mp3";
-import impactSound from "./../assets/hit-brutal-puncher-cinematic-trailer-sound-effects-124760.mp3";
-import startSound from "./../assets/production-elements-impactor-e-188986.mp3";
-import fulldownSound from "../assets/epic-swoosh-boom-1-183996.mp3";
-import fulldownSound2 from "../assets/epic-swoosh-boom-2-183997.mp3";
-import ticksmallSound from "../assets/ticksmall.mp3";
-import tickbigSound from "../assets/tickbig.mp3";
-import rotateSound from "../assets/rotate.mp3";
+import impactSound from "./../assets/game-start-6104.mp3";
+import startSound from "./../assets/cute-level-up-3-189853.mp3";
+import fulldownSound from "../assets/punch-6-1699.mp3";
+import fulldownSound2 from "../assets/punch-2-1695.mp3";
+import ticksmallSound from "../assets/happy-pop-3-185288.mp3";
+import tickbigSound from "../assets/pop-2-7.mp3";
+import rotateSound from "../assets/multi-pop-1-188165.mp3";
 import mouseoverSound from "../assets/button-124476.mp3";
-import fulldownPointSound from "../assets/90s-game-ui-2-185095.mp3";
+import fulldownPointSound from "../assets/90s-game-ui-7-185100.mp3";
 import takenSound from "../assets/8-bit-game-2-186976.mp3";
 import line1Sound from "../assets/90s-game-ui-7-185100.mp3";
-import line2Sound from "../assets/high-zcore-96686.mp3";
+import line2Sound from "../assets/90s-game-ui-6-185099.mp3";
 import undoSound from "../assets/cinematic-whoosh-reverse-161307.mp3";
-import gameoverSound from "../assets/gameover-86548.mp3";
+import gameoverSound from "../assets/game-fx-9-40197.mp3";
 import announceAmazingSound from "../assets/announcements-amazing.mp3";
 import announceAmazingSound2 from "../assets/announcements-amazing2.mp3";
 import announceIncredibleSound from "../assets/announcements-incredible.mp3";
 import announceOutstandingSound from "../assets/announcements-outstanding.mp3";
-import nextlevelSound from "../assets/next-level-160613.mp3";
+import nextlevelSound from "../assets/level-up-bonus-sequence-2-186891.mp3";
 
 const soundFiles = {
 	key: keydownSound,
