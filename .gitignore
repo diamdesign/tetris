@@ -25,3 +25,5 @@ game/php/
 *.sw?
 .php/game/php/*
 game/php/db.php
+game/php/gethighscore.php
+game/php/savehighscore.php
